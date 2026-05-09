@@ -1,1 +1,1 @@
-Nothing should be ignored based on the provided file changes. The only added file is `html-editor.html`, which is a source file and should not be ignored.
+Nothing should be ignored in this case, as the changes only include HTML files (index.html and html-editor.html) which are source files and not build artifacts, dependencies, or temporary files.
