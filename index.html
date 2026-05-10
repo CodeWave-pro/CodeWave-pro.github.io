@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Android Simulator - CodeWave Pro</title>
     <style>
         * {
@@ -18,321 +18,66 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
         }
 
-        /* Главная карточка */
-        .launch-card {
-            max-width: 500px;
-            width: 100%;
-            background: white;
-            border-radius: 48px;
-            padding: 48px 32px;
+        .container {
             text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            animation: fadeInUp 0.6s ease;
+            padding: 40px;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .logo {
+            font-size: 80px;
+            margin-bottom: 20px;
         }
 
-        /* Логотип */
-        .android-logo {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 24px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .android-logo svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Заголовок */
         h1 {
-            font-size: 32px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 12px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 32px;
-        }
-
-        /* Характеристики */
-        .features {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .feature {
-            text-align: center;
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: #f0f0f0;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin: 0 auto 8px;
-        }
-
-        .feature-text {
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* Кнопка запуска */
-        .launch-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: none;
-            padding: 16px 48px;
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        p {
+            color: rgba(255,255,255,0.8);
             font-size: 18px;
-            font-weight: 600;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            max-width: 280px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
+            margin-bottom: 40px;
         }
 
-        .launch-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
-        }
-
-        .launch-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Список приложений */
-        .app-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 32px;
-            padding-top: 32px;
-            border-top: 1px solid #eee;
-        }
-
-        .app-badge {
-            background: #f8f9fa;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 14px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .app-badge i {
-            font-size: 16px;
-        }
-
-        /* Футер */
-        .footer {
-            margin-top: 32px;
-            font-size: 12px;
-            color: #999;
-        }
-
-        /* Модальное окно с симулятором */
-        .simulator-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 10000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .simulator-container {
-            position: relative;
-        }
-
-        .close-simulator {
-            position: absolute;
-            top: -50px;
-            right: 0;
+        .start-btn {
+            display: inline-block;
             background: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 20px;
-            cursor: pointer;
+            color: #667eea;
+            padding: 16px 48px;
             font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
-        .close-simulator:hover {
-            background: #eee;
-            transform: scale(1.1);
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
-        iframe {
-            width: 400px;
-            height: 810px;
-            border: none;
-            border-radius: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        @media (max-width: 480px) {
-            iframe {
-                width: 95vw;
-                height: 85vh;
-                border-radius: 30px;
-            }
-            
-            .launch-card {
-                padding: 32px 20px;
-            }
-            
-            h1 {
-                font-size: 28px;
-            }
+        .footer {
+            margin-top: 60px;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-
-    <!-- Главная страница-заставка -->
-    <div class="launch-card" id="launchScreen">
-        <div class="android-logo">
-            <svg viewBox="0 0 24 24">
-                <path d="M6,18c0,0.55,0.45,1,1,1h1v3.5c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5V19h2v3.5c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5V19h1c0.55,0,1-0.45,1-1V8H6V18z M3.5,8C2.67,8,2,8.67,2,9.5v7c0,0.83,0.67,1.5,1.5,1.5S5,17.33,5,16.5v-7C5,8.67,4.33,8,3.5,8z M20.5,8c-0.83,0-1.5,0.67-1.5,1.5v7c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5v-7C22,8.67,21.33,8,20.5,8z M15.53,2.16l1.3-1.3c0.31-0.31,0.85-0.09,0.85,0.35v3.5c0,0.45-0.54,0.67-0.85,0.35l-1.3-1.3C15.23,3.29,14.77,3.29,15.53,2.16z M8.47,2.16L7.17,3.46c-0.31,0.31-0.85,0.09-0.85-0.35v-3.5c0-0.45,0.54-0.67,0.85-0.35l1.3,1.3C8.77,0.71,9.23,0.71,8.47,2.16z"/>
-            </svg>
-        </div>
-        
+    <div class="container">
+        <div class="logo">📱</div>
         <h1>Android Simulator</h1>
-        <div class="subtitle">Веб-симулятор мобильной ОС</div>
+        <p>Веб-симулятор мобильной ОС</p>
         
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">📱</div>
-                <div class="feature-text">12+ приложений</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🌐</div>
-                <div class="feature-text">Веб-браузер</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🔐</div>
-                <div class="feature-text">Аккаунт</div>
-            </div>
-        </div>
-        
-        <button class="launch-btn" id="launchBtn">
-            🚀 Запустить симулятор
-        </button>
-        
-        <div class="app-list">
-            <div class="app-badge"><i>🌐</i> Chrome</div>
-            <div class="app-badge"><i>📞</i> Телефон</div>
-            <div class="app-badge"><i>💬</i> Сообщения</div>
-            <div class="app-badge"><i>📷</i> Камера</div>
-            <div class="app-badge"><i>🖼️</i> Галерея</div>
-            <div class="app-badge"><i>🧮</i> Калькулятор</div>
-            <div class="app-badge"><i>🎵</i> Музыка</div>
-            <div class="app-badge"><i>☁️</i> Погода</div>
-            <div class="app-badge"><i>📝</i> Заметки</div>
-            <div class="app-badge"><i>⏰</i> Часы</div>
-            <div class="app-badge"><i>⚙️</i> Настройки</div>
-        </div>
+        <a href="simulator.html" class="start-btn">🚀 Запустить симулятор</a>
         
         <div class="footer">
             by CodeWave Pro
         </div>
     </div>
-
-    <!-- Модальное окно с симулятором -->
-    <div class="simulator-modal" id="simulatorModal">
-        <div class="simulator-container">
-            <button class="close-simulator" id="closeBtn">✕</button>
-            <iframe src="simulator.html" id="simulatorFrame"></iframe>
-        </div>
-    </div>
-
-    <script>
-        const launchBtn = document.getElementById('launchBtn');
-        const simulatorModal = document.getElementById('simulatorModal');
-        const closeBtn = document.getElementById('closeBtn');
-        
-        // Открыть симулятор
-        launchBtn.addEventListener('click', () => {
-            simulatorModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        });
-        
-        // Закрыть симулятор
-        function closeSimulator() {
-            simulatorModal.style.display = 'none';
-            document.body.style.overflow = '';
-        }
-        
-        closeBtn.addEventListener('click', closeSimulator);
-        
-        // Закрыть по клику на фон
-        simulatorModal.addEventListener('click', (e) => {
-            if (e.target === simulatorModal) {
-                closeSimulator();
-            }
-        });
-        
-        // Закрыть по Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && simulatorModal.style.display === 'flex') {
-                closeSimulator();
-            }
-        });
-    </script>
 </body>
 </html>
