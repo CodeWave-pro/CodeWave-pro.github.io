@@ -1,7 +1,4 @@
---- html-editor.html (原始)
 
-
-+++ html-editor.html (修改后)
 <!DOCTYPE html>
 <html lang="ru">
 <head>
