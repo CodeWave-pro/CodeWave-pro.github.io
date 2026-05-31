@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Android симулятор — веб-симулятор мобильной ОС с играми, приложениями, камерой и магазином">
     <title>Android Simulator</title>
+    <!-- FAVICON -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='19.933 68.509 228.155 228.155'%3E%3Cpath d='M101.885 207.092c7.865 0 14.241 6.376 14.241 14.241v61.09c0 7.865-6.376 14.24-14.241 14.24-7.864 0-14.24-6.375-14.24-14.24v-61.09c0-7.864 6.376-14.24 14.24-14.24z' fill='%23a4c639'/%3E%3Cpath d='M69.374 133.645c-.047.54-.088 1.086-.088 1.638v92.557c0 9.954 7.879 17.973 17.66 17.973h94.124c9.782 0 17.661-8.02 17.661-17.973v-92.557c0-.552-.02-1.1-.066-1.638H69.374z' fill='%23a4c639'/%3E%3Cpath d='M166.133 207.092c7.865 0 14.241 6.376 14.241 14.241v61.09c0 7.865-6.376 14.24-14.241 14.24-7.864 0-14.24-6.375-14.24-14.24v-61.09c0-7.864 6.376-14.24 14.24-14.24zM46.405 141.882c7.864 0 14.24 6.376 14.24 14.241v61.09c0 7.865-6.376 14.241-14.24 14.241-7.865 0-14.241-6.376-14.241-14.24v-61.09c-.001-7.865 6.375-14.242 14.241-14.242zM221.614 141.882c7.864 0 14.24 6.376 14.24 14.241v61.09c0 7.865-6.376 14.241-14.24 14.241-7.865 0-14.241-6.376-14.241-14.24v-61.09c0-7.865 6.376-14.242 14.241-14.242zM69.79 127.565c.396-28.43 25.21-51.74 57.062-54.812h14.312c31.854 3.073 56.666 26.384 57.062 54.812H69.79z' fill='%23a4c639'/%3E%3Cpath d='M74.743 70.009l15.022 26.02M193.276 70.009l-15.023 26.02' fill='none' stroke='%23a4c639' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M114.878 102.087c.012 3.974-3.277 7.205-7.347 7.216-4.068.01-7.376-3.202-7.388-7.176v-.04c-.011-3.975 3.278-7.205 7.347-7.216 4.068-.011 7.376 3.2 7.388 7.176v.04zM169.874 102.087c.012 3.974-3.277 7.205-7.347 7.216-4.068.01-7.376-3.202-7.388-7.176v-.04c-.011-3.975 3.278-7.205 7.347-7.216 4.068-.011 7.376 3.2 7.388 7.176v.04z' fill='%23ffffff'/%3E%3C/svg%3E">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:system-ui;background:linear-gradient(135deg,#667eea,#764ba2);height:100vh;display:flex;justify-content:center;align-items:center}
@@ -69,7 +71,6 @@
         .notification-popup.error{background:#d93025}
         @keyframes slideInRight{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
         
-        /* ИГРЫ */
         .game-selector{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;justify-content:center}
         .game-btn{padding:10px 20px;border:none;border-radius:25px;background:var(--card);color:var(--text);cursor:pointer;font-size:14px;transition:transform 0.1s}
         .game-btn:active{transform:scale(0.95)}
@@ -96,6 +97,7 @@
         
         .flappy-board{background:#87CEEB;border-radius:16px;height:400px;position:relative;overflow:hidden;margin-top:16px;cursor:pointer}
         .flappy-bird{position:absolute;width:30px;height:30px;background:#FFD700;border-radius:50%;left:50px}
+        .flappy-pipe{position:absolute;width:50px;background:#228B22}
         
         .tetris-board{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;background:var(--card);padding:8px;border-radius:16px;margin-top:16px}
         .tetris-cell{aspect-ratio:1;background:var(--bg);border-radius:2px}
@@ -218,7 +220,7 @@
             <button type="button" class="forgot-btn" id="forgotBtn">❓ Забыли пароль?</button>
         </form>
         <button class="enter-btn" id="enterBtn" disabled>🚀 Войти в симулятор</button>
-        <div style="text-align:center; font-size:12px; margin-top:15px; color:var(--text-secondary)">Android Simulator<br>by Arseniy Studio</div>
+        <div style="text-align:center; font-size:12px; margin-top:15px; color:var(--text-secondary)">Android Simulator</div>
     </div>
 
     <div id="forgotModal" class="modal" style="display:none"><div class="modal-content"><h3>🔐 Восстановление</h3><input type="email" id="forgotEmail" placeholder="Email"><div id="forgotResult"></div><div class="modal-buttons"><button id="findPasswordBtn">Найти</button><button id="closeModalBtn">Закрыть</button></div></div></div>
@@ -498,7 +500,6 @@
     document.querySelectorAll('[data-theme]').forEach(btn=>{ btn.addEventListener('click',()=>setTheme(btn.dataset.theme)); });
     document.querySelectorAll('[data-wallpaper]').forEach(btn=>{ btn.addEventListener('click',()=>setWallpaper(btn.dataset.wallpaper)); });
     
-    // Базовые функции
     function showNotification(msg, isError = false) { let el = document.createElement('div'); el.className = `notification-popup ${isError ? 'error' : 'success'}`; el.textContent = msg; document.body.appendChild(el); setTimeout(() => el.remove(), 3000); }
     function getUsers() { let users = localStorage.getItem('simulator_users'); if (!users) { let defaultUsers = [{ id: 1, name: 'Тестовый', email: 'test@example.com', password: '123456' }]; localStorage.setItem('simulator_users', JSON.stringify(defaultUsers)); return defaultUsers; } return JSON.parse(users); }
     function saveUsers(users) { localStorage.setItem('simulator_users', JSON.stringify(users)); }
