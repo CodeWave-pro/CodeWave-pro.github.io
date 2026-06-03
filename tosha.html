@@ -4,16 +4,116 @@
     <meta charset="UTF-8">
     <title>Тоша</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, Helvetica, sans-serif;
             background: red;
-            padding: 40px;
-            margin: 0;
             min-height: 100vh;
+        }
+
+        /* Верхнее меню */
+        .navbar {
+            background-color: #333;
+            padding: 15px 40px;
+            display: flex;
+            gap: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #007bff;
+            transform: translateY(-2px);
+        }
+
+        /* Выпадающее меню в навбаре */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+        }
+
+        .dropbtn:hover {
+            background-color: #007bff;
+            transform: translateY(-2px);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 5px;
+            background-color: white;
+            min-width: 180px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 15px;
+            font-family: Arial, Helvetica, sans-serif;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Основной контент */
+        .content {
+            padding: 40px;
         }
 
         h1 {
             color: white;
+            margin-bottom: 15px;
         }
 
         p {
@@ -21,6 +121,7 @@
             font-size: 18px;
         }
 
+        /* Кнопка внизу */
         .btn {
             background-color: #007bff;
             color: white;
@@ -33,7 +134,7 @@
             cursor: pointer;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .btn:hover {
@@ -49,9 +150,28 @@
     </style>
 </head>
 <body>
-    <h1>Тоша</h1>
-    <p>Тоша — это кот</p>
-    <button class="btn">Больше</button>
+
+    <!-- Верхнее меню -->
+    <div class="navbar">
+        <a href="#">Главная</a>
+        <a href="#">О Тоше</a>
+        <div class="dropdown">
+            <button class="dropbtn">Фото ▼</button>
+            <div class="dropdown-menu">
+                <a href="#">Котёнком</a>
+                <a href="#">Взрослым</a>
+                <a href="#">С игрушками</a>
+            </div>
+        </div>
+        <a href="#">Контакты</a>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="content">
+        <h1>Тоша</h1>
+        <p>Тоша — это кот</p>
+        <button class="btn">Больше</button>
+    </div>
+
 </body>
 </html>
-
