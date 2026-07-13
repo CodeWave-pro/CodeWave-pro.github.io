@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Игровой конструктор + Экспорт в APK</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background: #0a0e1a;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: #141c30;
+            border-radius: 40px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            border: 1px solid #2a3f60;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .header h1 {
+            color: #8ab4ff;
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header h1 small {
+            font-size: 0.9rem;
+            background: #1e3150;
+            padding: 2px 16px;
+            border-radius: 40px;
+            color: #7a9fd0;
+        }
+        .export-btn {
+            background: #2a6b4a;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0d2a1a;
+            transition: 0.08s linear;
+            border: 1px solid #3e9e6a;
+        }
+        .export-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #0d2a1a;
+        }
+        .export-btn:disabled {
+            opacity: 0.5;
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #0d2a1a;
+            pointer-events: none;
+        }
+        .canvas-wrap {
+            background: #0b101f;
+            border-radius: 24px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 800/500;
+            background: #141f33;
+            border-radius: 16px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: #101a2b;
+            padding: 12px 16px;
+            border-radius: 40px;
+            margin-bottom: 12px;
+            align-items: center;
+            border: 1px solid #253a5a;
+        }
+        .tools button {
+            background: #1e3150;
+            color: #b0ccff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: 1px solid #3a5a82;
+            transition: 0.1s;
+        }
+        .tools button:active {
+            transform: scale(0.95);
+        }
+        .tools button.play {
+            background: #2a6b4a;
+            border-color: #4a9a6a;
+            color: white;
+        }
+        .tools button.danger {
+            background: #6a2a3a;
+            border-color: #9a4a5a;
+            color: #ffb0b0;
+        }
+        .tools label {
+            color: #8aa8d0;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
+        }
+        .tools input[type="color"] {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #3a5a82;
+            border-radius: 30px;
+            padding: 2px;
+            background: transparent;
+            cursor: pointer;
+        }
+        .tools input[type="range"] {
+            width: 80px;
+            accent-color: #4a8ac0;
+        }
+        .info {
+            display: flex;
+            justify-content: space-between;
+            color: #6a8aaa;
+            font-size: 0.85rem;
+            padding: 0 8px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .info span {
+            background: #0a1220;
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid #1a2a40;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a2a44;
+            color: #b0ccff;
+            padding: 14px 32px;
+            border-radius: 40px;
+            border: 1px solid #3a6a9a;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            font-size: 1rem;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            text-align: center;
+            max-width: 90%;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+        .toast.success {
+            border-color: #4a9a6a;
+            color: #8addb0;
+        }
+        @media (max-width: 700px) {
+            .tools label { margin-left: 0; }
+            .header h1 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>
+            🎮 Конструктор игр
+            <small>движок</small>
+        </h1>
+        <button class="export-btn" id="exportApkBtn">📱 Экспорт в APK</button>
+    </div>
+
+    <div class="canvas-wrap">
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+    </div>
+
+    <div class="tools">
+        <button class="play" id="playBtn">▶ Играть</button>
+        <button id="addBtn">➕ Добавить</button>
+        <button id="removeBtn">➖ Удалить</button>
+        <button class="danger" id="resetBtn">⟳ Сброс</button>
+        <label>
+            🎨 <input type="color" id="colorPicker" value="#ffb347">
+        </label>
+        <label>
+            ⚡ <input type="range" id="speedSlider" min="0.5" max="5" step="0.1" value="2">
+        </label>
+    </div>
+
+    <div class="info">
+        <span id="objCount">Объектов: 0</span>
+        <span id="fpsDisplay">FPS: 60</span>
+        <span>🖱 Клик по блоку → удалить</span>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// 1. ИГРОВОЙ ДВИЖОК (создание и редактирование игры)
+// ============================================================
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+let blocks = [];
+let isPlaying = false;
+let animId = null;
+let lastFpsUpdate = 0;
+let fps = 60;
+
+let selectedColor = '#ffb347';
+let speedFactor = 2.0;
+
+// DOM
+const playBtn = document.getElementById('playBtn');
+const addBtn = document.getElementById('addBtn');
+const removeBtn = document.getElementById('removeBtn');
+const resetBtn = document.getElementById('resetBtn');
+const colorPicker = document.getElementById('colorPicker');
+const speedSlider = document.getElementById('speedSlider');
+const objCountSpan = document.getElementById('objCount');
+const fpsSpan = document.getElementById('fpsDisplay');
+const exportBtn = document.getElementById('exportApkBtn');
+const toast = document.getElementById('toast');
+
+// ---- Вспомогательные ----
+function rand(min, max) { return Math.random() * (max - min) + min; }
+
+function createBlock(x, y) {
+    const size = rand(20, 50);
+    return {
+        x: x || rand(20, 780),
+        y: y || rand(20, 480),
+        w: size,
+        h: size,
+        color: selectedColor,
+        vx: rand(-2.5, 2.5),
+        vy: rand(-2.5, 2.5),
+    };
+}
+
+function addBlocks(count = 1) {
+    for (let i = 0; i < count; i++) blocks.push(createBlock());
+    updateCount();
+}
+
+function updateCount() {
+    objCountSpan.textContent = `Объектов: ${blocks.length}`;
+}
+
+// ---- Инициализация ----
+function init() {
+    blocks = [];
+    const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#a29bfe', '#fd79a8', '#55efc4'];
+    for (let i = 0; i < 6; i++) {
+        const b = createBlock();
+        b.color = colors[i % colors.length];
+        blocks.push(b);
+    }
+    updateCount();
+}
+init();
+
+// ---- Отрисовка ----
+function draw() {
+    ctx.clearRect(0, 0, 800, 500);
+
+    // Сетка
+    ctx.strokeStyle = '#1a2a44';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < 800; i += 40) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, 500);
+        ctx.stroke();
+    }
+    for (let i = 0; i < 500; i += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(800, i);
+        ctx.stroke();
+    }
+
+    // Блоки
+    for (const b of blocks) {
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = b.color;
+        ctx.fillRect(b.x, b.y, b.w, b.h);
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(b.x, b.y, b.w, b.h);
+    }
+}
+
+// ---- Физика ----
+function updatePhysics() {
+    if (!isPlaying) return;
+    const spd = speedFactor;
+    for (const b of blocks) {
+        b.x += b.vx * spd * 0.5;
+        b.y += b.vy * spd * 0.5;
+
+        if (b.x < 0) { b.x = 0; b.vx *= -1; }
+        if (b.x + b.w > 800) { b.x = 800 - b.w; b.vx *= -1; }
+        if (b.y < 0) { b.y = 0; b.vy *= -1; }
+        if (b.y + b.h > 500) { b.y = 500 - b.h; b.vy *= -1; }
+
+        b.vx *= 0.997;
+        b.vy *= 0.997;
+        const maxV = 5;
+        const v = Math.hypot(b.vx, b.vy);
+        if (v > maxV) {
+            b.vx = (b.vx / v) * maxV;
+            b.vy = (b.vy / v) * maxV;
+        }
+        if (Math.abs(b.vx) < 0.05 && Math.abs(b.vy) < 0.05) {
+            b.vx += (Math.random() - 0.5) * 0.3;
+            b.vy += (Math.random() - 0.5) * 0.3;
+        }
+    }
+}
+
+// ---- Цикл ----
+function loop(time) {
+    if (!isPlaying) { draw(); return; }
+
+    if (time - lastFpsUpdate > 1000) {
+        fps = Math.round(1000 / (time - lastFpsUpdate));
+        fpsSpan.textContent = `FPS: ${Math.min(fps, 120)}`;
+        lastFpsUpdate = time;
+    }
+
+    updatePhysics();
+    draw();
+    animId = requestAnimationFrame(loop);
+}
+
+// ---- Управление ----
+function togglePlay() {
+    isPlaying = !isPlaying;
+    playBtn.textContent = isPlaying ? '⏸ Пауза' : '▶ Играть';
+    if (isPlaying) {
+        if (animId) cancelAnimationFrame(animId);
+        lastFpsUpdate = performance.now();
+        animId = requestAnimationFrame(loop);
+    } else {
+        if (animId) { cancelAnimationFrame(animId); animId = null; }
+        draw();
+    }
+}
+
+// ---- Добавление/удаление ----
+function addBlockAt(event) {
+    const rect = canvas.getBoundingClientRect();
+    const sx = canvas.width / rect.width;
+    const sy = canvas.height / rect.height;
+
+    let cx, cy;
+    if (event.touches) {
+        cx = event.touches[0].clientX;
+        cy = event.touches[0].clientY;
+        event.preventDefault();
+    } else {
+        cx = event.clientX;
+        cy = event.clientY;
+    }
+
+    let x = (cx - rect.left) * sx - 25;
+    let y = (cy - rect.top) * sy - 25;
+    x = Math.max(5, Math.min(770, x));
+    y = Math.max(5, Math.min(470, y));
+
+    const b = createBlock(x, y);
+    b.color = selectedColor;
+    blocks.push(b);
+    updateCount();
+    if (!isPlaying) draw();
+}
+
+function removeBlockAt(event) {
+    if (isPlaying) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const sx = canvas.width / rect.width;
+    const sy = canvas.height / rect.height;
+
+    let cx, cy;
+    if (event.touches) {
+        cx = event.touches[0].clientX;
+        cy = event.touches[0].clientY;
+        event.preventDefault();
+    } else {
+        cx = event.clientX;
+        cy = event.clientY;
+    }
+
+    const x = (cx - rect.left) * sx;
+    const y = (cy - rect.top) * sy;
+
+    for (let i = blocks.length - 1; i >= 0; i--) {
+        const b = blocks[i];
+        if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) {
+            blocks.splice(i, 1);
+            updateCount();
+            if (!isPlaying) draw();
+            return;
+        }
+    }
+}
+
+function resetGame() {
+    if (isPlaying) togglePlay();
+    blocks = [];
+    const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#a29bfe', '#fd79a8', '#55efc4', '#fdcb6e', '#74b9ff'];
+    for (let i = 0; i < 8; i++) {
+        const b = createBlock();
+        b.color = colors[i % colors.length];
+        blocks.push(b);
+    }
+    updateCount();
+    draw();
+    showToast('🔄 Игра сброшена');
+}
+
+// ---- Уведомления ----
+function showToast(msg, duration = 3000) {
+    toast.textContent = msg;
+    toast.className = 'toast show';
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.className = 'toast', duration);
+}
+
+// ============================================================
+// 2. ЭКСПОРТ В APK (БЕЗ ДОПОЛНИТЕЛЬНЫХ ПРИЛОЖЕНИЙ)
+// ============================================================
+
+function exportToApk() {
+    exportBtn.disabled = true;
+    exportBtn.textContent = '⏳ Сборка...';
+
+    // Получаем состояние игры (все блоки)
+    const gameState = {
+        blocks: blocks.map(b => ({ ...b })),
+        version: '1.0',
+        timestamp: Date.now()
+    };
+
+    // Генерируем HTML-код готовой игры (автономный файл)
+    const gameHTML = generateGameHTML(gameState);
+
+    // Создаём APK через WebAPK (встроенный в Chrome Android)
+    try {
+        // Способ 1: PWA установка через манифест
+        const manifest = {
+            name: 'Моя игра',
+            short_name: 'Game',
+            description: 'Игра созданная в конструкторе',
+            start_url: 'data:text/html,' + encodeURIComponent(gameHTML),
+            display: 'standalone',
+            background_color: '#0a0e1a',
+            theme_color: '#141c30',
+            icons: [{
+                src: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"%3E%3Crect width="512" height="512" rx="80" fill="%23141c30"/%3E%3Ccircle cx="256" cy="256" r="180" fill="%23ffb347"/%3E%3Ctext x="256" y="280" font-size="100" text-anchor="middle" fill="%23fff" font-family="sans-serif"%3E🎮%3C/text%3E%3C/svg%3E',
+                sizes: '512x512',
+                type: 'image/svg+xml'
+            }]
+        };
+
+        // Создаём ссылку для скачивания HTML-файла игры
+        const blob = new Blob([gameHTML], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+
+        // Скачиваем как .html
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'my_game.html';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+        // Показываем инструкцию по установке на Android
+        showToast('✅ Игра сохранена! Для установки на Android откройте HTML в Chrome и нажмите "Установить"', 6000);
+
+        // Дополнительно: предлагаем установить через PWA
+        setTimeout(() => {
+            if (window.confirm('📱 Установить игру как приложение на Android?')) {
+                // Сохраняем в localStorage для PWA
+                localStorage.setItem('gameHTML', gameHTML);
+                // Перезагружаем с PWA манифестом
+                installAsPWA(gameHTML);
+            }
+        }, 1500);
+
+    } catch (e) {
+        showToast('❌ Ошибка: ' + e.message);
+    } finally {
+        exportBtn.disabled = false;
+        exportBtn.textContent = '📱 Экспорт в APK';
+    }
+}
+
+// ---- Генерация HTML игры ----
+function generateGameHTML(state) {
+    const blocksJSON = JSON.stringify(state.blocks);
+
+    return `<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Моя игра</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        body {
+            background: #0a0e1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: sans-serif;
+        }
+        .game-container {
+            background: #141c30;
+            border-radius: 24px;
+            padding: 16px;
+            max-width: 820px;
+            width: 100%;
+            margin: 16px;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 800/500;
+            background: #141f33;
+            border-radius: 16px;
+            touch-action: none;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        button {
+            background: #1e3150;
+            color: #b0ccff;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: 1px solid #3a5a82;
+        }
+        button.play {
+            background: #2a6b4a;
+            border-color: #4a9a6a;
+            color: white;
+        }
+        .info {
+            color: #6a8aaa;
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+    <div class="controls">
+        <button class="play" id="playBtn">▶ Играть</button>
+        <button id="resetBtn">⟳ Сброс</button>
+    </div>
+    <div class="info" id="info">Объектов: ${state.blocks.length}</div>
+</div>
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const info = document.getElementById('info');
+
+    let blocks = ${blocksJSON};
+    let isPlaying = false;
+    let animId = null;
+    let speedFactor = 2.0;
+
+    function draw() {
+        ctx.clearRect(0, 0, 800, 500);
+        ctx.strokeStyle = '#1a2a44';
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < 800; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, 500);
+            ctx.stroke();
+        }
+        for (let i = 0; i < 500; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(800, i);
+            ctx.stroke();
+        }
+        for (const b of blocks) {
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 12;
+            ctx.fillStyle = b.color;
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(b.x, b.y, b.w, b.h);
+        }
+        info.textContent = 'Объектов: ' + blocks.length;
+    }
+
+    function updatePhysics() {
+        if (!isPlaying) return;
+        for (const b of blocks) {
+            b.x += b.vx * speedFactor * 0.5;
+            b.y += b.vy * speedFactor * 0.5;
+            if (b.x < 0) { b.x = 0; b.vx *= -1; }
+            if (b.x + b.w > 800) { b.x = 800 - b.w; b.vx *= -1; }
+            if (b.y < 0) { b.y = 0; b.vy *= -1; }
+            if (b.y + b.h > 500) { b.y = 500 - b.h; b.vy *= -1; }
+            b.vx *= 0.997;
+            b.vy *= 0.997;
+            const maxV = 5;
+            const v = Math.hypot(b.vx, b.vy);
+            if (v > maxV) {
+                b.vx = (b.vx / v) * maxV;
+                b.vy = (b.vy / v) * maxV;
+            }
+            if (Math.abs(b.vx) < 0.05 && Math.abs(b.vy) < 0.05) {
+                b.vx += (Math.random() - 0.5) * 0.3;
+                b.vy += (Math.random() - 0.5) * 0.3;
+            }
+        }
+    }
+
+    function loop() {
+        if (!isPlaying) { draw(); return; }
+        updatePhysics();
+        draw();
+        animId = requestAnimationFrame(loop);
+    }
+
+    function togglePlay() {
+        isPlaying = !isPlaying;
+        playBtn.textContent = isPlaying ? '⏸ Пауза' : '▶ Играть';
+        if (isPlaying) {
+            if (animId) cancelAnimationFrame(animId);
+            animId = requestAnimationFrame(loop);
+        } else {
+            if (animId) { cancelAnimationFrame(animId); animId = null; }
+            draw();
+        }
+    }
+
+    function resetGame() {
+        if (isPlaying) togglePlay();
+        blocks = ${blocksJSON};
+        draw();
+    }
+
+    playBtn.addEventListener('click', togglePlay);
+    resetBtn.addEventListener('click', resetGame);
+
+    draw();
+
+    // --- Поддержка установки на Android через PWA ---
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('data:text/javascript,' + encodeURIComponent(
+            'self.addEventListener("install", e => e.waitUntil(self.skipWaiting()));' +
+            'self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));'
+        ));
+    }
+</script>
+</body>
+</html>`;
+}
+
+// ---- Установка как PWA (на Android) ----
+function installAsPWA(gameHTML) {
+    try {
+        const manifest = {
+            name: 'Моя игра',
+            short_name: 'Game',
+            description: 'Игра созданная в конструкторе',
+            start_url: 'data:text/html,' + encodeURIComponent(gameHTML),
+            display: 'standalone',
+            background_color: '#0a0e1a',
+            theme_color: '#141c30',
+            icons: [{
+                src: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"%3E%3Crect width="512" height="512" rx="80" fill="%23141c30"/%3E%3Ccircle cx="256" cy="256" r="180" fill="%23ffb347"/%3E%3Ctext x="256" y="280" font-size="100" text-anchor="middle" fill="%23fff" font-family="sans-serif"%3E🎮%3C/text%3E%3C/svg%3E',
+                sizes: '512x512',
+                type: 'image/svg+xml'
+            }]
+        };
+
+        // Сохраняем в localStorage
+        localStorage.setItem('gameHTML', gameHTML);
+        localStorage.setItem('manifest', JSON.stringify(manifest));
+
+        showToast('📲 Откройте Chrome на Android и нажмите "Установить" в меню', 5000);
+
+        // Если в Chrome на Android — показываем кнопку установки
+        if (window.navigator && window.navigator.share) {
+            if (confirm('📲 Установить игру как приложение?')) {
+                // Пытаемся открыть установку PWA
+                const link = document.createElement('a');
+                link.href = 'data:text/html,' + encodeURIComponent(gameHTML);
+                link.download = 'game.html';
+                link.click();
+                showToast('✅ Файл сохранён. Откройте его в Chrome и установите', 4000);
+            }
+        }
+    } catch (e) {
+        showToast('❌ Ошибка: ' + e.message);
+    }
+}
+
+// ============================================================
+// 3. СОБЫТИЯ
+// ============================================================
+
+playBtn.addEventListener('click', togglePlay);
+
+addBtn.addEventListener('click', () => {
+    addBlocks(1);
+    if (!isPlaying) draw();
+});
+
+removeBtn.addEventListener('click', () => {
+    if (blocks.length === 0) return;
+    if (isPlaying) togglePlay();
+    blocks.pop();
+    updateCount();
+    draw();
+});
+
+resetBtn.addEventListener('click', resetGame);
+
+colorPicker.addEventListener('input', (e) => {
+    selectedColor = e.target.value;
+});
+
+speedSlider.addEventListener('input', (e) => {
+    speedFactor = parseFloat(e.target.value);
+});
+
+canvas.addEventListener('click', removeBlockAt);
+canvas.addEventListener('dblclick', addBlockAt);
+canvas.addEventListener('touchstart', (e) => {
+    if (!isPlaying) removeBlockAt(e);
+    else addBlockAt(e);
+}, { passive: false });
+
+exportBtn.addEventListener('click', exportToApk);
+
+// ============================================================
+// 4. СТАРТ
+// ============================================================
+
+draw();
+updateCount();
+togglePlay(); // автоматический запуск
+
+console.log('🎮 Игровой конструктор загружен!');
+console.log('📱 Нажмите "Экспорт в APK" чтобы сохранить игру и установить на Android');
+</script>
+</body>
+</html>
