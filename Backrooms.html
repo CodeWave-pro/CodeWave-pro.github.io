@@ -8,8 +8,40 @@
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="https://codewave-pro.github.io/Backrooms/favicon.png">
 <title>THE BACKROOMS</title>
+ <!-- Counter.dev аналитика -->
+<script>
+  // Простой счетчик через localStorage + отображение
+  (function() {
+    const visits = parseInt(localStorage.getItem('backrooms_visits_count') || '0') + 1;
+    localStorage.setItem('backrooms_visits_count', visits);
+    
+    // Показывать в консоли для разработчика
+    console.log(`%c📊 Посещение #${visits}`, 'color: #d4b85a; font-size: 16px; font-weight: bold;');
+    
+    // Отправка на бесплатный сервис (опционально)
+    // fetch('https://api.counterapi.dev/v1/backrooms-game/up/');
+  })();
+</script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+ /* Мобильные контролы */
+@media (max-width: 768px) {
+  #mobileControls { display: block !important; }
+  #hud { font-size: 11px; }
+  #minimap { width: 100px; height: 100px; }
+}
+
+#joystickLeft:active, #joystickRight:active {
+  background: rgba(212,184,90,0.2);
+}
+
+#joystickKnobLeft.active, #joystickKnobRight.active {
+  background: rgba(212,184,90,0.8);
+}
+
+#btnFlashMobile:active, #btnMedkitMobile:active {
+  transform: scale(0.9);
+}
   body { background: #000; color: #0f0; font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; }
   #game { position: relative; width: 100vw; height: 100vh; image-rendering: pixelated; }
   #bgCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; image-rendering: pixelated; display: block; }
@@ -431,6 +463,20 @@
 </div>
 
 <script>
+ <!-- ВИРТУАЛЬНЫЙ ДЖОЙСТИК ДЛЯ МОБИЛЬНЫХ -->
+<div id="mobileControls" style="display:none;position:fixed;bottom:0;left:0;right:0;height:200px;z-index:100;pointer-events:none;">
+  <div id="joystickLeft" style="position:absolute;bottom:20px;left:20px;width:120px;height:120px;background:rgba(212,184,90,0.1);border:2px solid rgba(212,184,90,0.3);border-radius:50%;pointer-events:auto;touch-action:none;">
+    <div id="joystickKnobLeft" style="position:absolute;top:50%;left:50%;width:50px;height:50px;background:rgba(212,184,90,0.5);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;"></div>
+  </div>
+  <div id="joystickRight" style="position:absolute;bottom:20px;right:20px;width:120px;height:120px;background:rgba(212,184,90,0.1);border:2px solid rgba(212,184,90,0.3);border-radius:50%;pointer-events:auto;touch-action:none;">
+    <div id="joystickKnobRight" style="position:absolute;top:50%;left:50%;width:50px;height:50px;background:rgba(212,184,90,0.5);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;"></div>
+  </div>
+  <div id="mobileButtons" style="position:absolute;bottom:160px;right:20px;display:flex;gap:10px;pointer-events:auto;">
+    <button id="btnFlashMobile" style="width:60px;height:60px;background:rgba(212,184,90,0.2);border:2px solid #d4b85a;color:#d4b85a;border-radius:50%;font-size:24px;">🔦</button>
+    <button id="btnMedkitMobile" style="width:60px;height:60px;background:rgba(244,68,68,0.2);border:2px solid #f44;color:#f44;border-radius:50%;font-size:24px;">🧰</button>
+  </div>
+</div>
+ 
 'use strict';
 
 const W = 800, H = 500;
@@ -2869,6 +2915,125 @@ document.addEventListener('visibilitychange', () => {
 
 log('Ready. F1 — dev panel, F3 — console, P — photo mode', 'info');
 log('Type "help" for commands', 'info');
+ // ============ ВИРТУАЛЬНЫЙ ДЖОЙСТИК ============
+const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+const mobileControls = document.getElementById('mobileControls');
+
+if (isMobile) {
+  mobileControls.style.display = 'block';
+  
+  // Левый джойстик — движение
+  const joyLeft = document.getElementById('joystickLeft');
+  const knobLeft = document.getElementById('joystickKnobLeft');
+  let joyLeftActive = false;
+  let joyLeftStart = { x: 0, y: 0 };
+  let joyLeftDelta = { x: 0, y: 0 };
+  
+  joyLeft.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    joyLeftActive = true;
+    const touch = e.touches[0];
+    const rect = joyLeft.getBoundingClientRect();
+    joyLeftStart.x = rect.left + rect.width / 2;
+    joyLeftStart.y = rect.top + rect.height / 2;
+    knobLeft.classList.add('active');
+  });
+  
+  joyLeft.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (!joyLeftActive) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - joyLeftStart.x;
+    const dy = touch.clientY - joyLeftStart.y;
+    const dist = Math.min(Math.hypot(dx, dy), 35);
+    const angle = Math.atan2(dy, dx);
+    joyLeftDelta.x = Math.cos(angle) * dist;
+    joyLeftDelta.y = Math.sin(angle) * dist;
+    knobLeft.style.transform = `translate(calc(-50% + ${joyLeftDelta.x}px), calc(-50% + ${joyLeftDelta.y}px))`;
+  });
+  
+  joyLeft.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    joyLeftActive = false;
+    joyLeftDelta.x = 0;
+    joyLeftDelta.y = 0;
+    knobLeft.style.transform = 'translate(-50%, -50%)';
+    knobLeft.classList.remove('active');
+  });
+  
+  // Правый джойстик — обзор
+  const joyRight = document.getElementById('joystickRight');
+  const knobRight = document.getElementById('joystickKnobRight');
+  let joyRightActive = false;
+  let joyRightStart = { x: 0, y: 0 };
+  let joyRightDelta = { x: 0, y: 0 };
+  
+  joyRight.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    joyRightActive = true;
+    const touch = e.touches[0];
+    const rect = joyRight.getBoundingClientRect();
+    joyRightStart.x = rect.left + rect.width / 2;
+    joyRightStart.y = rect.top + rect.height / 2;
+    knobRight.classList.add('active');
+  });
+  
+  joyRight.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (!joyRightActive) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - joyRightStart.x;
+    const dy = touch.clientY - joyRightStart.y;
+    const dist = Math.min(Math.hypot(dx, dy), 35);
+    const angle = Math.atan2(dy, dx);
+    joyRightDelta.x = Math.cos(angle) * dist;
+    joyRightDelta.y = Math.sin(angle) * dist;
+    knobRight.style.transform = `translate(calc(-50% + ${joyRightDelta.x}px), calc(-50% + ${joyRightDelta.y}px))`;
+    // Поворот камеры
+    player.dir += joyRightDelta.x * 0.0005;
+  });
+  
+  joyRight.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    joyRightActive = false;
+    joyRightDelta.x = 0;
+    joyRightDelta.y = 0;
+    knobRight.style.transform = 'translate(-50%, -50%)';
+    knobRight.classList.remove('active');
+  });
+  
+  // Кнопки
+  document.getElementById('btnFlashMobile').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    player.flashOn = !player.flashOn;
+    if (player.flashOn && player.battery <= 0 && !dev.infiniteFlash) player.flashOn = false;
+    updateFlashHUD();
+  });
+  
+  document.getElementById('btnMedkitMobile').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    useMedkit();
+  });
+  
+  // Интеграция с движением игрока
+  const originalMovePlayer = movePlayer;
+  movePlayer = function(dt) {
+    // Мобильное управление
+    if (joyLeftActive) {
+      const moveAngle = Math.atan2(joyLeftDelta.y, joyLeftDelta.x);
+      const moveDist = Math.hypot(joyLeftDelta.x, joyLeftDelta.y) / 35;
+      const spd = (player.runSpeed * moveDist) * dt * dev.speedMultiplier;
+      const mx = Math.cos(moveAngle) * spd;
+      const my = Math.sin(moveAngle) * spd;
+      if (canMove(player.x + mx, player.y)) player.x += mx;
+      if (canMove(player.x, player.y + my)) player.y += my;
+      dev.totalDistance += moveDist * spd;
+    } else {
+      // Клавиатурное управление
+      originalMovePlayer(dt);
+    }
+  };
+}
 </script>
 </body>
 </html>
