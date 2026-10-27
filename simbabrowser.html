@@ -23,7 +23,6 @@
   }
   .wrap{max-width:1080px;margin:0 auto}
 
-  /* верхняя полоска */
   .topbar{
     display:flex;justify-content:space-between;align-items:baseline;
     border-bottom:1px solid rgba(42,29,20,.25);
@@ -35,7 +34,6 @@
   .topbar .logo{color:var(--ink);font-weight:700;letter-spacing:.18em}
   .topbar .logo span{color:var(--rust)}
 
-  /* сетка */
   .grid{
     display:grid;
     grid-template-columns: 1.1fr .9fr;
@@ -46,7 +44,6 @@
     .grid{grid-template-columns:1fr;gap:30px}
   }
 
-  /* левая часть — большой заголовок */
   .left h1{
     font-size:clamp(56px, 9vw, 128px);
     line-height:.92;
@@ -70,7 +67,6 @@
   }
   .left .sub b{color:var(--ink);font-weight:600}
 
-  /* правая часть — письмо */
   .letter{
     background:var(--paper);
     padding:38px 36px 44px;
@@ -109,14 +105,12 @@
     margin-top:4px;font-family:"Helvetica Neue",Arial,sans-serif;
   }
 
-  /* след лапы */
   .paw{
     position:fixed;right:30px;bottom:30px;opacity:.18;
     transform:rotate(-18deg);
     pointer-events:none;
   }
 
-  /* нижняя полоса */
   .footer{
     margin-top:80px;
     padding-top:18px;
@@ -128,7 +122,6 @@
   }
   .footer .dot{color:var(--rust)}
 
-  /* маленькая пометка-наклейка */
   .sticker{
     display:inline-block;
     background:var(--ochre);
@@ -147,7 +140,7 @@
 
     <div class="topbar">
       <div class="logo">СИМБА<span>●</span>browser</div>
-      <div>выпуск № 4 · осень 2026</div>
+      <div>выпуск № 3 · осень 2026</div>
     </div>
 
     <div class="grid">
@@ -184,19 +177,18 @@
         </p>
         <div class="sign">
           — команда Симбы
-          <small>сделано с заботой · v 4.2.1</small>
+          <small>сделано с заботой · v 3.1.0</small>
         </div>
       </div>
     </div>
 
     <div class="footer">
-      <div>симба браузер <span class="dot">●</span> с 2024 года</div>
+      <div>симба браузер <span class="dot">●</span> с 2026 года</div>
       <div>тихо · быстро · по-человечески</div>
       <div>стр. 01 из 01</div>
     </div>
   </div>
 
-  <!-- след лапы -->
   <svg class="paw" width="110" height="110" viewBox="0 0 100 100" fill="#2a1d14">
     <ellipse cx="50" cy="65" rx="22" ry="18"/>
     <ellipse cx="28" cy="40" rx="8" ry="11" transform="rotate(-20 28 40)"/>
@@ -205,4 +197,4 @@
     <ellipse cx="78" cy="42" rx="8" ry="11" transform="rotate(20 78 42)"/>
   </svg>
 </body>
-  </html>
+</html>
