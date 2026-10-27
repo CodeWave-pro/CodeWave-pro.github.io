@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Симба — спасибо</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --cream:#f1e8db;
+    --paper:#f7f1e6;
+    --ink:#2a1d14;
+    --rust:#b84a2d;
+    --ochre:#d9a441;
+    --muted:#7a6a58;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--cream);color:var(--ink);font-family:Georgia,"Times New Roman",serif;min-height:100%}
+  body{
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(217,164,65,.15), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(184,74,45,.12), transparent 45%);
+    padding:40px 24px 60px;
+  }
+  .wrap{max-width:1080px;margin:0 auto}
+
+  /* верхняя полоска */
+  .topbar{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:1px solid rgba(42,29,20,.25);
+    padding-bottom:14px;margin-bottom:60px;
+    font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    color:var(--muted);
+  }
+  .topbar .logo{color:var(--ink);font-weight:700;letter-spacing:.18em}
+  .topbar .logo span{color:var(--rust)}
+
+  /* сетка */
+  .grid{
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap:60px;
+    align-items:start;
+  }
+  @media (max-width:780px){
+    .grid{grid-template-columns:1fr;gap:30px}
+  }
+
+  /* левая часть — большой заголовок */
+  .left h1{
+    font-size:clamp(56px, 9vw, 128px);
+    line-height:.92;
+    font-weight:400;
+    letter-spacing:-.02em;
+    color:var(--ink);
+  }
+  .left h1 em{
+    font-style:italic;
+    color:var(--rust);
+    display:block;
+    transform:translateX(20px);
+  }
+  .left .sub{
+    margin-top:28px;
+    font-size:17px;
+    color:var(--muted);
+    max-width:380px;
+    line-height:1.55;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+  }
+  .left .sub b{color:var(--ink);font-weight:600}
+
+  /* правая часть — письмо */
+  .letter{
+    background:var(--paper);
+    padding:38px 36px 44px;
+    border:1px solid rgba(42,29,20,.15);
+    box-shadow: 6px 8px 0 rgba(42,29,20,.08);
+    position:relative;
+    transform:rotate(.4deg);
+  }
+  .letter::before{
+    content:"";
+    position:absolute;top:14px;left:14px;right:14px;bottom:14px;
+    border:1px dashed rgba(42,29,20,.18);
+    pointer-events:none;
+  }
+  .letter .date{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:12px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:18px;
+  }
+  .letter p{
+    font-size:17px;line-height:1.65;margin-bottom:14px;
+  }
+  .letter p.first::first-letter{
+    font-size:42px;float:left;line-height:1;
+    padding:4px 8px 0 0;color:var(--rust);font-weight:700;
+  }
+  .letter .sign{
+    margin-top:24px;
+    font-style:italic;
+    font-size:20px;
+    color:var(--ink);
+  }
+  .letter .sign small{
+    display:block;font-style:normal;font-size:12px;
+    color:var(--muted);letter-spacing:.1em;text-transform:uppercase;
+    margin-top:4px;font-family:"Helvetica Neue",Arial,sans-serif;
+  }
+
+  /* след лапы */
+  .paw{
+    position:fixed;right:30px;bottom:30px;opacity:.18;
+    transform:rotate(-18deg);
+    pointer-events:none;
+  }
+
+  /* нижняя полоса */
+  .footer{
+    margin-top:80px;
+    padding-top:18px;
+    border-top:1px solid rgba(42,29,20,.25);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);
+  }
+  .footer .dot{color:var(--rust)}
+
+  /* маленькая пометка-наклейка */
+  .sticker{
+    display:inline-block;
+    background:var(--ochre);
+    color:var(--ink);
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    padding:6px 12px;
+    transform:rotate(-3deg);
+    margin-bottom:22px;
+    box-shadow:2px 3px 0 rgba(42,29,20,.15);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <div class="logo">СИМБА<span>●</span>browser</div>
+      <div>выпуск № 4 · осень 2026</div>
+    </div>
+
+    <div class="grid">
+      <div class="left">
+        <div class="sticker">личное сообщение</div>
+        <h1>
+          Спасибо,<br>
+          <em>что выбрали</em>
+          нас.
+        </h1>
+        <p class="sub">
+          Вы используете <b>Симба браузер</b> — и это, честно говоря,
+          делает наш день чуть теплее. Ниже — короткое письмо от тех,
+          кто его собирал.
+        </p>
+      </div>
+
+      <div class="letter">
+        <div class="date">27 октября 2026 · вторник</div>
+        <p class="first">
+          Мы долго думали, как начать это письмо, и решили просто:
+          спасибо. Без пафоса, без громких слов — просто спасибо,
+          что доверили нам свой экран, свои вкладки и свои утра
+          за чашкой кофе.
+        </p>
+        <p>
+          Симба — это не про гром. Это про тёплый свет, быстрые
+          страницы и ощущение, что всё под контролем. Мы стараемся,
+          чтобы браузер не мешал жить, а тихо помогал.
+        </p>
+        <p>
+          Если что-то не так — напишите нам. Если всё хорошо —
+          тоже напишите. Мы читаем каждое письмо.
+        </p>
+        <div class="sign">
+          — команда Симбы
+          <small>сделано с заботой · v 4.2.1</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>симба браузер <span class="dot">●</span> с 2024 года</div>
+      <div>тихо · быстро · по-человечески</div>
+      <div>стр. 01 из 01</div>
+    </div>
+  </div>
+
+  <!-- след лапы -->
+  <svg class="paw" width="110" height="110" viewBox="0 0 100 100" fill="#2a1d14">
+    <ellipse cx="50" cy="65" rx="22" ry="18"/>
+    <ellipse cx="28" cy="40" rx="8" ry="11" transform="rotate(-20 28 40)"/>
+    <ellipse cx="45" cy="28" rx="7" ry="10"/>
+    <ellipse cx="62" cy="28" rx="7" ry="10"/>
+    <ellipse cx="78" cy="42" rx="8" ry="11" transform="rotate(20 78 42)"/>
+  </svg>
+</body>
+  </html>
