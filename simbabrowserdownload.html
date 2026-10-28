@@ -89,6 +89,7 @@
   .btn-download {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     background: var(--rust);
     color: var(--cream);
@@ -96,12 +97,12 @@
     font-size: 18px;
     font-weight: 600;
     letter-spacing: .05em;
-    text-decoration: none;
     padding: 20px 48px;
     border: 2px solid var(--ink);
     box-shadow: 6px 6px 0 var(--ink);
     transition: transform 0.1s ease, box-shadow 0.1s ease;
     cursor: pointer;
+    text-decoration: none;
   }
 
   .btn-download:hover { background: var(--rust-dark); }
@@ -126,6 +127,7 @@
     font-size: 13px;
     color: var(--muted);
     letter-spacing: .05em;
+    text-align: center;
   }
   .microcopy span { color: var(--ink); font-weight: 600; }
 
@@ -212,14 +214,19 @@
         Это просто хороший браузер, который уважает ваше время и внимание.
       </p>
 
-      <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.1.0/simba.apk" class="btn-download">
-  <svg viewBox="0 0 24 24">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-    <polyline points="7 10 12 15 17 10"></polyline>
-    <line x1="12" y1="15" x2="12" y2="3"></line>
-  </svg>
-  Скачать Симбу (.apk)
-      </a>
+      <div class="download-box">
+        <!-- Кнопка теперь вызывает JavaScript функцию -->
+        <button onclick="startDownload()" class="btn-download">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Скачать Симбу (.apk)
+        </button>
+        <div class="microcopy">
+          Версия <span>3.1.0</span> · 64,2 МБ · Бесплатно
+        </div>
       </div>
     </div>
 
@@ -253,6 +260,24 @@
     <ellipse cx="62" cy="28" rx="7" ry="10"/>
     <ellipse cx="78" cy="42" rx="8" ry="11" transform="rotate(20 78 42)"/>
   </svg>
+
+  <!-- Скрипт для скачивания и перенаправления -->
+  <script>
+    function startDownload() {
+      // 1. Создаем невидимую ссылку и инициируем скачивание
+      const link = document.createElement('a');
+      link.href = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.1.0/simba.apk';
+      link.download = 'simba.apk';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // 2. Через 2 секунды перенаправляем на страницу благодарности
+      setTimeout(function() {
+        window.location.href = 'https://codewave-pro.github.io/simbabrowserthsanks.html';
+      }, 2000);
+    }
+  </script>
 
 </body>
 </html>
