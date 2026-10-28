@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Симба браузер — Скачать</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --cream: #f1e8db;
+    --paper: #f7f1e6;
+    --ink: #2a1d14;
+    --rust: #b84a2d;
+    --rust-dark: #963a22;
+    --ochre: #d9a441;
+    --muted: #7a6a58;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    min-height: 100%;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 10% 15%, rgba(217,164,65,.12), transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(184,74,45,.10), transparent 45%);
+    padding: 40px 24px 60px;
+  }
+
+  .wrap { max-width: 900px; margin: 0 auto; }
+
+  /* Верхняя полоска */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(42,29,20,.2);
+    padding-bottom: 14px;
+    margin-bottom: 80px;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: var(--muted);
+  }
+  .topbar .logo { color: var(--ink); font-weight: 700; letter-spacing: .18em; }
+  .topbar .logo span { color: var(--rust); }
+
+  /* Основной блок */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+    margin-bottom: 80px;
+  }
+
+  .hero h1 {
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -.02em;
+    color: var(--ink);
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .hero .subtitle {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* Тактильная кнопка скачивания */
+  .download-box {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--rust);
+    color: var(--cream);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-decoration: none;
+    padding: 20px 48px;
+    border: 2px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    cursor: pointer;
+  }
+
+  .btn-download:hover {
+    background: var(--rust-dark);
+  }
+
+  .btn-download:active {
+    transform: translate(4px, 4px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .btn-download svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .microcopy {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+  .microcopy span { color: var(--ink); font-weight: 600; }
+
+  /* Карточки преимуществ */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 80px;
+  }
+  @media (max-width: 700px) {
+    .features { grid-template-columns: 1fr; gap: 20px; }
+  }
+
+  .feature-card {
+    background: var(--paper);
+    border: 1px solid rgba(42,29,20,.15);
+    padding: 28px 24px;
+    position: relative;
+  }
+  .feature-card::after {
+    content: "";
+    position: absolute;
+    top: 8px; left: 8px; right: 8px; bottom: 8px;
+    border: 1px dashed rgba(42,29,20,.12);
+    pointer-events: none;
+  }
+
+  .feature-card h3 {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--rust);
+    margin-bottom: 12px;
+  }
+
+  .feature-card p {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  /* Подвал */
+  .footer {
+    padding-top: 18px;
+    border-top: 1px solid rgba(42,29,20,.2);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer .dot { color: var(--rust); }
+
+  /* След лапы */
+  .paw {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    opacity: .15;
+    transform: rotate(-18deg);
+    pointer-events: none;
+  }
+  @media (max-width: 600px) {
+    .paw { width: 70px; height: 70px; right: 20px; bottom: 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+    
+    <div class="topbar">
+      <div class="logo">СИМБА<span>●</span>browser</div>
+      <div>выпуск № 3 · с 2026 года</div>
+    </div>
+
+    <div class="hero">
+      <h1>Ваш тихий<br><em>уголок</em> в интернете.</h1>
+      <p class="subtitle">
+        Симба не отвлекает, не следит и не перегружает. 
+        Это просто хороший браузер, который уважает ваше время и внимание.
+      </p>
+
+      <div class="download-box">
+        <a href="https://codewave-pro.github.io/simbabrowser.html" class="btn-download">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Скачать Симбу
+        </a>
+        <div class="microcopy">
+          Версия <span>3.1.0</span> · Бесплатно · Без лишних вопросов
+        </div>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature-card">
+        <h3>01 · Легкость</h3>
+        <p>Запускается мгновенно. Не ест оперативную память, как не в себя. Работает даже на старых устройствах.</p>
+      </div>
+      <div class="feature-card">
+        <h3>02 · Тишина</h3>
+        <p>Никаких всплывающих новостей, навязчивых уведомлений или трекеров. Только вы и ваши вкладки.</p>
+      </div>
+      <div class="feature-card">
+        <h3>03 · Забота</h3>
+        <p>Мы читаем каждое письмо от пользователей. Симба растёт вместе с вами, а не вопреки вам.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>симба браузер <span class="dot">●</span> с 2026 года</div>
+      <div>тихо · быстро · по-человечески</div>
+      <div>стр. 01 из 01</div>
+    </div>
+
+  </div>
+
+  <!-- Тактильный след лапы -->
+  <svg class="paw" width="110" height="110" viewBox="0 0 100 100" fill="#2a1d14">
+    <ellipse cx="50" cy="65" rx="22" ry="18"/>
+    <ellipse cx="28" cy="40" rx="8" ry="11" transform="rotate(-20 28 40)"/>
+    <ellipse cx="45" cy="28" rx="7" ry="10"/>
+    <ellipse cx="62" cy="28" rx="7" ry="10"/>
+    <ellipse cx="78" cy="42" rx="8" ry="11" transform="rotate(20 78 42)"/>
+  </svg>
+
+</body>
+      </html>
