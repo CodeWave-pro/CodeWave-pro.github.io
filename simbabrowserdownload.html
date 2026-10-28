@@ -33,7 +33,6 @@
 
   .wrap { max-width: 900px; margin: 0 auto; }
 
-  /* Верхняя полоска */
   .topbar {
     display: flex;
     justify-content: space-between;
@@ -50,7 +49,6 @@
   .topbar .logo { color: var(--ink); font-weight: 700; letter-spacing: .18em; }
   .topbar .logo span { color: var(--rust); }
 
-  /* Основной блок */
   .hero {
     display: grid;
     grid-template-columns: 1fr;
@@ -80,7 +78,6 @@
     font-family: "Helvetica Neue", Arial, sans-serif;
   }
 
-  /* Тактильная кнопка скачивания */
   .download-box {
     margin-top: 20px;
     display: flex;
@@ -107,9 +104,7 @@
     cursor: pointer;
   }
 
-  .btn-download:hover {
-    background: var(--rust-dark);
-  }
+  .btn-download:hover { background: var(--rust-dark); }
 
   .btn-download:active {
     transform: translate(4px, 4px);
@@ -134,7 +129,6 @@
   }
   .microcopy span { color: var(--ink); font-weight: 600; }
 
-  /* Карточки преимуществ */
   .features {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -174,7 +168,6 @@
     color: var(--ink);
   }
 
-  /* Подвал */
   .footer {
     padding-top: 18px;
     border-top: 1px solid rgba(42,29,20,.2);
@@ -190,7 +183,6 @@
   }
   .footer .dot { color: var(--rust); }
 
-  /* След лапы */
   .paw {
     position: fixed;
     right: 40px;
@@ -221,13 +213,13 @@
       </p>
 
       <div class="download-box">
-        <a href="https://codewave-pro.github.io/simbabrowser.html" class="btn-download">
+        <a href="simba.apk" download="simba.apk" class="btn-download">
           <svg viewBox="0 0 24 24">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-          Скачать Симбу
+          Скачать Симбу (.apk)
         </a>
         <div class="microcopy">
           Версия <span>3.1.0</span> · Бесплатно · Без лишних вопросов
@@ -258,7 +250,6 @@
 
   </div>
 
-  <!-- Тактильный след лапы -->
   <svg class="paw" width="110" height="110" viewBox="0 0 100 100" fill="#2a1d14">
     <ellipse cx="50" cy="65" rx="22" ry="18"/>
     <ellipse cx="28" cy="40" rx="8" ry="11" transform="rotate(-20 28 40)"/>
@@ -268,4 +259,4 @@
   </svg>
 
 </body>
-      </html>
+</html>
