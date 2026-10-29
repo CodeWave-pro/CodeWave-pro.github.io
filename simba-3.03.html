@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Симба браузер</title>
+<style>
+  :root {
+    --cream: #f1e8db;
+    --paper: #f7f1e6;
+    --ink: #2a1d14;
+    --rust: #b84a2d;
+    --rust-dark: #963a22;
+    --muted: #7a6a58;
+    --bg: #f1e8db;
+    --card: #f7f1e6;
+    --text: #2a1d14;
+  }
+
+  /* Тёмная тема */
+  body.dark {
+    --bg: #1a1510;
+    --card: #2a241d;
+    --text: #f1e8db;
+    --ink: #f1e8db;
+    --paper: #2a241d;
+    --muted: #a89888;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  .wrap { max-width: 500px; margin: 0 auto; padding: 30px 20px; }
+
+  /* Шапка */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  .logo h1 {
+    font-family: Georgia, serif;
+    font-size: 32px;
+    color: var(--text);
+    font-weight: 400;
+  }
+  .logo h1 em { color: var(--rust); font-style: italic; }
+
+  .theme-toggle {
+    background: var(--card);
+    border: 2px solid var(--ink);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .theme-toggle:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
+  /* Приветствие */
+  .greeting {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .greeting-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  /* Адресная строка */
+  .search-box {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .search-box input {
+    flex: 1;
+    background: var(--card);
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+  }
+  .search-box input:focus { border-color: var(--rust); }
+  .search-box button {
+    background: var(--rust);
+    color: var(--cream);
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    padding: 0 18px;
+    font-size: 18px;
+    font-weight: 700;
+    box-shadow: 3px 3px 0 var(--ink);
+    cursor: pointer;
+  }
+  .search-box button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
+  /* Секции */
+  .section-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .section-title .add-btn {
+    background: none;
+    border: none;
+    color: var(--rust);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 4px;
+  }
+
+  /* Закладки */
+  .bookmarks {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+    min-height: 70px;
+  }
+  .bookmark {
+    background: var(--card);
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    padding: 10px 6px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink);
+    position: relative;
+    transition: all 0.1s;
+  }
+  .bookmark:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .bookmark .icon { font-size: 22px; margin-bottom: 4px; }
+  .bookmark .name {
+    font-size: 10px;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .bookmark .delete {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--rust);
+    color: var(--cream);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    font-size: 12px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .bookmark.editing .delete { display: flex; }
+
+  .bookmarks-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 20px;
+    border: 2px dashed var(--muted);
+    border-radius: 10px;
+    opacity: 0.6;
+  }
+
+  /* Быстрый доступ */
+  .links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .link-card {
+    background: var(--card);
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    padding: 14px 12px;
+    color: var(--text);
+    box-shadow: 3px 3px 0 var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .link-card:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .link-card .icon { font-size: 24px; }
+  .link-card .label { font-size: 14px; font-weight: 600; }
+
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-top: 30px;
+  }
+  .footer span { color: var(--rust); }
+
+  /* Модальное окно блокировки */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: var(--card);
+    border: 3px solid var(--ink);
+    border-radius: 16px;
+    padding: 30px 24px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 8px 8px 0 var(--ink);
+    position: relative;
+  }
+
+  .modal .paw {
+    font-size: 48px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .modal h2 {
+    font-family: Georgia, serif;
+    font-size: 24px;
+    color: var(--rust);
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+
+  .modal p {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .modal .ok-btn {
+    background: var(--rust);
+    color: var(--cream);
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    padding: 12px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .modal .ok-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
+  /* SVG лапка */
+  .paw-svg {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 10px;
+    fill: var(--rust);
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <div class="header">
+      <div class="logo">
+        <h1>Симба <em>браузер</em></h1>
+      </div>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
+    </div>
+
+    <div class="greeting" id="greeting">Доброе утро!</div>
+    <div class="greeting-sub" id="greetingSub">Кофе и интернет?</div>
+
+    <!-- Адресная строка -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Адрес или поиск..." onkeypress="if(event.key==='Enter')doSearch()">
+      <button onclick="doSearch()">→</button>
+    </div>
+
+    <!-- Закладки -->
+    <div class="section-title">
+      <span>Мои закладки</span>
+      <button class="add-btn" onclick="toggleEditBookmarks()" id="editBtn">✏️</button>
+    </div>
+    <div class="bookmarks" id="bookmarksList"></div>
+
+    <!-- Быстрый доступ -->
+    <div class="section-title">Быстрый доступ</div>
+    <div class="links">
+      <div class="link-card" onclick="openSite('https://google.com')">
+        <div class="icon">🔍</div><div class="label">Google</div>
+      </div>
+      <div class="link-card" onclick="openSite('https://yandex.ru')">
+        <div class="icon">🌐</div><div class="label">Яндекс</div>
+      </div>
+      <div class="link-card" onclick="openSite('https://youtube.com')">
+        <div class="icon">📺</div><div class="label">YouTube</div>
+      </div>
+      <div class="link-card" onclick="openSite('https://github.com')">
+        <div class="icon"></div><div class="label">GitHub</div>
+      </div>
+      <div class="link-card" onclick="openSite('https://wikipedia.org')">
+        <div class="icon"></div><div class="label">Википедия</div>
+      </div>
+      <div class="link-card" onclick="openSite('https://t.me')">
+        <div class="icon">✈️</div><div class="label">Telegram</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      симба браузер <span>●</span> с 2026 года · v3.03
+    </div>
+
+  </div>
+
+  <!-- Модальное окно блокировки -->
+  <div class="modal-overlay" id="blockModal">
+    <div class="modal">
+      <svg class="paw-svg" viewBox="0 0 100 100">
+        <ellipse cx="50" cy="65" rx="22" ry="18"/>
+        <ellipse cx="28" cy="40" rx="8" ry="11" transform="rotate(-20 28 40)"/>
+        <ellipse cx="45" cy="28" rx="7" ry="10"/>
+        <ellipse cx="62" cy="28" rx="7" ry="10"/>
+        <ellipse cx="78" cy="42" rx="8" ry="11" transform="rotate(20 78 42)"/>
+      </svg>
+      <h2>Мяу-мяу!</h2>
+      <p>Этот сайт заблокирован в России.<br>Не забудьте включить прокси или VPN.</p>
+      <button class="ok-btn" onclick="closeModal()">Хорошо</button>
+    </div>
+  </div>
+
+<script>
+  // === ЗАПРЕЩЁННЫЕ САЙТЫ ===
+  const BLOCKED_DOMAINS = [
+    'facebook.com', 'www.facebook.com',
+    'instagram.com', 'www.instagram.com',
+    'twitter.com', 'www.twitter.com',
+    'x.com', 'www.x.com',
+    'tiktok.com', 'www.tiktok.com',
+    'linkedin.com', 'www.linkedin.com',
+    'threads.net', 'www.threads.net',
+    'pinterest.com', 'www.pinterest.com',
+    'tumblr.com', 'www.tumblr.com',
+    'discord.com', 'www.discord.com',
+    'discord.gg', 'www.discord.gg'
+  ];
+
+  // === УМНАЯ АДРЕСНАЯ СТРОКА ===
+  function isUrl(text) {
+    text = text.trim();
+    // С явным протоколом
+    if (/^https?:\/\//i.test(text)) return true;
+    // С www
+    if (/^www\./i.test(text)) return true;
+    // Домен с точкой и без пробелов (например: google.com, ya.ru)
+    if (/^[a-zа-яё0-9-]+\.[a-zа-яё]{2,}(:\d+)?(\/.*)?$/i.test(text) && !/\s/.test(text)) return true;
+    return false;
+  }
+
+  function normalizeUrl(text) {
+    text = text.trim();
+    if (!/^https?:\/\//i.test(text)) {
+      text = 'https://' + text;
+    }
+    return text;
+  }
+
+  function getDomain(url) {
+    try {
+      return new URL(url).hostname.toLowerCase();
+    } catch (e) {
+      return url.toLowerCase();
+    }
+  }
+
+  function isBlocked(url) {
+    const domain = getDomain(url);
+    return BLOCKED_DOMAINS.some(b => domain === b || domain.endsWith('.' + b));
+  }
+
+  function doSearch() {
+    const input = document.getElementById('searchInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    if (isUrl(text)) {
+      const url = normalizeUrl(text);
+      if (isBlocked(url)) {
+        showBlockModal();
+        input.value = '';
+        return;
+      }
+      openSite(url);
+    } else {
+      // Поисковый запрос
+      openSite('https://google.com/search?q=' + encodeURIComponent(text));
+    }
+  }
+
+  function openSite(url) {
+    if (isBlocked(url)) {
+      showBlockModal();
+      return;
+    }
+    window.location.href = url;
+  }
+
+  // === МОДАЛКА БЛОКИРОВКИ ===
+  function showBlockModal() {
+    document.getElementById('blockModal').classList.add('active');
+  }
+  function closeModal() {
+    document.getElementById('blockModal').classList.remove('active');
+  }
+
+  // === ТЁМНАЯ ТЕМА ===
+  function toggleTheme() {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    localStorage.setItem('simba_theme', isDark ? 'dark' : 'light');
+    document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+  }
+
+  function loadTheme() {
+    const saved = localStorage.getItem('simba_theme');
+    if (saved === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('themeBtn').textContent = '️';
+    }
+  }
+
+  // === ПРИВЕТСТВИЕ ===
+  function updateGreeting() {
+    const hour = new Date().getHours();
+    const greeting = document.getElementById('greeting');
+    const sub = document.getElementById('greetingSub');
+    
+    if (hour >= 5 && hour < 12) {
+      greeting.textContent = 'Доброе утро!';
+      sub.textContent = 'Кофе и интернет?';
+    } else if (hour >= 12 && hour < 18) {
+      greeting.textContent = 'Добрый день!';
+      sub.textContent = 'Продуктивного дня!';
+    } else if (hour >= 18 && hour < 23) {
+      greeting.textContent = 'Добрый вечер!';
+      sub.textContent = 'Время отдыхать.';
+    } else {
+      greeting.textContent = 'Доброй ночи!';
+      sub.textContent = 'Тсс... Симба спит...';
+    }
+  }
+
+  // === ЗАКЛАДКИ ===
+  let bookmarks = [];
+  let editingMode = false;
+
+  function loadBookmarks() {
+    const saved = localStorage.getItem('simba_bookmarks');
+    bookmarks = saved ? JSON.parse(saved) : [];
+    renderBookmarks();
+  }
+
+  function saveBookmarks() {
+    localStorage.setItem('simba_bookmarks', JSON.stringify(bookmarks));
+  }
+
+  function getFavicon(url) {
+    try {
+      const domain = new URL(url).hostname;
+      return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+    } catch (e) {
+      return '🌐';
+    }
+  }
+
+  function getShortName(url) {
+    try {
+      const domain = new URL(url).hostname.replace('www.', '');
+      return domain.split('.')[0];
+    } catch (e) {
+      return url;
+    }
+  }
+
+  function renderBookmarks() {
+    const list = document.getElementById('bookmarksList');
+    list.innerHTML = '';
+
+    if (bookmarks.length === 0) {
+      list.innerHTML = '<div class="bookmarks-empty">Пока пусто.<br>Добавьте первый сайт!</div>';
+      return;
+    }
+
+    bookmarks.forEach((bm, index) => {
+      const div = document.createElement('div');
+      div.className = 'bookmark' + (editingMode ? ' editing' : '');
+      div.onclick = (e) => {
+        if (editingMode) {
+          deleteBookmark(index);
+        } else {
+          openSite(bm.url);
+        }
+      };
+
+      const isImage = bm.icon && bm.icon.startsWith('http');
+      const iconHtml = isImage 
+        ? `<img src="${bm.icon}" style="width:22px;height:22px;border-radius:4px;">`
+        : `<span class="icon">${bm.icon || '🌐'}</span>`;
+
+      div.innerHTML = `
+        ${iconHtml}
+        <div class="name">${bm.name}</div>
+        <div class="delete" onclick="event.stopPropagation(); deleteBookmark(${index})">✕</div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function toggleEditBookmarks() {
+    editingMode = !editingMode;
+    document.getElementById('editBtn').textContent = editingMode ? '✓' : '✏️';
+    renderBookmarks();
+  }
+
+  function deleteBookmark(index) {
+    bookmarks.splice(index, 1);
+    saveBookmarks();
+    renderBookmarks();
+  }
+
+  function addBookmark() {
+    const url = prompt('Введите адрес сайта:');
+    if (!url) return;
+    
+    const name = prompt('Название закладки:', getShortName(url));
+    if (!name) return;
+
+    bookmarks.push({
+      url: url.startsWith('http') ? url : 'https://' + url,
+      name: name,
+      icon: getFavicon(url)
+    });
+    saveBookmarks();
+    renderBookmarks();
+  }
+
+  // Долгое нажатие на пустое место в закладках — добавить
+  document.getElementById('bookmarksList').addEventListener('dblclick', (e) => {
+    if (e.target.id === 'bookmarksList' || e.target.classList.contains('bookmarks-empty')) {
+      addBookmark();
+    }
+  });
+
+  // === ИНИЦИАЛИЗАЦИЯ ===
+  loadTheme();
+  updateGreeting();
+  loadBookmarks();
+</script>
+
+</body>
+  </html>
