@@ -341,7 +341,7 @@
       <div class="logo">
         <h1>Симба <em>браузер</em></h1>
       </div>
-      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()"></button>
     </div>
 
     <div class="greeting" id="greeting">Доброе утро!</div>
@@ -354,7 +354,7 @@
 
     <div class="section-title">
       <span>Мои закладки</span>
-      <button class="add-btn" onclick="toggleEditBookmarks()" id="editBtn">✏️</button>
+      <button class="add-btn" onclick="toggleEditBookmarks()" id="editBtn">️</button>
     </div>
     <div class="bookmarks" id="bookmarksList"></div>
 
@@ -405,8 +405,8 @@
   <!-- Модальное окно пасхалки -->
   <div class="modal-overlay easter-modal" id="easterModal">
     <div class="modal">
-      <!-- ИСПРАВЛЕНА ССЫЛКА НА ПРЯМУЮ (RAW) -->
-      <img class="easter-photo" src="https://raw.githubusercontent.com/CodeWave-pro/CodeWave-pro.github.io/main/IMG_20261029_214809_872.jpg" alt="Симба на рыбалке">
+      <!-- ССЫЛКА ЧЕРЕЗ JSDelivr CDN (гарантированно работает) -->
+      <img class="easter-photo" src="https://cdn.jsdelivr.net/gh/CodeWave-pro/CodeWave-pro.github.io@main/IMG_20261029_214809_872.jpg" alt="Симба на рыбалке">
       <div class="easter-title">Мяу! Я тут 🎣</div>
       <div class="easter-subtitle">Тише... рыба клюёт.</div>
       <button class="ok-btn" onclick="closeModal('easterModal')">Хорошо</button>
@@ -563,7 +563,7 @@
 
   function getFavicon(url) {
     try { return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`; }
-    catch (e) { return '🌐'; }
+    catch (e) { return ''; }
   }
 
   function getShortName(url) {
