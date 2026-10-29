@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Симба браузер</title>
+<style>
+  :root {
+    --cream: #f1e8db;
+    --paper: #f7f1e6;
+    --ink: #2a1d14;
+    --rust: #b84a2d;
+    --rust-dark: #963a22;
+    --muted: #7a6a58;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background: var(--cream);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Верхняя панель */
+  .toolbar {
+    background: var(--paper);
+    border-bottom: 2px solid var(--ink);
+    padding: 12px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(42,29,20,.1);
+  }
+
+  .nav-btn {
+    background: var(--rust);
+    color: var(--cream);
+    border: 2px solid var(--ink);
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: all 0.1s;
+    flex-shrink: 0;
+  }
+
+  .nav-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .address-bar {
+    flex: 1;
+    background: var(--cream);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 15px;
+    color: var(--ink);
+    outline: none;
+    box-shadow: inset 2px 2px 0 rgba(42,29,20,.1);
+  }
+
+  .address-bar:focus {
+    border-color: var(--rust);
+  }
+
+  .go-btn {
+    background: var(--rust);
+    color: var(--cream);
+    border: 2px solid var(--ink);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: all 0.1s;
+  }
+
+  .go-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
+  /* Область просмотра */
+  .webview {
+    flex: 1;
+    background: white;
+    border: none;
+    width: 100%;
+  }
+
+  /* Стартовая страница */
+  .home-page {
+    flex: 1;
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .home-page h1 {
+    font-family: Georgia, serif;
+    font-size: 48px;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .home-page h1 em {
+    color: var(--rust);
+    font-style: italic;
+  }
+
+  .home-page p {
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  .quick-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .quick-link {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    padding: 20px;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: all 0.1s;
+  }
+
+  .quick-link:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .quick-link .icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .quick-link .label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* Индикатор загрузки */
+  .loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--rust);
+    animation: load 1s ease-in-out;
+    z-index: 100;
+  }
+
+  @keyframes load {
+    0% { width: 0; }
+    100% { width: 100%; }
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+  <!-- Панель инструментов -->
+  <div class="toolbar">
+    <button class="nav-btn" id="backBtn" onclick="goBack()" disabled>◀</button>
+    <button class="nav-btn" id="forwardBtn" onclick="goForward()" disabled>▶</button>
+    <button class="nav-btn" id="reloadBtn" onclick="reload()">↻</button>
+    <button class="nav-btn" id="homeBtn" onclick="goHome()">🏠</button>
+    <input type="text" class="address-bar" id="addressBar" placeholder="Введите адрес..." onkeypress="if(event.key==='Enter')navigate()">
+    <button class="go-btn" onclick="navigate()">→</button>
+  </div>
+
+  <!-- Стартовая страница -->
+  <div class="home-page" id="homePage">
+    <h1>Симба <em>браузер</em></h1>
+    <p>Ваш тихий уголок в интернете</p>
+    
+    <div class="quick-links">
+      <a href="#" class="quick-link" onclick="loadURL('https://google.com'); return false;">
+        <div class="icon">🔍</div>
+        <div class="label">Google</div>
+      </a>
+      <a href="#" class="quick-link" onclick="loadURL('https://yandex.ru'); return false;">
+        <div class="icon">🌐</div>
+        <div class="label">Яндекс</div>
+      </a>
+      <a href="#" class="quick-link" onclick="loadURL('https://youtube.com'); return false;">
+        <div class="icon">📺</div>
+        <div class="label">YouTube</div>
+      </a>
+      <a href="#" class="quick-link" onclick="loadURL('https://github.com'); return false;">
+        <div class="icon"></div>
+        <div class="label">GitHub</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- WebView -->
+  <iframe class="webview hidden" id="webview" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+
+<script>
+  let history = [];
+  let historyIndex = -1;
+  let isHome = true;
+
+  const webview = document.getElementById('webview');
+  const homePage = document.getElementById('homePage');
+  const addressBar = document.getElementById('addressBar');
+  const backBtn = document.getElementById('backBtn');
+  const forwardBtn = document.getElementById('forwardBtn');
+
+  function loadURL(url) {
+    // Добавляем https:// если нет протокола
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'https://' + url;
+    }
+
+    // Показываем индикатор загрузки
+    const loader = document.createElement('div');
+    loader.className = 'loading';
+    document.body.appendChild(loader);
+    setTimeout(() => loader.remove(), 1000);
+
+    // Скрываем домашнюю страницу, показываем WebView
+    homePage.classList.add('hidden');
+    webview.classList.remove('hidden');
+
+    // Загружаем URL
+    webview.src = url;
+    addressBar.value = url;
+
+    // Добавляем в историю
+    if (historyIndex < history.length - 1) {
+      history = history.slice(0, historyIndex + 1);
+    }
+    history.push(url);
+    historyIndex++;
+    isHome = false;
+
+    updateButtons();
+  }
+
+  function navigate() {
+    const url = addressBar.value.trim();
+    if (url) loadURL(url);
+  }
+
+  function goBack() {
+    if (historyIndex > 0) {
+      historyIndex--;
+      const url = history[historyIndex];
+      webview.src = url;
+      addressBar.value = url;
+      updateButtons();
+    } else if (historyIndex === 0) {
+      goHome();
+    }
+  }
+
+  function goForward() {
+    if (historyIndex < history.length - 1) {
+      historyIndex++;
+      const url = history[historyIndex];
+      webview.src = url;
+      addressBar.value = url;
+      updateButtons();
+    }
+  }
+
+  function reload() {
+    if (!isHome) {
+      webview.src = webview.src;
+    }
+  }
+
+  function goHome() {
+    webview.classList.add('hidden');
+    homePage.classList.remove('hidden');
+    addressBar.value = '';
+    isHome = true;
+    updateButtons();
+  }
+
+  function updateButtons() {
+    backBtn.disabled = historyIndex <= 0 && !isHome;
+    forwardBtn.disabled = historyIndex >= history.length - 1;
+  }
+
+  // Обработка загрузки iframe
+  webview.onload = function() {
+    // Пытаемся получить текущий URL (может не работать из-за CORS)
+    try {
+      addressBar.value = webview.contentWindow.location.href;
+    } catch(e) {
+      // Оставляем адрес из истории
+    }
+  };
+</script>
+
+</body>
+          </html>
