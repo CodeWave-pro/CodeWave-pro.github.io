@@ -132,15 +132,15 @@
     box-shadow: 1px 1px 0 var(--ink);
   }
 
-  .btn-download.disabled {
+  .btn-download.archive-btn {
     background: var(--muted);
-    cursor: not-allowed;
-    opacity: 0.6;
+    font-size: 12px;
+    padding: 10px 16px;
+    box-shadow: 2px 2px 0 var(--ink);
   }
-  .btn-download.disabled:hover { background: var(--muted); }
-  .btn-download.disabled:active {
-    transform: none;
-    box-shadow: 3px 3px 0 var(--ink);
+  .btn-download.archive-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
   }
 
   .microcopy {
@@ -258,7 +258,8 @@
     margin-right: 8px;
   }
 
-  .version-meta .badge.soon {
+  .version-meta .badge.soon,
+  .version-meta .badge.archive {
     background: var(--muted);
   }
 
@@ -287,8 +288,10 @@
   }
   @media (max-width: 600px) {
     .paw { width: 70px; height: 70px; right: 20px; bottom: 20px; }
-    .version-row { padding: 16px 18px; }
+    .version-row { padding: 16px 18px; flex-direction: column; align-items: flex-start; }
     .version-name { font-size: 18px; }
+    .version-row > div:last-child { width: 100%; display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-download.small, .btn-download.archive-btn { flex: 1; justify-content: center; }
   }
 </style>
 </head>
@@ -309,8 +312,7 @@
       </p>
 
       <div class="download-box">
-        <!-- ГЛАВНАЯ КНОПКА ОБНОВЛЕНА НА ВЕРСИЮ 3.02 -->
-        <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.02/simbabrowserv3.02.apk" class="btn-download">
+        <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.03/simbabrowserv3.03.apk" class="btn-download">
           <svg viewBox="0 0 24 24">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
@@ -319,7 +321,7 @@
           Скачать последнюю версию
         </a>
         <div class="microcopy">
-          Версия <span>3.02</span> · Бесплатно
+          Версия <span>3.03</span> · Тёмная тема, закладки, умный поиск
         </div>
       </div>
     </div>
@@ -327,7 +329,7 @@
     <div class="features">
       <div class="feature-card">
         <h3>01 · Легкость</h3>
-        <p>Запускается мгновенно. Не ест оперативную память, как не в себя. Работает даже на старых устройствах.</p>
+        <p>Запускается мгновенно. Не ест оперативную память. Работает даже на старых устройствах.</p>
       </div>
       <div class="feature-card">
         <h3>02 · Тишина</h3>
@@ -340,7 +342,7 @@
     </div>
 
     <div class="versions-section">
-      <div class="versions-title">Все версии браузера</div>
+      <div class="versions-title">История версий браузера</div>
       
       <div class="versions-list">
 
@@ -349,30 +351,45 @@
           <div class="version-info">
             <div class="version-name">Симба браузер 3.01</div>
             <div class="version-meta">
-              <span class="badge">Первая версия</span>
-              Начальный выпуск
+              <span class="badge archive">Архив</span>
+              Первая версия · Просто Google
             </div>
           </div>
-          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.1.0/simba.apk" class="btn-download small">
-            <svg viewBox="0 0 24 24">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Скачать
+          <a href="simba-3.01.html" class="btn-download archive-btn">
+            👁️ Посмотреть
           </a>
         </div>
 
-        <!-- Версия 3.02 (ТЕПЕРЬ АКТИВНА) -->
+        <!-- Версия 3.02 -->
         <div class="version-row">
           <div class="version-info">
             <div class="version-name">Симба браузер 3.02</div>
             <div class="version-meta">
-              <span class="badge">Обновление</span>
-              Исправления и улучшения
+              <span class="badge archive">Архив</span>
+              Первая стартовая страница
             </div>
           </div>
-          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.02/simbabrowserv3.02.apk" class="btn-download small">
+          <div style="display: flex; gap: 8px; width: 100%;">
+            <a href="simba-3.02.html" class="btn-download archive-btn" style="flex: 1;">
+              👁️ Посмотреть
+            </a>
+            <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.02/simbabrowserv3.02.apk" class="btn-download small" style="flex: 1;">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Скачать
+            </a>
+          </div>
+        </div>
+
+        <!-- Версия 3.03 (АКТИВНАЯ) -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.03</div>
+            <div class="version-meta">
+              <span class="badge">Новинка</span>
+              Тёмная тема, закладки, умный поиск, пасхалки
+            </div>
+          </div>
+          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.03/simbabrowserv3.03.apk" class="btn-download small">
             <svg viewBox="0 0 24 24">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
@@ -380,18 +397,6 @@
             </svg>
             Скачать
           </a>
-        </div>
-
-        <!-- Версия 3.03 -->
-        <div class="version-row">
-          <div class="version-info">
-            <div class="version-name">Симба браузер 3.03</div>
-            <div class="version-meta">
-              <span class="badge soon">Скоро</span>
-              Новая функциональность
-            </div>
-          </div>
-          <div class="microcopy" style="margin: 0; font-weight: 600;">Скоро</div>
         </div>
 
         <!-- Версия 3.04 -->
@@ -400,10 +405,10 @@
             <div class="version-name">Симба браузер 3.04</div>
             <div class="version-meta">
               <span class="badge soon">Скоро</span>
-              Улучшения производительности
+              Улучшения производительности и приватности
             </div>
           </div>
-          <div class="microcopy" style="margin: 0; font-weight: 600;">Скоро</div>
+          <div class="microcopy" style="margin: 0; font-weight: 600; width: 100%; text-align: right;">Скоро</div>
         </div>
 
         <!-- Версия 3.05 -->
@@ -412,10 +417,10 @@
             <div class="version-name">Симба браузер 3.05</div>
             <div class="version-meta">
               <span class="badge soon">Скоро</span>
-              Крупное обновление
+              Крупное обновление «Характер Симбы»
             </div>
           </div>
-          <div class="microcopy" style="margin: 0; font-weight: 600;">Скоро</div>
+          <div class="microcopy" style="margin: 0; font-weight: 600; width: 100%; text-align: right;">Скоро</div>
         </div>
 
       </div>
