@@ -180,5 +180,14 @@
     }
   }
 </script>
+  <script>
+  // Перехватываем кнопку "Назад" на Android
+  window.history.pushState(null, null, window.location.href);
+  
+  window.addEventListener('popstate', function() {
+    // Возвращаемся на стартовую страницу Симбы
+    window.location.href = 'https://codewave-pro.github.io/simba-browser.html';
+  });
+  </script>
 </body>
 </html>
