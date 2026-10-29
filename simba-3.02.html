@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Симба браузер 3.02</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background: #f1e8db;
+    min-height: 100vh;
+    padding: 30px 20px;
+  }
+  .wrap { max-width: 500px; margin: 0 auto; text-align: center; }
+  h1 {
+    font-family: Georgia, serif;
+    font-size: 48px;
+    color: #2a1d14;
+    margin-bottom: 10px;
+  }
+  h1 em { color: #b84a2d; font-style: italic; }
+  .subtitle {
+    color: #7a6a58;
+    font-size: 15px;
+    margin-bottom: 30px;
+  }
+  .search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+  .search-box input {
+    flex: 1;
+    background: #f7f1e6;
+    border: 2px solid #2a1d14;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 16px;
+    color: #2a1d14;
+    outline: none;
+  }
+  .search-box button {
+    background: #b84a2d;
+    color: #f1e8db;
+    border: 2px solid #2a1d14;
+    border-radius: 10px;
+    padding: 0 20px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .link-card {
+    background: #f7f1e6;
+    border: 2px solid #2a1d14;
+    border-radius: 12px;
+    padding: 18px 14px;
+    color: #2a1d14;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 #2a1d14;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .link-card:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #2a1d14;
+  }
+  .link-card .icon { font-size: 24px; }
+  .footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: #7a6a58;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Симба <em>браузер</em></h1>
+    <p class="subtitle">Версия 3.02 · Ваш тихий уголок в интернете</p>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Поиск в Google..." onkeypress="if(event.key==='Enter')search()">
+      <button onclick="search()">→</button>
+    </div>
+
+    <div class="links">
+      <div class="link-card" onclick="openSite('https://google.com')">
+        <span class="icon">🔍</span> Google
+      </div>
+      <div class="link-card" onclick="openSite('https://yandex.ru')">
+        <span class="icon">🌐</span> Яндекс
+      </div>
+      <div class="link-card" onclick="openSite('https://youtube.com')">
+        <span class="icon">📺</span> YouTube
+      </div>
+      <div class="link-card" onclick="openSite('https://github.com')">
+        <span class="icon">🐙</span> GitHub
+      </div>
+      <div class="link-card" onclick="openSite('https://wikipedia.org')">
+        <span class="icon">📚</span> Википедия
+      </div>
+      <div class="link-card" onclick="openSite('https://t.me')">
+        <span class="icon">✈️</span> Telegram
+      </div>
+    </div>
+
+    <div class="footer">симба браузер · с 2026 года</div>
+  </div>
+
+<script>
+  function openSite(url) { window.location.href = url; }
+  function search() {
+    const q = document.getElementById('searchInput').value.trim();
+    if (q) openSite('https://google.com/search?q=' + encodeURIComponent(q));
+  }
+</script>
+</body>
+</html>
