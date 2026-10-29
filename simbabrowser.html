@@ -11,7 +11,6 @@
     --ink: #2a1d14;
     --rust: #b84a2d;
     --rust-dark: #963a22;
-    --ochre: #d9a441;
     --muted: #7a6a58;
   }
 
@@ -132,15 +131,15 @@
     box-shadow: 1px 1px 0 var(--ink);
   }
 
-  .btn-download.archive-btn {
+  .btn-download.disabled {
     background: var(--muted);
-    font-size: 12px;
-    padding: 10px 16px;
-    box-shadow: 2px 2px 0 var(--ink);
+    cursor: not-allowed;
+    opacity: 0.6;
   }
-  .btn-download.archive-btn:active {
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0 var(--ink);
+  .btn-download.disabled:hover { background: var(--muted); }
+  .btn-download.disabled:active {
+    transform: none;
+    box-shadow: 3px 3px 0 var(--ink);
   }
 
   .microcopy {
@@ -258,8 +257,7 @@
     margin-right: 8px;
   }
 
-  .version-meta .badge.soon,
-  .version-meta .badge.archive {
+  .version-meta .badge.soon {
     background: var(--muted);
   }
 
@@ -288,10 +286,8 @@
   }
   @media (max-width: 600px) {
     .paw { width: 70px; height: 70px; right: 20px; bottom: 20px; }
-    .version-row { padding: 16px 18px; flex-direction: column; align-items: flex-start; }
+    .version-row { padding: 16px 18px; }
     .version-name { font-size: 18px; }
-    .version-row > div:last-child { width: 100%; display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn-download.small, .btn-download.archive-btn { flex: 1; justify-content: center; }
   }
 </style>
 </head>
@@ -351,12 +347,17 @@
           <div class="version-info">
             <div class="version-name">Симба браузер 3.01</div>
             <div class="version-meta">
-              <span class="badge archive">Архив</span>
+              <span class="badge">Архив</span>
               Первая версия · Просто Google
             </div>
           </div>
-          <a href="simba-3.01.html" class="btn-download archive-btn">
-            👁️ Посмотреть
+          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.01/simbabrowserv3.01.apk" class="btn-download small">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Скачать
           </a>
         </div>
 
@@ -365,19 +366,18 @@
           <div class="version-info">
             <div class="version-name">Симба браузер 3.02</div>
             <div class="version-meta">
-              <span class="badge archive">Архив</span>
+              <span class="badge">Архив</span>
               Первая стартовая страница
             </div>
           </div>
-          <div style="display: flex; gap: 8px; width: 100%;">
-            <a href="simba-3.02.html" class="btn-download archive-btn" style="flex: 1;">
-              👁️ Посмотреть
-            </a>
-            <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.02/simbabrowserv3.02.apk" class="btn-download small" style="flex: 1;">
-              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Скачать
-            </a>
-          </div>
+          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.02/simbabrowserv3.02.apk" class="btn-download small">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Скачать
+          </a>
         </div>
 
         <!-- Версия 3.03 (АКТИВНАЯ) -->
@@ -408,7 +408,7 @@
               Улучшения производительности и приватности
             </div>
           </div>
-          <div class="microcopy" style="margin: 0; font-weight: 600; width: 100%; text-align: right;">Скоро</div>
+          <div class="microcopy" style="margin: 0; font-weight: 600;">Скоро</div>
         </div>
 
         <!-- Версия 3.05 -->
@@ -420,7 +420,7 @@
               Крупное обновление «Характер Симбы»
             </div>
           </div>
-          <div class="microcopy" style="margin: 0; font-weight: 600; width: 100%; text-align: right;">Скоро</div>
+          <div class="microcopy" style="margin: 0; font-weight: 600;">Скоро</div>
         </div>
 
       </div>
