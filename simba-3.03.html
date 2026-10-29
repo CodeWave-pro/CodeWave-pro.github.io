@@ -17,7 +17,6 @@
     --text: #2a1d14;
   }
 
-  /* Тёмная тема */
   body.dark {
     --bg: #1a1510;
     --card: #2a241d;
@@ -39,7 +38,6 @@
 
   .wrap { max-width: 500px; margin: 0 auto; padding: 30px 20px; }
 
-  /* Шапка */
   .header {
     display: flex;
     justify-content: space-between;
@@ -72,7 +70,6 @@
     box-shadow: 1px 1px 0 var(--ink);
   }
 
-  /* Приветствие */
   .greeting {
     font-family: Georgia, serif;
     font-size: 22px;
@@ -85,7 +82,6 @@
     margin-bottom: 24px;
   }
 
-  /* Адресная строка */
   .search-box {
     display: flex;
     gap: 8px;
@@ -118,7 +114,6 @@
     box-shadow: 1px 1px 0 var(--ink);
   }
 
-  /* Секции */
   .section-title {
     font-size: 12px;
     text-transform: uppercase;
@@ -139,7 +134,6 @@
     padding: 0 4px;
   }
 
-  /* Закладки */
   .bookmarks {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -199,7 +193,6 @@
     opacity: 0.6;
   }
 
-  /* Быстрый доступ */
   .links {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -235,18 +228,24 @@
   }
   .footer span { color: var(--rust); }
 
-  /* Модальное окно блокировки */
+  /* === МОДАЛКИ === */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.75);
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 1000;
     padding: 20px;
+    animation: fadeIn 0.3s ease;
   }
   .modal-overlay.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 
   .modal {
     background: var(--card);
@@ -257,13 +256,19 @@
     width: 100%;
     text-align: center;
     box-shadow: 8px 8px 0 var(--ink);
-    position: relative;
+    animation: popIn 0.3s ease;
   }
 
-  .modal .paw {
-    font-size: 48px;
-    margin-bottom: 12px;
-    display: block;
+  @keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .modal .paw-svg {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 10px;
+    fill: var(--rust);
   }
 
   .modal h2 {
@@ -297,12 +302,34 @@
     box-shadow: 1px 1px 0 var(--ink);
   }
 
-  /* SVG лапка */
-  .paw-svg {
-    width: 50px;
-    height: 50px;
-    margin: 0 auto 10px;
-    fill: var(--rust);
+  /* === ПАСХАЛКА === */
+  .easter-modal .modal {
+    max-width: 420px;
+    padding: 24px;
+  }
+
+  .easter-photo {
+    width: 100%;
+    border-radius: 12px;
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .easter-title {
+    font-family: Georgia, serif;
+    font-size: 28px;
+    color: var(--rust);
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  .easter-subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    font-style: italic;
   }
 </style>
 </head>
@@ -320,20 +347,17 @@
     <div class="greeting" id="greeting">Доброе утро!</div>
     <div class="greeting-sub" id="greetingSub">Кофе и интернет?</div>
 
-    <!-- Адресная строка -->
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Адрес или поиск..." onkeypress="if(event.key==='Enter')doSearch()">
       <button onclick="doSearch()">→</button>
     </div>
 
-    <!-- Закладки -->
     <div class="section-title">
       <span>Мои закладки</span>
       <button class="add-btn" onclick="toggleEditBookmarks()" id="editBtn">✏️</button>
     </div>
     <div class="bookmarks" id="bookmarksList"></div>
 
-    <!-- Быстрый доступ -->
     <div class="section-title">Быстрый доступ</div>
     <div class="links">
       <div class="link-card" onclick="openSite('https://google.com')">
@@ -346,10 +370,10 @@
         <div class="icon">📺</div><div class="label">YouTube</div>
       </div>
       <div class="link-card" onclick="openSite('https://github.com')">
-        <div class="icon"></div><div class="label">GitHub</div>
+        <div class="icon">🐙</div><div class="label">GitHub</div>
       </div>
       <div class="link-card" onclick="openSite('https://wikipedia.org')">
-        <div class="icon"></div><div class="label">Википедия</div>
+        <div class="icon">📚</div><div class="label">Википедия</div>
       </div>
       <div class="link-card" onclick="openSite('https://t.me')">
         <div class="icon">✈️</div><div class="label">Telegram</div>
@@ -374,7 +398,17 @@
       </svg>
       <h2>Мяу-мяу!</h2>
       <p>Этот сайт заблокирован в России.<br>Не забудьте включить прокси или VPN.</p>
-      <button class="ok-btn" onclick="closeModal()">Хорошо</button>
+      <button class="ok-btn" onclick="closeModal('blockModal')">Хорошо</button>
+    </div>
+  </div>
+
+  <!-- Модальное окно пасхалки -->
+  <div class="modal-overlay easter-modal" id="easterModal">
+    <div class="modal">
+      <img class="easter-photo" src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.03/IMG_20261029_214809_872.jpg" alt="Симба на рыбалке">
+      <div class="easter-title">Мяу! Я тут 🎣</div>
+      <div class="easter-subtitle">Тише... рыба клюёт.</div>
+      <button class="ok-btn" onclick="closeModal('easterModal')">Хорошо</button>
     </div>
   </div>
 
@@ -394,32 +428,27 @@
     'discord.gg', 'www.discord.gg'
   ];
 
+  // === СЛОВА-ПАСХАЛКИ ===
+  const EASTER_WORDS = ['симба', 'simba', 'мяу', 'кот', 'cat', 'симба кот', 'симба браузер'];
+
   // === УМНАЯ АДРЕСНАЯ СТРОКА ===
   function isUrl(text) {
     text = text.trim();
-    // С явным протоколом
     if (/^https?:\/\//i.test(text)) return true;
-    // С www
     if (/^www\./i.test(text)) return true;
-    // Домен с точкой и без пробелов (например: google.com, ya.ru)
     if (/^[a-zа-яё0-9-]+\.[a-zа-яё]{2,}(:\d+)?(\/.*)?$/i.test(text) && !/\s/.test(text)) return true;
     return false;
   }
 
   function normalizeUrl(text) {
     text = text.trim();
-    if (!/^https?:\/\//i.test(text)) {
-      text = 'https://' + text;
-    }
+    if (!/^https?:\/\//i.test(text)) text = 'https://' + text;
     return text;
   }
 
   function getDomain(url) {
-    try {
-      return new URL(url).hostname.toLowerCase();
-    } catch (e) {
-      return url.toLowerCase();
-    }
+    try { return new URL(url).hostname.toLowerCase(); }
+    catch (e) { return url.toLowerCase(); }
   }
 
   function isBlocked(url) {
@@ -427,10 +456,22 @@
     return BLOCKED_DOMAINS.some(b => domain === b || domain.endsWith('.' + b));
   }
 
+  function isEasterWord(text) {
+    const lower = text.toLowerCase().trim();
+    return EASTER_WORDS.some(w => lower === w);
+  }
+
   function doSearch() {
     const input = document.getElementById('searchInput');
     const text = input.value.trim();
     if (!text) return;
+
+    // Сначала проверяем пасхалку
+    if (isEasterWord(text)) {
+      showEasterEgg();
+      input.value = '';
+      return;
+    }
 
     if (isUrl(text)) {
       const url = normalizeUrl(text);
@@ -441,26 +482,32 @@
       }
       openSite(url);
     } else {
-      // Поисковый запрос
       openSite('https://google.com/search?q=' + encodeURIComponent(text));
     }
   }
 
   function openSite(url) {
-    if (isBlocked(url)) {
-      showBlockModal();
-      return;
-    }
+    if (isBlocked(url)) { showBlockModal(); return; }
     window.location.href = url;
   }
 
-  // === МОДАЛКА БЛОКИРОВКИ ===
+  // === МОДАЛКИ ===
   function showBlockModal() {
     document.getElementById('blockModal').classList.add('active');
   }
-  function closeModal() {
-    document.getElementById('blockModal').classList.remove('active');
+  function showEasterEgg() {
+    document.getElementById('easterModal').classList.add('active');
   }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+  }
+
+  // Закрытие по клику на фон
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('active');
+    });
+  });
 
   // === ТЁМНАЯ ТЕМА ===
   function toggleTheme() {
@@ -474,7 +521,7 @@
     const saved = localStorage.getItem('simba_theme');
     if (saved === 'dark') {
       document.body.classList.add('dark');
-      document.getElementById('themeBtn').textContent = '️';
+      document.getElementById('themeBtn').textContent = '☀️';
     }
   }
 
@@ -514,21 +561,13 @@
   }
 
   function getFavicon(url) {
-    try {
-      const domain = new URL(url).hostname;
-      return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-    } catch (e) {
-      return '🌐';
-    }
+    try { return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`; }
+    catch (e) { return '🌐'; }
   }
 
   function getShortName(url) {
-    try {
-      const domain = new URL(url).hostname.replace('www.', '');
-      return domain.split('.')[0];
-    } catch (e) {
-      return url;
-    }
+    try { return new URL(url).hostname.replace('www.', '').split('.')[0]; }
+    catch (e) { return url; }
   }
 
   function renderBookmarks() {
@@ -536,31 +575,21 @@
     list.innerHTML = '';
 
     if (bookmarks.length === 0) {
-      list.innerHTML = '<div class="bookmarks-empty">Пока пусто.<br>Добавьте первый сайт!</div>';
+      list.innerHTML = '<div class="bookmarks-empty">Пока пусто.<br>Дважды нажмите, чтобы добавить!</div>';
       return;
     }
 
     bookmarks.forEach((bm, index) => {
       const div = document.createElement('div');
       div.className = 'bookmark' + (editingMode ? ' editing' : '');
-      div.onclick = (e) => {
-        if (editingMode) {
-          deleteBookmark(index);
-        } else {
-          openSite(bm.url);
-        }
-      };
+      div.onclick = () => editingMode ? deleteBookmark(index) : openSite(bm.url);
 
       const isImage = bm.icon && bm.icon.startsWith('http');
       const iconHtml = isImage 
         ? `<img src="${bm.icon}" style="width:22px;height:22px;border-radius:4px;">`
         : `<span class="icon">${bm.icon || '🌐'}</span>`;
 
-      div.innerHTML = `
-        ${iconHtml}
-        <div class="name">${bm.name}</div>
-        <div class="delete" onclick="event.stopPropagation(); deleteBookmark(${index})">✕</div>
-      `;
+      div.innerHTML = `${iconHtml}<div class="name">${bm.name}</div><div class="delete" onclick="event.stopPropagation(); deleteBookmark(${index})">✕</div>`;
       list.appendChild(div);
     });
   }
@@ -580,24 +609,15 @@
   function addBookmark() {
     const url = prompt('Введите адрес сайта:');
     if (!url) return;
-    
     const name = prompt('Название закладки:', getShortName(url));
     if (!name) return;
-
-    bookmarks.push({
-      url: url.startsWith('http') ? url : 'https://' + url,
-      name: name,
-      icon: getFavicon(url)
-    });
+    bookmarks.push({ url: url.startsWith('http') ? url : 'https://' + url, name, icon: getFavicon(url) });
     saveBookmarks();
     renderBookmarks();
   }
 
-  // Долгое нажатие на пустое место в закладках — добавить
   document.getElementById('bookmarksList').addEventListener('dblclick', (e) => {
-    if (e.target.id === 'bookmarksList' || e.target.classList.contains('bookmarks-empty')) {
-      addBookmark();
-    }
+    if (e.target.id === 'bookmarksList' || e.target.classList.contains('bookmarks-empty')) addBookmark();
   });
 
   // === ИНИЦИАЛИЗАЦИЯ ===
