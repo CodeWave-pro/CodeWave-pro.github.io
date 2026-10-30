@@ -17,6 +17,7 @@
     --text: #2a1d14;
   }
 
+  /* ТЁМНАЯ ТЕМА */
   body.dark {
     --bg: #1a1510;
     --card: #2a241d;
@@ -26,6 +27,16 @@
     --muted: #a89888;
   }
 
+  /* СУМЕРЕЧНАЯ ТЕМА (16:00 - 18:00) */
+  body.dusk {
+    --bg: #d4ccc2;
+    --card: #e0d8ce;
+    --text: #2a1d14;
+    --ink: #2a1d14;
+    --paper: #e0d8ce;
+    --muted: #7a6a58;
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
@@ -33,7 +44,15 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    transition: background 0.4s ease, color 0.4s ease;
+    transition: background 1s ease, color 1s ease;
+  }
+
+  /* Плавные переходы для всех элементов */
+  .header, .logo h1, .greeting, .greeting-sub, 
+  .search-box input, .search-box button,
+  .bookmark, .link-card, .footer,
+  .section-title, .modal, .modal-overlay {
+    transition: background 1s ease, color 1s ease, border-color 1s ease, box-shadow 1s ease;
   }
 
   .wrap { max-width: 500px; margin: 0 auto; padding: 30px 20px; }
@@ -469,9 +488,10 @@
       <div class="setting-item">
         <label class="setting-label">Оформление</label>
         <select class="setting-select" id="themeSelect" onchange="saveSettings()">
-          <option value="auto">🔄 Авто (как в системе)</option>
+          <option value="auto">🔄 Авто (по времени суток)</option>
           <option value="light">☀️ Всегда светлая</option>
-          <option value="dark">🌙 Всегда тёмная</option>
+          <option value="dusk">🌇 Всегда сумеречная</option>
+          <option value="dark"> Всегда тёмная</option>
         </select>
       </div>
 
@@ -498,12 +518,10 @@
   };
 
   function loadSettings() {
-    // Тема
     const savedTheme = localStorage.getItem('simba_theme') || 'auto';
     document.getElementById('themeSelect').value = savedTheme;
     applyTheme(savedTheme);
 
-    // Поисковик
     const savedSearch = localStorage.getItem('simba_search') || 'google';
     document.getElementById('searchSelect').value = savedSearch;
   }
@@ -518,14 +536,36 @@
     applyTheme(theme);
   }
 
+  // === УМНАЯ АВТО-ТЕМА ПО ВРЕМЕНИ ===
   function applyTheme(theme) {
-    const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = theme === 'dark' || (theme === 'auto' && isSystemDark);
+    // Сбрасываем все темы
+    document.body.classList.remove('dark', 'dusk');
 
-    if (isDark) {
+    if (theme === 'light') {
+      // Всегда светлая
+      return;
+    } else if (theme === 'dark') {
+      // Всегда тёмная
       document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
+      return;
+    } else if (theme === 'dusk') {
+      // Всегда сумеречная
+      document.body.classList.add('dusk');
+      return;
+    } else if (theme === 'auto') {
+      // Авто по времени суток
+      const hour = new Date().getHours();
+      
+      if (hour >= 6 && hour < 16) {
+        // 06:00 - 16:00 → Светлая
+        // Ничего не добавляем (светлая по умолчанию)
+      } else if (hour >= 16 && hour < 18) {
+        // 16:00 - 18:00 → Сумеречная (светло-серая)
+        document.body.classList.add('dusk');
+      } else {
+        // 18:00 - 06:00 → Тёмная
+        document.body.classList.add('dark');
+      }
     }
   }
 
@@ -668,7 +708,7 @@
       div.className = 'bookmark' + (editingMode ? ' editing' : '');
       div.onclick = () => editingMode ? deleteBookmark(index) : openSite(bm.url);
       const isImage = bm.icon && bm.icon.startsWith('http');
-      const iconHtml = isImage ? `<img src="${bm.icon}" style="width:22px;height:22px;border-radius:4px;">` : `<span class="icon">${bm.icon || '🌐'}</span>`;
+      const iconHtml = isImage ? `<img src="${bm.icon}" style="width:22px;height:22px;border-radius:4px;">` : `<span class="icon">${bm.icon || ''}</span>`;
       div.innerHTML = `${iconHtml}<div class="name">${bm.name}</div><div class="delete" onclick="event.stopPropagation(); deleteBookmark(${index})">✕</div>`;
       list.appendChild(div);
     });
@@ -676,7 +716,7 @@
 
   function toggleEditBookmarks() {
     editingMode = !editingMode;
-    document.getElementById('editBtn').textContent = editingMode ? '✓' : '✏️';
+    document.getElementById('editBtn').textContent = editingMode ? '✓' : '️';
     renderBookmarks();
   }
 
@@ -705,11 +745,17 @@
   updateGreeting();
   loadBookmarks();
   
-  // Слушаем изменение системной темы для режима "Авто"
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  // Проверяем время каждую минуту и переключаем тему, если нужно
+  setInterval(() => {
     const theme = localStorage.getItem('simba_theme') || 'auto';
-    if (theme === 'auto') applyTheme('auto');
-  });
+    if (theme === 'auto') {
+      applyTheme('auto');
+    }
+  }, 60000); // Каждую минуту
+</script>
+
+</body>
+      </html> });
 </script>
 
 </body>
