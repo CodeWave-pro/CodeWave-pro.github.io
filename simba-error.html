@@ -1,1 +1,71 @@
-
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Симба: Нет связи</title>
+<style>
+  body {
+    background: #f1e8db;
+    color: #2a1d14;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    text-align: center;
+    padding: 20px;
+  }
+  .paw {
+    width: 80px;
+    height: 80px;
+    fill: #b84a2d;
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+  h1 {
+    font-family: Georgia, serif;
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #b84a2d;
+  }
+  p {
+    font-size: 16px;
+    color: #7a6a58;
+    line-height: 1.5;
+    max-width: 300px;
+  }
+  .btn {
+    margin-top: 30px;
+    background: #b84a2d;
+    color: #f1e8db;
+    border: 2px solid #2a1d14;
+    border-radius: 10px;
+    padding: 12px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #2a1d14;
+    text-decoration: none;
+  }
+  .btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #2a1d14;
+  }
+</style>
+</head>
+<body>
+  <svg class="paw" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="65" rx="22" ry="18"/>
+    <ellipse cx="28" cy="40" rx="8" ry="11" transform="rotate(-20 28 40)"/>
+    <ellipse cx="45" cy="28" rx="7" ry="10"/>
+    <ellipse cx="62" cy="28" rx="7" ry="10"/>
+    <ellipse cx="78" cy="42" rx="8" ry="11" transform="rotate(20 78 42)"/>
+  </svg>
+  <h1>Связь потеряна</h1>
+  <p>Симба не может загрузить эту страницу.<br>Проверьте подключение к интернету и попробуйте снова.</p>
+  <button class="btn" onclick="window.location.reload()">Обновить</button>
+</body>
+</html>
