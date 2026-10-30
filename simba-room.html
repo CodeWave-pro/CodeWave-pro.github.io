@@ -26,12 +26,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
     z-index: 100;
     border-bottom: 2px solid #b84a2d;
     flex-shrink: 0;
   }
-  .room-header h1 { font-size: 18px; font-weight: 400; }
+  .room-header h1 { font-size: 18px; font-weight: 400; color: #f1e8db; }
   .room-header h1 em { color: #b84a2d; font-style: italic; }
   .back-btn {
     background: #b84a2d;
@@ -44,52 +43,51 @@
     font-family: "Helvetica Neue", Arial, sans-serif;
     text-decoration: none;
   }
-  .back-btn:active { transform: scale(0.95); }
 
+  /* Комната = стена + пол как два блока */
   .room {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
     position: relative;
-    overflow: hidden;
-    cursor: pointer;
+  }
+
+  /* СТЕНА — верхняя половина */
+  .wall {
+    flex: 1;
+    background: linear-gradient(to bottom, #e8dcc8 0%, #d4c4a8 100%);
+    position: relative;
     min-height: 0;
   }
 
-  .wall {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 50%;
-    background: linear-gradient(to bottom, #e8dcc8 0%, #d4c4a8 100%);
-    z-index: 1;
-  }
-
-  .floor {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 50%;
+  /* ПОЛ — нижняя половина, отдельный контейнер */
+  .floor-area {
+    flex: 1;
     background: repeating-linear-gradient(90deg, #8b7355 0px, #8b7355 60px, #7a6245 60px, #7a6245 62px);
-    box-shadow: inset 0 20px 40px rgba(0,0,0,0.3);
-    z-index: 2;
+    position: relative;
+    min-height: 0;
+    box-shadow: inset 0 10px 20px rgba(0,0,0,0.3);
   }
 
+  /* Коврик на полу */
   .rug {
     position: absolute;
-    bottom: 5%;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     width: 70%;
-    height: 35%;
+    height: 70%;
     background: radial-gradient(ellipse, #b84a2d 0%, #963a22 60%, #7a2e1a 100%);
     border-radius: 50%;
     opacity: 0.7;
     border: 3px dashed #f1e8db;
-    z-index: 2;
   }
 
+  /* Элементы на стене */
   .window {
     position: absolute;
-    top: 5%;
+    top: 15%;
     left: 50%;
     transform: translateX(-50%);
     width: 120px;
@@ -97,8 +95,7 @@
     background: linear-gradient(to bottom, #87ceeb 0%, #b0e0e6 100%);
     border: 8px solid #5a4a3a;
     border-radius: 4px;
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.3), 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 2;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
   .window::before {
     content: '';
@@ -127,12 +124,11 @@
 
   .shelf {
     position: absolute;
-    top: 20%; left: 8%;
+    top: 55%; left: 8%;
     width: 90px; height: 6px;
     background: #5a4a3a;
     border-radius: 2px;
     box-shadow: 0 3px 5px rgba(0,0,0,0.3);
-    z-index: 2;
   }
   .book {
     position: absolute;
@@ -147,7 +143,7 @@
 
   .picture {
     position: absolute;
-    top: 12%; right: 12%;
+    top: 30%; right: 10%;
     width: 60px; height: 70px;
     background: #f7f1e6;
     border: 5px solid #5a4a3a;
@@ -156,15 +152,15 @@
     align-items: center;
     justify-content: center;
     font-size: 25px;
-    z-index: 2;
   }
 
+  /* Подушка — на полу, в процентах от floor-area */
   .pillow {
     position: absolute;
-    bottom: 8%;
-    left: 8%;
-    width: 100px;
-    height: 50px;
+    top: 60%;
+    left: 10%;
+    width: 90px;
+    height: 45px;
     background: linear-gradient(135deg, #d9a441 0%, #b8862d 100%);
     border-radius: 50%;
     border: 3px solid #8b6a1a;
@@ -173,9 +169,10 @@
     z-index: 3;
   }
 
+  /* Игрушки — на полу */
   .toy {
     position: absolute;
-    font-size: 50px;
+    font-size: 45px;
     cursor: pointer;
     z-index: 4;
     transition: transform 0.3s;
@@ -183,13 +180,15 @@
   }
   .toy:active { transform: scale(1.3) rotate(10deg); }
 
+  /* Кот — на полу, размер адаптивный */
   .cat {
     position: absolute;
-    width: 280px;
+    width: 140px;
     height: auto;
     z-index: 10;
     filter: drop-shadow(3px 5px 6px rgba(0,0,0,0.4));
     cursor: pointer;
+    /* Важно: кот позиционируется от верхнего левого угла */
   }
   .cat img {
     width: 100%;
@@ -207,7 +206,7 @@
 
   @keyframes bob {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); }
   }
   @keyframes wiggle {
     0%, 100% { transform: rotate(-5deg); }
@@ -215,11 +214,11 @@
   }
 
   .action-text {
-    position: absolute;
-    bottom: 20px;
+    position: fixed;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(26, 21, 16, 0.92);
+    background: rgba(26, 21, 16, 0.95);
     color: #f1e8db;
     padding: 12px 24px;
     border-radius: 12px;
@@ -228,7 +227,7 @@
     font-style: italic;
     opacity: 0;
     transition: opacity 0.5s;
-    z-index: 20;
+    z-index: 200;
     pointer-events: none;
     border: 2px solid #b84a2d;
     white-space: nowrap;
@@ -244,19 +243,20 @@
   }
 
   .hint {
-    position: absolute;
-    top: 10px;
+    position: fixed;
+    top: 70px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(184, 74, 45, 0.9);
+    background: rgba(184, 74, 45, 0.95);
     color: #f1e8db;
     padding: 8px 16px;
     border-radius: 20px;
     font-size: 12px;
     font-family: "Helvetica Neue", Arial, sans-serif;
-    z-index: 15;
+    z-index: 150;
     opacity: 0;
     transition: opacity 1s;
+    white-space: nowrap;
   }
   .hint.visible { opacity: 1; }
 </style>
@@ -272,36 +272,39 @@
   </div>
 
   <div class="room" id="room">
-    <div class="wall"></div>
-    <div class="floor"></div>
-    <div class="rug"></div>
-
-    <div class="window"><div class="sun"></div></div>
-
-    <div class="shelf">
-      <div class="book"></div>
-      <div class="book"></div>
-      <div class="book"></div>
-      <div class="book"></div>
+    <!-- СТЕНА -->
+    <div class="wall" id="wall">
+      <div class="window"><div class="sun"></div></div>
+      <div class="shelf">
+        <div class="book"></div>
+        <div class="book"></div>
+        <div class="book"></div>
+        <div class="book"></div>
+      </div>
+      <div class="picture">🐾</div>
     </div>
 
-    <div class="picture">🐾</div>
+    <!-- ПОЛ — отдельный контейнер, всё что здесь = на полу -->
+    <div class="floor-area" id="floor">
+      <div class="rug"></div>
 
-    <div class="pillow" id="pillow" onclick="goToPillow(event)"></div>
+      <div class="pillow" id="pillow" onclick="goToPillow(event)"></div>
 
-    <!-- Игрушки на коврике -->
-    <div class="toy" id="toy-yarn" style="bottom: 15%; right: 15%;" onclick="goToToy(event, 'yarn')">🧶</div>
-    <div class="toy" id="toy-box" style="bottom: 22%; right: 35%;" onclick="goToToy(event, 'box')"></div>
-    <div class="toy" id="toy-rod" style="bottom: 12%; left: 40%;" onclick="goToToy(event, 'rod')">🎣</div>
-    <div class="toy" id="toy-mouse" style="bottom: 20%; left: 60%;" onclick="goToToy(event, 'mouse')">🐭</div>
+      <!-- Игрушки в процентах от пола -->
+      <div class="toy" id="toy-yarn" style="top: 55%; right: 15%;" onclick="goToToy(event, 'yarn')"></div>
+      <div class="toy" id="toy-box" style="top: 30%; right: 30%;" onclick="goToToy(event, 'box')">📦</div>
+      <div class="toy" id="toy-rod" style="top: 65%; left: 40%;" onclick="goToToy(event, 'rod')">🎣</div>
+      <div class="toy" id="toy-mouse" style="top: 40%; left: 55%;" onclick="goToToy(event, 'mouse')">🐭</div>
 
-    <div class="cat" id="cat">
-      <img id="catImg" src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-lie.png" alt="Симба">
+      <!-- Кот -->
+      <div class="cat" id="cat">
+        <img id="catImg" src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-lie.png" alt="Симба">
+      </div>
     </div>
-
-    <div class="hint visible" id="hint">Нажми куда-нибудь — Симба пойдёт туда!</div>
-    <div class="action-text" id="actionText"></div>
   </div>
+
+  <div class="hint visible" id="hint">Нажми на пол — Симба пойдёт туда!</div>
+  <div class="action-text" id="actionText"></div>
 
 <script>
   const IMG_LIE = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-lie.png';
@@ -310,15 +313,15 @@
   const IMG_PLAY = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-play.png';
 
   const TOY_NAMES = {
-    yarn: 'клубком ниток 🧶',
-    box: 'коробкой 📦',
-    rod: 'удочкой 🎣',
-    mouse: 'мышкой 🐭'
+    yarn: 'клубком ниток ',
+    box: 'коробкой ',
+    rod: 'удочкой ',
+    mouse: 'мышкой '
   };
 
   const cat = document.getElementById('cat');
   const catImg = document.getElementById('catImg');
-  const room = document.getElementById('room');
+  const floor = document.getElementById('floor');
   const actionText = document.getElementById('actionText');
   const hint = document.getElementById('hint');
   const pillow = document.getElementById('pillow');
@@ -387,32 +390,34 @@
     else cat.classList.remove('flipped');
   }
 
-  function getCatPositionPercent() {
-    const roomRect = room.getBoundingClientRect();
+  // Получить позицию кота в пикселях относительно пола
+  function getCatPos() {
+    const floorRect = floor.getBoundingClientRect();
     const catRect = cat.getBoundingClientRect();
-    const leftPercent = ((catRect.left - roomRect.left) / roomRect.width) * 100;
-    const bottomPercent = ((roomRect.bottom - catRect.bottom) / roomRect.height) * 100;
-    return { left: leftPercent, bottom: bottomPercent };
+    return {
+      left: catRect.left - floorRect.left,
+      top: catRect.top - floorRect.top
+    };
   }
 
-  function clampToFloor(leftPercent, bottomPercent) {
-    const maxBottom = 40;
-    const minBottom = 2;
-    bottomPercent = Math.max(minBottom, Math.min(bottomPercent, maxBottom));
+  // Ограничить позицию пределами пола
+  function clampToFloor(x, y) {
+    const floorRect = floor.getBoundingClientRect();
+    const catW = 140;
+    const catH = 100; // примерная высота кота после масштабирования
     
-    const maxLeft = 80;
-    const minLeft = 2;
-    leftPercent = Math.max(minLeft, Math.min(leftPercent, maxLeft));
+    x = Math.max(5, Math.min(x, floorRect.width - catW - 5));
+    y = Math.max(5, Math.min(y, floorRect.height - catH - 5));
     
-    return { left: leftPercent, bottom: bottomPercent };
+    return { x, y };
   }
 
-  function moveCatToPercent(targetLeft, targetBottom, callback) {
+  function moveCatTo(targetX, targetY, callback) {
     if (isMoving) return;
     isMoving = true;
 
-    const pos = getCatPositionPercent();
-    const direction = targetLeft < pos.left ? 'left' : 'right';
+    const pos = getCatPos();
+    const direction = targetX < pos.left ? 'left' : 'right';
     flipCat(direction);
 
     setCatImage(IMG_SIT);
@@ -423,21 +428,21 @@
       cat.classList.add('walking');
 
       const distance = Math.sqrt(
-        Math.pow(targetLeft - pos.left, 2) + 
-        Math.pow(targetBottom - pos.bottom, 2)
+        Math.pow(targetX - pos.left, 2) + 
+        Math.pow(targetY - pos.top, 2)
       );
-      const duration = Math.max(800, distance * 30);
+      const duration = Math.max(600, distance * 2);
 
-      cat.style.transition = `left ${duration}ms ease-in-out, bottom ${duration}ms ease-in-out`;
-      cat.style.left = targetLeft + '%';
-      cat.style.bottom = targetBottom + '%';
+      cat.style.transition = `left ${duration}ms ease-in-out, top ${duration}ms ease-in-out`;
+      cat.style.left = targetX + 'px';
+      cat.style.top = targetY + 'px';
 
       setTimeout(() => {
         cat.classList.remove('walking');
         if (callback) callback();
         isMoving = false;
       }, duration);
-    }, 350);
+    }, 300);
   }
 
   function goToPillow(event) {
@@ -445,15 +450,15 @@
     if (isMoving) return;
     hideHint();
 
-    const roomRect = room.getBoundingClientRect();
+    const floorRect = floor.getBoundingClientRect();
     const pillowRect = pillow.getBoundingClientRect();
     
-    const targetLeft = ((pillowRect.left - roomRect.left) / roomRect.width) * 100;
-    const targetBottom = ((roomRect.bottom - pillowRect.bottom) / roomRect.height) * 100 + 5;
+    const targetX = pillowRect.left - floorRect.left - 20;
+    const targetY = pillowRect.top - floorRect.top - 30;
     
-    const clamped = clampToFloor(targetLeft, targetBottom);
+    const clamped = clampToFloor(targetX, targetY);
 
-    moveCatToPercent(clamped.left, clamped.bottom, () => {
+    moveCatTo(clamped.x, clamped.y, () => {
       setCatImage(IMG_LIE);
       showAction('Симба отдыхает на подушке... 💤');
     });
@@ -465,15 +470,15 @@
     hideHint();
 
     const toy = document.getElementById('toy-' + toyName);
-    const roomRect = room.getBoundingClientRect();
+    const floorRect = floor.getBoundingClientRect();
     const toyRect = toy.getBoundingClientRect();
     
-    const targetLeft = ((toyRect.left - roomRect.left) / roomRect.width) * 100 - 5;
-    const targetBottom = ((roomRect.bottom - toyRect.bottom) / roomRect.height) * 100 + 10;
+    const targetX = toyRect.left - floorRect.left - 30;
+    const targetY = toyRect.top - floorRect.top - 20;
     
-    const clamped = clampToFloor(targetLeft, targetBottom);
+    const clamped = clampToFloor(targetX, targetY);
 
-    moveCatToPercent(clamped.left, clamped.bottom, () => {
+    moveCatTo(clamped.x, clamped.y, () => {
       setCatImage(IMG_PLAY);
       cat.classList.add('playing');
       playPurr();
@@ -486,23 +491,25 @@
     });
   }
 
-  room.addEventListener('click', (e) => {
+  // Клик по полу
+  floor.addEventListener('click', (e) => {
     if (isMoving) return;
     if (e.target.closest('.toy') || e.target.id === 'pillow') return;
     hideHint();
 
-    const roomRect = room.getBoundingClientRect();
-    const clickLeft = ((e.clientX - roomRect.left) / roomRect.width) * 100;
-    const clickBottom = ((roomRect.bottom - e.clientY) / roomRect.height) * 100;
+    const floorRect = floor.getBoundingClientRect();
+    const clickX = e.clientX - floorRect.left - 70; // центр кота
+    const clickY = e.clientY - floorRect.top - 50;
     
-    const clamped = clampToFloor(clickLeft, clickBottom);
+    const clamped = clampToFloor(clickX, clickY);
 
-    moveCatToPercent(clamped.left, clamped.bottom, () => {
+    moveCatTo(clamped.x, clamped.y, () => {
       setCatImage(IMG_SIT);
       showAction('Симба сел и осматривается ');
     });
   });
 
+  // Клик по коту
   cat.addEventListener('click', (e) => {
     e.stopPropagation();
     if (isMoving) return;
@@ -511,11 +518,18 @@
   });
 
   function hideHint() { hint.classList.remove('visible'); }
-  setTimeout(hideHint, 5000);
+  setTimeout(hideHint, 4000);
 
+  // Стартовая позиция — на подушке (в пикселях от пола)
   window.addEventListener('load', () => {
-    cat.style.left = '5%';
-    cat.style.bottom = '5%';
+    const floorRect = floor.getBoundingClientRect();
+    const pillowRect = pillow.getBoundingClientRect();
+    
+    const startX = pillowRect.left - floorRect.left - 10;
+    const startY = pillowRect.top - floorRect.top - 20;
+    
+    cat.style.left = startX + 'px';
+    cat.style.top = startY + 'px';
     cat.style.transition = 'none';
   });
 </script>
