@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>История Симба браузера</title>
+<title>Симба браузер — Скачать</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root {
     --cream: #f1e8db;
@@ -16,287 +16,242 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html { scroll-behavior: smooth; }
-
-  body {
+  html, body {
     background: var(--cream);
     color: var(--ink);
     font-family: Georgia, "Times New Roman", serif;
-    line-height: 1.7;
-    background-image:
-      radial-gradient(circle at 10% 15%, rgba(217,164,65,.10), transparent 40%),
-      radial-gradient(circle at 90% 85%, rgba(184,74,45,.08), transparent 45%);
+    min-height: 100%;
   }
+
+  body {
+    background-image:
+      radial-gradient(circle at 10% 15%, rgba(217,164,65,.12), transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(184,74,45,.10), transparent 45%);
+    padding: 40px 24px 60px;
+  }
+
+  .wrap { max-width: 900px; margin: 0 auto; }
 
   .topbar {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     border-bottom: 1px solid rgba(42,29,20,.2);
-    padding: 20px 24px;
+    padding-bottom: 14px;
+    margin-bottom: 80px;
     font-size: 13px;
     letter-spacing: .08em;
     text-transform: uppercase;
     font-family: "Helvetica Neue", Arial, sans-serif;
     color: var(--muted);
-    position: sticky;
-    top: 0;
-    background: var(--cream);
-    z-index: 100;
   }
   .topbar .logo { color: var(--ink); font-weight: 700; letter-spacing: .18em; }
   .topbar .logo span { color: var(--rust); }
-  .topbar a { color: var(--muted); text-decoration: none; }
-  .topbar a:hover { color: var(--rust); }
 
-  .cover {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 80px 24px 60px;
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
     text-align: center;
+    margin-bottom: 80px;
   }
-  .cover .label {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 12px;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--rust);
-    margin-bottom: 24px;
-  }
-  .cover h1 {
-    font-size: clamp(40px, 7vw, 72px);
-    line-height: 1.05;
+
+  .hero h1 {
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 1;
     font-weight: 400;
     letter-spacing: -.02em;
-    margin-bottom: 20px;
+    color: var(--ink);
   }
-  .cover h1 em {
+  .hero h1 em {
     font-style: italic;
     color: var(--rust);
   }
-  .cover .subtitle {
+
+  .hero .subtitle {
     font-size: 18px;
     color: var(--muted);
     max-width: 480px;
-    margin: 0 auto 40px;
-    font-style: italic;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-family: "Helvetica Neue", Arial, sans-serif;
   }
-  .cover .meta {
+
+  .download-box {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .btn-download {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: var(--rust);
+    color: var(--cream);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    padding: 20px 48px;
+    border: 2px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .btn-download:hover { background: var(--rust-dark); }
+
+  .btn-download:active {
+    transform: translate(4px, 4px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .btn-download svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .btn-download.small {
+    padding: 12px 24px;
+    font-size: 14px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .btn-download.small:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
+  .microcopy {
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 13px;
     color: var(--muted);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-  .cover .meta span { color: var(--rust); }
-
-  .divider {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 24px;
-    text-align: center;
-    color: var(--rust);
-    font-size: 24px;
-    letter-spacing: .5em;
-  }
-
-  .toc {
-    max-width: 720px;
-    margin: 60px auto;
-    padding: 0 24px;
-  }
-  .toc h2 {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: .15em;
-    color: var(--rust);
-    margin-bottom: 24px;
-    text-align: center;
-    font-weight: 600;
-  }
-  .toc-list {
-    list-style: none;
-    border: 2px solid var(--ink);
-    border-radius: 12px;
-    background: var(--paper);
-    box-shadow: 6px 6px 0 var(--ink);
-    padding: 8px 0;
-  }
-  .toc-list li {
-    border-bottom: 1px dashed rgba(42,29,20,.15);
-  }
-  .toc-list li:last-child { border-bottom: none; }
-  .toc-list a {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 14px 24px;
-    color: var(--ink);
-    text-decoration: none;
-    font-size: 16px;
-    transition: background 0.2s;
-  }
-  .toc-list a:hover { background: rgba(184,74,45,.06); }
-  .toc-list .num {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 12px;
-    color: var(--rust);
-    letter-spacing: .1em;
-    margin-right: 16px;
-    font-weight: 600;
-  }
-  .toc-list .title { flex: 1; }
-  .toc-list .page {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 12px;
-    color: var(--muted);
     letter-spacing: .05em;
+    text-align: center;
   }
+  .microcopy span { color: var(--ink); font-weight: 600; }
 
-  .story {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 24px 60px;
-  }
-
-  .chapter {
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
     margin-bottom: 80px;
-    scroll-margin-top: 80px;
+  }
+  @media (max-width: 700px) {
+    .features { grid-template-columns: 1fr; gap: 20px; }
   }
 
-  .chapter-head {
-    display: flex;
-    align-items: baseline;
-    gap: 20px;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 2px solid var(--ink);
+  .feature-card {
+    background: var(--paper);
+    border: 1px solid rgba(42,29,20,.15);
+    padding: 28px 24px;
+    position: relative;
   }
-  .chapter-num {
+  .feature-card::after {
+    content: "";
+    position: absolute;
+    top: 8px; left: 8px; right: 8px; bottom: 8px;
+    border: 1px dashed rgba(42,29,20,.12);
+    pointer-events: none;
+  }
+
+  .feature-card h3 {
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 14px;
     text-transform: uppercase;
-    letter-spacing: .15em;
+    letter-spacing: .12em;
     color: var(--rust);
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .chapter-title {
-    font-size: clamp(28px, 5vw, 42px);
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: -.01em;
-  }
-  .chapter-title em {
-    font-style: italic;
-    color: var(--rust);
+    margin-bottom: 12px;
   }
 
-  .chapter-body {
-    font-size: 17px;
+  .feature-card p {
+    font-size: 16px;
+    line-height: 1.55;
     color: var(--ink);
   }
-  .chapter-body p {
-    margin-bottom: 18px;
-  }
-  .chapter-body p:last-child { margin-bottom: 0; }
 
-  .chapter-body strong {
-    color: var(--rust-dark);
-    font-weight: 700;
+  .versions-section {
+    margin-bottom: 80px;
   }
 
-  .chapter-body em {
+  .versions-title {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
     color: var(--rust);
-    font-style: italic;
+    margin-bottom: 24px;
+    text-align: center;
+    font-weight: 600;
   }
 
-  .note {
+  .versions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .version-row {
     background: var(--paper);
     border: 2px solid var(--ink);
     border-radius: 12px;
     padding: 20px 24px;
-    margin: 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     box-shadow: 4px 4px 0 var(--ink);
-    position: relative;
-  }
-  .note::before {
-    content: "🐾";
-    position: absolute;
-    top: -14px;
-    left: 20px;
-    background: var(--cream);
-    padding: 0 8px;
-    font-size: 18px;
-  }
-  .note-title {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: .12em;
-    color: var(--rust);
-    margin-bottom: 8px;
-    font-weight: 600;
-  }
-  .note p {
-    font-size: 15px;
-    margin-bottom: 0 !important;
+    gap: 16px;
+    flex-wrap: wrap;
   }
 
-  .features-list {
-    list-style: none;
-    margin: 20px 0;
-  }
-  .features-list li {
-    padding: 10px 0 10px 32px;
-    position: relative;
-    border-bottom: 1px dashed rgba(42,29,20,.15);
-  }
-  .features-list li:last-child { border-bottom: none; }
-  .features-list li::before {
-    content: "🐾";
-    position: absolute;
-    left: 0;
-    top: 10px;
-    font-size: 14px;
-  }
-  .features-list strong {
-    color: var(--rust-dark);
+  .version-info {
+    flex: 1;
+    min-width: 200px;
   }
 
-  .epilogue {
-    background: var(--paper);
-    border: 2px solid var(--ink);
-    border-radius: 12px;
-    padding: 40px 32px;
-    margin-top: 60px;
-    box-shadow: 6px 6px 0 var(--ink);
-    text-align: center;
-  }
-  .epilogue h2 {
-    font-size: 32px;
+  .version-name {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    color: var(--ink);
+    margin-bottom: 4px;
     font-weight: 400;
-    margin-bottom: 20px;
   }
-  .epilogue h2 em {
-    font-style: italic;
-    color: var(--rust);
+
+  .version-meta {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: .03em;
   }
-  .epilogue p {
-    font-size: 17px;
-    margin-bottom: 16px;
+
+  .version-meta .badge {
+    display: inline-block;
+    background: var(--rust);
+    color: var(--cream);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-right: 8px;
   }
-  .epilogue .paw {
-    font-size: 48px;
-    margin: 20px 0;
-    display: block;
+
+  .version-meta .badge.soon {
+    background: var(--muted);
   }
 
   .footer {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 24px;
+    padding-top: 18px;
     border-top: 1px solid rgba(42,29,20,.2);
     display: flex;
     justify-content: space-between;
@@ -310,188 +265,167 @@
   }
   .footer .dot { color: var(--rust); }
 
-  .paw-bg {
+  .paw {
     position: fixed;
     right: 40px;
     bottom: 40px;
-    opacity: .08;
+    opacity: .15;
     transform: rotate(-18deg);
     pointer-events: none;
-    z-index: 0;
   }
   @media (max-width: 600px) {
-    .paw-bg { width: 80px; height: 80px; right: 16px; bottom: 16px; }
-    .chapter-head { flex-direction: column; gap: 4px; }
-    .epilogue { padding: 28px 20px; }
+    .paw { width: 70px; height: 70px; right: 20px; bottom: 20px; }
+    .version-row { padding: 16px 18px; }
+    .version-name { font-size: 18px; }
   }
 </style>
 </head>
 <body>
 
-  <div class="topbar">
-    <div class="logo">СИМБА<span>●</span>browser</div>
-    <a href="simbabrowser.html">← На сайт</a>
-  </div>
-
-  <div class="cover">
-    <div class="label">История создания · 2026</div>
-    <h1>Как родился<br><em>Симба браузер</em></h1>
-    <p class="subtitle">Тихий, быстрый, по-человечески. Рассказ о том, как из простой идеи вырос настоящий проект с душой.</p>
-    <div class="meta">
-      Автор: <span>CodeWave-pro</span> · Маскот: <span>сиамский кот с удочкой</span>
-    </div>
-  </div>
-
-  <div class="divider">· · ·</div>
-
-  <div class="toc">
-    <h2>Оглавление</h2>
-    <ul class="toc-list">
-      <li><a href="#ch1"><span class="num">Глава 01</span><span class="title">Начало пути</span><span class="page">стр. 01</span></a></li>
-      <li><a href="#ch2"><span class="num">Глава 02</span><span class="title">Появление лица</span><span class="page">стр. 02</span></a></li>
-      <li><a href="#ch3"><span class="num">Глава 03</span><span class="title">Борьба с кодовым гниением</span><span class="page">стр. 03</span></a></li>
-      <li><a href="#ch4"><span class="num">Глава 04</span><span class="title">Большой скачок — версия 3.03</span><span class="page">стр. 04</span></a></li>
-      <li><a href="#ch5"><span class="num">Глава 05</span><span class="title">Технические битвы</span><span class="page">стр. 05</span></a></li>
-      <li><a href="#ch6"><span class="num">Глава 06</span><span class="title">Философия Симбы</span><span class="page">стр. 06</span></a></li>
-      <li><a href="#ch7"><span class="num">Глава 07</span><span class="title">Что дальше?</span><span class="page">стр. 07</span></a></li>
-    </ul>
-  </div>
-
-  <div class="divider">· · ·</div>
-
-  <div class="story">
-
-    <div class="chapter" id="ch1">
-      <div class="chapter-head">
-        <div class="chapter-num">Глава 01</div>
-        <h2 class="chapter-title">Начало <em>пути</em></h2>
-      </div>
-      <div class="chapter-body">
-        <p>Всё началось с простой идеи — сделать браузер, который <strong>не бесит</strong>. Не грузит лишним, не следит, не навязывает новости. Просто тихий уголок в интернете, где есть ты и твои вкладки.</p>
-        <p><strong>Версия 3.01</strong> — самая первая. В ней не было даже стартовой страницы. Браузер просто открывал Google. Минимализм в чистом виде. Никакого дизайна, никаких фич — только WebView и ссылка.</p>
-        <p>Но именно с неё всё началось.</p>
-      </div>
+  <div class="wrap">
+    
+    <div class="topbar">
+      <div class="logo">СИМБА<span>●</span>browser</div>
+      <div>выпуск № 3 · с 2026 года</div>
     </div>
 
-    <div class="chapter" id="ch2">
-      <div class="chapter-head">
-        <div class="chapter-num">Глава 02</div>
-        <h2 class="chapter-title">Появление <em>лица</em></h2>
-      </div>
-      <div class="chapter-body">
-        <p><strong>Версия 3.02</strong> — первая стартовая страница. Мы создали <em>simba-browser.html</em> — простую страницу в тёплых кремовых тонах с поиском и шестью карточками быстрого доступа: Google, Яндекс, YouTube, GitHub, Википедия, Telegram.</p>
-        <p>Тогда же появился сайт-витрина <em>simbabrowser.html</em> — красивая страница в стиле старой газеты, где можно было скачать браузер. Мы добавили таблицу версий, чтобы каждая новая сборка имела свою историю.</p>
-        <div class="note">
-          <div class="note-title">Факт</div>
-          <p>Первая версия сайта была сделана полностью с телефона, без компьютера. Это задало тон всему проекту.</p>
+    <div class="hero">
+      <h1>Ваш тихий<br><em>уголок</em> в интернете.</h1>
+      <p class="subtitle">
+        Симба не отвлекает, не следит и не перегружает. 
+        Это просто хороший браузер, который уважает ваше время и внимание.
+      </p>
+
+      <div class="download-box">
+        <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.03/simbabrowserv3.03.apk" class="btn-download">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Скачать последнюю версию
+        </a>
+        <div class="microcopy">
+          Версия <span>3.03</span> · Тёмная тема, закладки, умный поиск
         </div>
       </div>
     </div>
 
-    <div class="chapter" id="ch3">
-      <div class="chapter-head">
-        <div class="chapter-num">Глава 03</div>
-        <h2 class="chapter-title">Борьба с <em>кодовым гниением</em></h2>
+    <div class="features">
+      <div class="feature-card">
+        <h3>01 · Легкость</h3>
+        <p>Запускается мгновенно. Не ест оперативную память. Работает даже на старых устройствах.</p>
       </div>
-      <div class="chapter-body">
-        <p>Ты заметил важную вещь: если обновлять один HTML-файл, старые версии браузера сломаются. Это явление называется <strong>кодовое гниение</strong> (software rot) — когда старые сборки перестают работать из-за изменений в новых.</p>
-        <p>Мы приняли профессиональное решение: <strong>отдельный HTML для каждой версии</strong>.</p>
-        <ul class="features-list">
-          <li><strong>simba-3.01.html</strong> — редирект на Google (как и было)</li>
-          <li><strong>simba-3.02.html</strong> — простая стартовая страница</li>
-          <li><strong>simba-3.03.html</strong> — полноценный браузер</li>
-        </ul>
-        <p>Каждая версия теперь — честный снимок своего времени. Старые APK будут работать вечно.</p>
+      <div class="feature-card">
+        <h3>02 · Тишина</h3>
+        <p>Никаких всплывающих новостей, навязчивых уведомлений или трекеров. Только вы и ваши вкладки.</p>
+      </div>
+      <div class="feature-card">
+        <h3>03 · Забота</h3>
+        <p>Мы читаем каждое письмо от пользователей. Симба растёт вместе с вами, а не вопреки вам.</p>
       </div>
     </div>
 
-    <div class="chapter" id="ch4">
-      <div class="chapter-head">
-        <div class="chapter-num">Глава 04</div>
-        <h2 class="chapter-title">Большой скачок — <em>версия 3.03</em></h2>
-      </div>
-      <div class="chapter-body">
-        <p>Это была самая насыщенная версия. Мы добавили сразу пять больших фич:</p>
-        <p><strong>🌙 Тёмная тема.</strong> Кнопка-полумесяц в углу. Переключает все цвета за 0.4 секунды. Сохраняется между запусками. Ночью Симба «засыпает» вместе с хозяином.</p>
-        <p><strong>⭐ Закладки.</strong> Двойной клик по пустому месту — добавить сайт. Иконки подгружаются через Google Favicon. Всё хранится локально, без облаков и аккаунтов.</p>
-        <p><strong>🧠 Умная адресная строка.</strong> Вводишь <em>youtube.com</em> — открывает сайт. Вводишь <em>симба кот</em> — открывает поиск. Браузер сам понимает, что ты хочешь.</p>
-        <p><strong>🐾 Блокировка запрещённых сайтов.</strong> Facebook, Instagram, TikTok, Twitter/X, Discord и другие. При попытке открыть — красивое модальное окно: <em>«Мяу-мяу! Этот сайт заблокирован в России. Не забудьте включить прокси или VPN.»</em></p>
-        <p><strong>🎣 Пасхалка.</strong> Введи <em>симба</em>, <em>мяу</em>, <em>кот</em>, <em>simba</em> или <em>cat</em> — и появится фото кота в лодке с удочкой. С подписью: <em>«Мяу! Я тут. Тише... рыба клюёт.»</em></p>
-      </div>
-    </div>
+    <div class="versions-section">
+      <div class="versions-title">История версий браузера</div>
+      
+      <div class="versions-list">
 
-    <div class="chapter" id="ch5">
-      <div class="chapter-head">
-        <div class="chapter-num">Глава 05</div>
-        <h2 class="chapter-title">Технические <em>битвы</em></h2>
-      </div>
-      <div class="chapter-body">
-        <p>Путь не был лёгким. Мы столкнулись с кучей проблем и решили каждую:</p>
-        <ul class="features-list">
-          <li><strong>Кнопка «Назад» не работала</strong> — добавили свою кнопку в HTML с историей переходов.</li>
-          <li><strong>Файлы не загружались через CX Проводник</strong> — нашли трюк с «Версией для ПК» в Chrome.</li>
-          <li><strong>Фото пасхалки не появлялось</strong> — GitHub блокировал raw-ссылки. Решили через CDN jsDelivr.</li>
-          <li><strong>APK весил 0 байт</strong> — пересобрали в CCode.</li>
-          <li><strong>GitHub потребовал 2FA</strong> — настроили через Google Authenticator со скриншота.</li>
-          <li><strong>Ошибка WebView палила URL</strong> — решили на уровне HTML, проверяя интернет до перехода.</li>
-          <li><strong>Список заблокированных сайтов был неполным</strong> — добавили Twitch, Medium, Quora, Patreon и другие.</li>
-        </ul>
-        <div class="note">
-          <div class="note-title">Главный урок</div>
-          <p>Каждая проблема — это возможность сделать браузер лучше. Симба рос именно благодаря ошибкам.</p>
+        <!-- Версия 3.01 -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.01</div>
+            <div class="version-meta">
+              <span class="badge soon">Архив</span>
+              Первая версия · Просто Google
+            </div>
+          </div>
+          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.01/simbabrowserv3.01.apk" class="btn-download small">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Скачать
+          </a>
         </div>
+
+        <!-- Версия 3.02 -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.02</div>
+            <div class="version-meta">
+              <span class="badge soon">Архив</span>
+              Первая стартовая страница
+            </div>
+          </div>
+          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.02/simbabrowserv3.02.apk" class="btn-download small">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Скачать
+          </a>
+        </div>
+
+        <!-- Версия 3.03 (АКТИВНАЯ) -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.03</div>
+            <div class="version-meta">
+              <span class="badge">Новинка</span>
+              Тёмная тема, закладки, умный поиск, пасхалки
+            </div>
+          </div>
+          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.03/simbabrowserv3.03.apk" class="btn-download small">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Скачать
+          </a>
+        </div>
+
+        <!-- Версия 3.04 -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.04</div>
+            <div class="version-meta">
+              <span class="badge soon">Скоро</span>
+              Улучшения производительности и приватности
+            </div>
+          </div>
+          <div class="microcopy" style="margin: 0; font-weight: 600;">Скоро</div>
+        </div>
+
+        <!-- Версия 3.05 -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.05</div>
+            <div class="version-meta">
+              <span class="badge soon">Скоро</span>
+              Крупное обновление «Характер Симбы»
+            </div>
+          </div>
+          <div class="microcopy" style="margin: 0; font-weight: 600;">Скоро</div>
+        </div>
+
       </div>
     </div>
 
-    <div class="chapter" id="ch6">
-      <div class="chapter-head">
-        <div class="chapter-num">Глава 06</div>
-        <h2 class="chapter-title">Философия <em>Симбы</em></h2>
+    <div class="footer">
+      <div>симба браузер <span class="dot">●</span> с 2026 года</div>
+      <div>тихо · быстро · по-человечески</div>
+      <div>
+        <a href="simba-story.html" style="color: var(--rust); text-decoration: none; font-weight: 600;">📖 История создания</a>
       </div>
-      <div class="chapter-body">
-        <p>Симба браузер — это не просто WebView с HTML. Это проект с душой.</p>
-        <p><strong>Наши принципы:</strong></p>
-        <ul class="features-list">
-          <li><strong>Тишина</strong> — никаких уведомлений, трекеров, всплывающих новостей</li>
-          <li><strong>Лёгкость</strong> — работает даже на старых телефонах</li>
-          <li><strong>Забота</strong> — читаем каждого пользователя, растём вместе с ним</li>
-          <li><strong>Красота</strong> — тёплые цвета, бумажные текстуры, лапки в углу</li>
-          <li><strong>Приватность</strong> — всё хранится локально, никаких аккаунтов</li>
-        </ul>
-        <p>Большинство браузеров делают упор на функции. Симба делает упор на <em>эмоции и уют</em>. Пользователь открывает его не только потому, что он быстрый, но и потому, что ему приятно видеть там кота.</p>
-      </div>
-    </div>
-
-    <div class="chapter" id="ch7">
-      <div class="chapter-head">
-        <div class="chapter-num">Глава 07</div>
-        <h2 class="chapter-title">Что <em>дальше?</em></h2>
-      </div>
-      <div class="chapter-body">
-        <p>Впереди версии <strong>3.04</strong> и <strong>3.05</strong>:</p>
-        <p><strong>3.04 — «Скорость и чистота».</strong> Кнопка полной очистки данных, режим экономии трафика (без картинок), улучшенная обработка кнопки «Назад».</p>
-        <p><strong>3.05 — «Характер Симбы».</strong> Ночной режим со спящим котом, умные приветствия по времени суток, живые иконки приложения, секретная комната с фото кота.</p>
-        <p>Проект только начинается.</p>
-      </div>
-    </div>
-
-    <div class="epilogue">
-      <h2>Эпилог</h2>
-      <p>Симба браузер начинался как простой WebView с ссылкой на Google. Сейчас это полноценный проект с тремя выпущенными версиями, красивым сайтом-витриной, историей без кодового гниения и пасхалкой с котом-рыбаком.</p>
-      <p>И всё это — сделано <strong>с телефона</strong>, без компьютера, в свободное время, с любовью к деталям.</p>
-      <span class="paw">🐾</span>
-      <p><em>Это и есть Симба. Тихий, быстрый, по-человечески.</em></p>
     </div>
 
   </div>
 
-  <div class="footer">
-    <div>симба браузер <span class="dot">●</span> с 2026 года</div>
-    <div>тихо · быстро · по-человечески</div>
-    <div>стр. 01 из 07</div>
-  </div>
-
-  <svg class="paw-bg" width="110" height="110" viewBox="0 0 100 100" fill="#2a1d14">
+  <svg class="paw" width="110" height="110" viewBox="0 0 100 100" fill="#2a1d14">
     <ellipse cx="50" cy="65" rx="22" ry="18"/>
     <ellipse cx="28" cy="40" rx="8" ry="11" transform="rotate(-20 28 40)"/>
     <ellipse cx="45" cy="28" rx="7" ry="10"/>
