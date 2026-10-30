@@ -11,7 +11,6 @@
     --ink: #2a1d14;
     --rust: #b84a2d;
     --rust-dark: #963a22;
-    --ochre: #d9a441;
     --muted: #7a6a58;
   }
 
@@ -122,6 +121,16 @@
     stroke-linejoin: round;
   }
 
+  .btn-download.small {
+    padding: 12px 24px;
+    font-size: 14px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .btn-download.small:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
   .microcopy {
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 13px;
@@ -170,6 +179,77 @@
     color: var(--ink);
   }
 
+  .versions-section {
+    margin-bottom: 80px;
+  }
+
+  .versions-title {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--rust);
+    margin-bottom: 24px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .versions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .version-row {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 4px 4px 0 var(--ink);
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .version-info {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .version-name {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    font-weight: 400;
+  }
+
+  .version-meta {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: .03em;
+  }
+
+  .version-meta .badge {
+    display: inline-block;
+    background: var(--rust);
+    color: var(--cream);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-right: 8px;
+  }
+
+  .version-meta .badge.soon {
+    background: var(--muted);
+  }
+
   .footer {
     padding-top: 18px;
     border-top: 1px solid rgba(42,29,20,.2);
@@ -195,6 +275,8 @@
   }
   @media (max-width: 600px) {
     .paw { width: 70px; height: 70px; right: 20px; bottom: 20px; }
+    .version-row { padding: 16px 18px; }
+    .version-name { font-size: 18px; }
   }
 </style>
 </head>
@@ -215,17 +297,16 @@
       </p>
 
       <div class="download-box">
-        <!-- Кнопка теперь вызывает JavaScript функцию -->
-        <button onclick="startDownload()" class="btn-download">
+        <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.03/simbabrowserv3.03.apk" class="btn-download">
           <svg viewBox="0 0 24 24">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-          Скачать Симбу (.apk)
-        </button>
+          Скачать последнюю версию
+        </a>
         <div class="microcopy">
-          Версия <span>3.1.0</span> · 64,2 МБ · Бесплатно
+          Версия <span>3.03</span> · Тёмная тема, закладки, умный поиск
         </div>
       </div>
     </div>
@@ -233,7 +314,7 @@
     <div class="features">
       <div class="feature-card">
         <h3>01 · Легкость</h3>
-        <p>Запускается мгновенно. Не ест оперативную память, как не в себя. Работает даже на старых устройствах.</p>
+        <p>Запускается мгновенно. Не ест оперативную память. Работает даже на старых устройствах.</p>
       </div>
       <div class="feature-card">
         <h3>02 · Тишина</h3>
@@ -245,10 +326,101 @@
       </div>
     </div>
 
+    <div class="versions-section">
+      <div class="versions-title">История версий браузера</div>
+      
+      <div class="versions-list">
+
+        <!-- Версия 3.01 -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.01</div>
+            <div class="version-meta">
+              <span class="badge soon">Архив</span>
+              Первая версия · Просто Google
+            </div>
+          </div>
+          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.01/simbabrowserv3.01.apk" class="btn-download small">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Скачать
+          </a>
+        </div>
+
+        <!-- Версия 3.02 -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.02</div>
+            <div class="version-meta">
+              <span class="badge soon">Архив</span>
+              Первая стартовая страница
+            </div>
+          </div>
+          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.02/simbabrowserv3.02.apk" class="btn-download small">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Скачать
+          </a>
+        </div>
+
+        <!-- Версия 3.03 (АКТИВНАЯ) -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.03</div>
+            <div class="version-meta">
+              <span class="badge">Новинка</span>
+              Тёмная тема, закладки, умный поиск, пасхалки
+            </div>
+          </div>
+          <a href="https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.03/simbabrowserv3.03.apk" class="btn-download small">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Скачать
+          </a>
+        </div>
+
+        <!-- Версия 3.04 -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.04</div>
+            <div class="version-meta">
+              <span class="badge soon">Скоро</span>
+              Улучшения производительности и приватности
+            </div>
+          </div>
+          <div class="microcopy" style="margin: 0; font-weight: 600;">Скоро</div>
+        </div>
+
+        <!-- Версия 3.05 -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 3.05</div>
+            <div class="version-meta">
+              <span class="badge soon">Скоро</span>
+              Крупное обновление «Характер Симбы»
+            </div>
+          </div>
+          <div class="microcopy" style="margin: 0; font-weight: 600;">Скоро</div>
+        </div>
+
+      </div>
+    </div>
+
     <div class="footer">
       <div>симба браузер <span class="dot">●</span> с 2026 года</div>
       <div>тихо · быстро · по-человечески</div>
-      <div>стр. 01 из 01</div>
+      <div>
+        <a href="simba-story.html" style="color: var(--rust); text-decoration: none; font-weight: 600;">📖 История создания</a>
+      </div>
     </div>
 
   </div>
@@ -260,24 +432,6 @@
     <ellipse cx="62" cy="28" rx="7" ry="10"/>
     <ellipse cx="78" cy="42" rx="8" ry="11" transform="rotate(20 78 42)"/>
   </svg>
-
-  <!-- Скрипт для скачивания и перенаправления -->
-  <script>
-    function startDownload() {
-      // 1. Создаем невидимую ссылку и инициируем скачивание
-      const link = document.createElement('a');
-      link.href = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/releases/download/v3.1.0/simba.apk';
-      link.download = 'simba.apk';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      // 2. Через 2 секунды перенаправляем на страницу благодарности
-      setTimeout(function() {
-        window.location.href = 'https://codewave-pro.github.io/simbabrowserthsanks.html';
-      }, 2000);
-    }
-  </script>
 
 </body>
 </html>
