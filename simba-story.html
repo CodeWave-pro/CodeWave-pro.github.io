@@ -28,7 +28,6 @@
       radial-gradient(circle at 90% 85%, rgba(184,74,45,.08), transparent 45%);
   }
 
-  /* === ШАПКА === */
   .topbar {
     display: flex;
     justify-content: space-between;
@@ -50,7 +49,6 @@
   .topbar a { color: var(--muted); text-decoration: none; }
   .topbar a:hover { color: var(--rust); }
 
-  /* === ОБЛОЖКА === */
   .cover {
     max-width: 720px;
     margin: 0 auto;
@@ -102,7 +100,6 @@
     letter-spacing: .5em;
   }
 
-  /* === ОГЛАВЛЕНИЕ === */
   .toc {
     max-width: 720px;
     margin: 60px auto;
@@ -157,7 +154,6 @@
     letter-spacing: .05em;
   }
 
-  /* === ГЛАВЫ === */
   .story {
     max-width: 720px;
     margin: 0 auto;
@@ -216,7 +212,6 @@
     font-style: italic;
   }
 
-  /* Карточка-врезка */
   .note {
     background: var(--paper);
     border: 2px solid var(--ink);
@@ -227,7 +222,7 @@
     position: relative;
   }
   .note::before {
-    content: "";
+    content: "🐾";
     position: absolute;
     top: -14px;
     left: 20px;
@@ -249,7 +244,6 @@
     margin-bottom: 0 !important;
   }
 
-  /* Список фич */
   .features-list {
     list-style: none;
     margin: 20px 0;
@@ -271,7 +265,6 @@
     color: var(--rust-dark);
   }
 
-  /* Эпилог */
   .epilogue {
     background: var(--paper);
     border: 2px solid var(--ink);
@@ -300,7 +293,6 @@
     display: block;
   }
 
-  /* === ФУТЕР === */
   .footer {
     max-width: 720px;
     margin: 0 auto;
@@ -338,10 +330,9 @@
 
   <div class="topbar">
     <div class="logo">СИМБА<span>●</span>browser</div>
-    <a href="index.html">← На сайт</a>
+    <a href="simbabrowser.html">← На сайт</a>
   </div>
 
-  <!-- ОБЛОЖКА -->
   <div class="cover">
     <div class="label">История создания · 2026</div>
     <h1>Как родился<br><em>Симба браузер</em></h1>
@@ -353,7 +344,6 @@
 
   <div class="divider">· · ·</div>
 
-  <!-- ОГЛАВЛЕНИЕ -->
   <div class="toc">
     <h2>Оглавление</h2>
     <ul class="toc-list">
@@ -369,10 +359,8 @@
 
   <div class="divider">· · ·</div>
 
-  <!-- ИСТОРИЯ -->
   <div class="story">
 
-    <!-- ГЛАВА 1 -->
     <div class="chapter" id="ch1">
       <div class="chapter-head">
         <div class="chapter-num">Глава 01</div>
@@ -385,7 +373,6 @@
       </div>
     </div>
 
-    <!-- ГЛАВА 2 -->
     <div class="chapter" id="ch2">
       <div class="chapter-head">
         <div class="chapter-num">Глава 02</div>
@@ -393,7 +380,7 @@
       </div>
       <div class="chapter-body">
         <p><strong>Версия 3.02</strong> — первая стартовая страница. Мы создали <em>simba-browser.html</em> — простую страницу в тёплых кремовых тонах с поиском и шестью карточками быстрого доступа: Google, Яндекс, YouTube, GitHub, Википедия, Telegram.</p>
-        <p>Тогда же появился сайт-витрина <em>index.html</em> — красивая страница в стиле старой газеты, где можно было скачать браузер. Мы добавили таблицу версий, чтобы каждая новая сборка имела свою историю.</p>
+        <p>Тогда же появился сайт-витрина <em>simbabrowser.html</em> — красивая страница в стиле старой газеты, где можно было скачать браузер. Мы добавили таблицу версий, чтобы каждая новая сборка имела свою историю.</p>
         <div class="note">
           <div class="note-title">Факт</div>
           <p>Первая версия сайта была сделана полностью с телефона, без компьютера. Это задало тон всему проекту.</p>
@@ -401,7 +388,6 @@
       </div>
     </div>
 
-    <!-- ГЛАВА 3 -->
     <div class="chapter" id="ch3">
       <div class="chapter-head">
         <div class="chapter-num">Глава 03</div>
@@ -419,7 +405,6 @@
       </div>
     </div>
 
-    <!-- ГЛАВА 4 -->
     <div class="chapter" id="ch4">
       <div class="chapter-head">
         <div class="chapter-num">Глава 04</div>
@@ -427,20 +412,14 @@
       </div>
       <div class="chapter-body">
         <p>Это была самая насыщенная версия. Мы добавили сразу пять больших фич:</p>
-
-        <p><strong> Тёмная тема.</strong> Кнопка-полумесяц в углу. Переключает все цвета за 0.4 секунды. Сохраняется между запусками. Ночью Симба «засыпает» вместе с хозяином.</p>
-
+        <p><strong>🌙 Тёмная тема.</strong> Кнопка-полумесяц в углу. Переключает все цвета за 0.4 секунды. Сохраняется между запусками. Ночью Симба «засыпает» вместе с хозяином.</p>
         <p><strong>⭐ Закладки.</strong> Двойной клик по пустому месту — добавить сайт. Иконки подгружаются через Google Favicon. Всё хранится локально, без облаков и аккаунтов.</p>
-
         <p><strong>🧠 Умная адресная строка.</strong> Вводишь <em>youtube.com</em> — открывает сайт. Вводишь <em>симба кот</em> — открывает поиск. Браузер сам понимает, что ты хочешь.</p>
-
         <p><strong>🐾 Блокировка запрещённых сайтов.</strong> Facebook, Instagram, TikTok, Twitter/X, Discord и другие. При попытке открыть — красивое модальное окно: <em>«Мяу-мяу! Этот сайт заблокирован в России. Не забудьте включить прокси или VPN.»</em></p>
-
-        <p><strong> Пасхалка.</strong> Введи <em>симба</em>, <em>мяу</em>, <em>кот</em>, <em>simba</em> или <em>cat</em> — и появится фото кота в лодке с удочкой. С подписью: <em>«Мяу! Я тут. Тише... рыба клюёт.»</em></p>
+        <p><strong>🎣 Пасхалка.</strong> Введи <em>симба</em>, <em>мяу</em>, <em>кот</em>, <em>simba</em> или <em>cat</em> — и появится фото кота в лодке с удочкой. С подписью: <em>«Мяу! Я тут. Тише... рыба клюёт.»</em></p>
       </div>
     </div>
 
-    <!-- ГЛАВА 5 -->
     <div class="chapter" id="ch5">
       <div class="chapter-head">
         <div class="chapter-num">Глава 05</div>
@@ -464,7 +443,6 @@
       </div>
     </div>
 
-    <!-- ГЛАВА 6 -->
     <div class="chapter" id="ch6">
       <div class="chapter-head">
         <div class="chapter-num">Глава 06</div>
@@ -484,7 +462,6 @@
       </div>
     </div>
 
-    <!-- ГЛАВА 7 -->
     <div class="chapter" id="ch7">
       <div class="chapter-head">
         <div class="chapter-num">Глава 07</div>
@@ -498,7 +475,6 @@
       </div>
     </div>
 
-    <!-- ЭПИЛОГ -->
     <div class="epilogue">
       <h2>Эпилог</h2>
       <p>Симба браузер начинался как простой WebView с ссылкой на Google. Сейчас это полноценный проект с тремя выпущенными версиями, красивым сайтом-витриной, историей без кодового гниения и пасхалкой с котом-рыбаком.</p>
@@ -524,4 +500,4 @@
   </svg>
 
 </body>
-  </html>
+</html>
