@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Помощь · Симба браузер</title>
+<style>
+  :root {
+    --cream: #f1e8db;
+    --paper: #f7f1e6;
+    --ink: #2a1d14;
+    --rust: #b84a2d;
+    --rust-dark: #963a22;
+    --muted: #7a6a58;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.6;
+    background-image:
+      radial-gradient(circle at 10% 15%, rgba(217,164,65,.10), transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(184,74,45,.08), transparent 45%);
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(42,29,20,.2);
+    padding: 20px 24px;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: var(--muted);
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    z-index: 100;
+  }
+  .topbar .logo { color: var(--ink); font-weight: 700; letter-spacing: .18em; }
+  .topbar .logo span { color: var(--rust); }
+  .topbar a { color: var(--muted); text-decoration: none; }
+  .topbar a:hover { color: var(--rust); }
+
+  .hero {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 24px 40px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 em { font-style: italic; color: var(--rust); }
+  .hero p {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .help-section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .issue-card {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    padding: 28px 24px;
+    margin-bottom: 24px;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: transform 0.2s ease;
+  }
+  .issue-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .issue-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed rgba(42,29,20,.2);
+  }
+  .issue-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+  .issue-title {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--rust-dark);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+
+  .issue-body p {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  .issue-body p:last-child { margin-bottom: 0; }
+
+  .steps {
+    list-style: none;
+    margin: 16px 0;
+    counter-reset: step-counter;
+  }
+  .steps li {
+    counter-increment: step-counter;
+    position: relative;
+    padding: 8px 0 8px 36px;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+  .steps li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 24px;
+    height: 24px;
+    background: var(--rust);
+    color: var(--cream);
+    border-radius: 50%;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .note {
+    background: rgba(184, 74, 45, 0.08);
+    border-left: 3px solid var(--rust);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    color: var(--rust-dark);
+    margin-top: 16px;
+  }
+  .note strong { display: block; margin-bottom: 4px; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+
+  .footer {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px;
+    border-top: 1px solid rgba(42,29,20,.2);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer .dot { color: var(--rust); }
+
+  .paw-bg {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    opacity: .08;
+    transform: rotate(-18deg);
+    pointer-events: none;
+    z-index: 0;
+  }
+  @media (max-width: 600px) {
+    .paw-bg { width: 80px; height: 80px; right: 16px; bottom: 16px; }
+    .issue-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="logo">СИМБА<span>●</span>browser</div>
+    <a href="simbabrowser.html">← На главную</a>
+  </div>
+
+  <div class="hero">
+    <h1>Что-то пошло <em>не так?</em></h1>
+    <p>Не волнуйся. Симба подготовил простые решения для самых частых ситуаций. Выбери свою проблему ниже.</p>
+    <div style="margin-top: 30px; font-size: 48px;">🐾</div>
+  </div>
+
+  <div class="help-section">
+
+    <!-- Проблема 1 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div class="issue-icon">📶</div>
+        <div class="issue-title">Нет подключения к интернету</div>
+      </div>
+      <div class="issue-body">
+        <p>Появляется окно «Слабый сигнал» или страница просто не загружается.</p>
+        <ol class="steps">
+          <li>Проверь, включён ли Wi-Fi или мобильный интернет в настройках телефона.</li>
+          <li>Попробуй включить и сразу выключить «Авиарежим» (это перезапустит сеть).</li>
+          <li>Нажми кнопку «Обновить» на странице ошибки.</li>
+        </ol>
+        <div class="note">
+          <strong>Важно</strong>
+          Симба не может загрузить страницу, если телефон физически не подключен к сети. Убедись, что другие приложения (например, мессенджеры) работают.
+        </div>
+      </div>
+    </div>
+
+    <!-- Проблема 2 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div class="issue-icon">🚫</div>
+        <div class="issue-title">Сайт заблокирован</div>
+      </div>
+      <div class="issue-body">
+        <p>Появляется окно с лапкой: «Мяу-мяу! Этот сайт заблокирован в России».</p>
+        <ol class="steps">
+          <li>Это <strong>не ошибка браузера</strong>. Симба просто предупреждает тебя, что доступ к этому ресурсу ограничен на уровне провайдера.</li>
+          <li>Чтобы открыть такой сайт, тебе потребуется включить надёжный VPN или прокси на твоём устройстве.</li>
+          <li>После включения VPN обнови страницу.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Проблема 3 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div class="issue-icon">🐌</div>
+        <div class="issue-title">Браузер тормозит или вылетает</div>
+      </div>
+      <div class="issue-body">
+        <p>Приложение закрывается само по себе или страницы открываются очень медленно.</p>
+        <ol class="steps">
+          <li>Закрой все лишние приложения в фоне, чтобы освободить оперативную память.</li>
+          <li>Убедись, что у тебя установлена <a href="simbabrowser.html" style="color: var(--rust); font-weight: 600;">последняя версия Симбы</a> (мы постоянно исправляем ошибки).</li>
+          <li>Если проблема сохраняется, зайди в Настройки телефона → Приложения → Симба → Хранилище → <strong>Очистить кэш</strong>.</li>
+        </ol>
+        <div class="note">
+          <strong>Внимание</strong>
+          Не нажимай «Очистить данные» (только «Очистить кэш»), иначе ты потеряешь свои сохранённые закладки и настройки темы!
+        </div>
+      </div>
+    </div>
+
+    <!-- Проблема 4 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div class="issue-icon">📄</div>
+        <div class="issue-title">Белый экран или страница отображается криво</div>
+      </div>
+      <div class="issue-body">
+        <p>Вместо сайта ты видишь белый фон, или элементы наезжают друг на друга.</p>
+        <ol class="steps">
+          <li>Нажми на значок обновления (обычно в адресной строке или в меню браузера).</li>
+          <li>Проверь своё подключение к интернету (иногда страница не догружается из-за обрыва связи).</li>
+          <li>Попробуй открыть этот же сайт в другом браузере. Если там тоже не работает, значит, проблема на стороне самого сайта, а не Симбы.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Проблема 5 -->
+    <div class="issue-card">
+      <div class="issue-header">
+        <div class="issue-icon">🔙</div>
+        <div class="issue-title">Не работает кнопка «Назад»</div>
+      </div>
+      <div class="issue-body">
+        <p>При нажатии кнопки «Назад» браузер закрывается, а не возвращает на предыдущую страницу.</p>
+        <ol class="steps">
+          <li>Это происходит, если ты открыл ссылку в новой вкладке или перешёл на сайт напрямую, и в истории браузера нет предыдущих страниц.</li>
+          <li>Попробуй использовать кнопку «Домой» (значок домика), чтобы вернуться на стартовую страницу Симбы.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; padding: 24px; border: 2px dashed var(--muted); border-radius: 12px; color: var(--muted);">
+      <p style="font-size: 18px; margin-bottom: 8px;">Не нашёл свою проблему?</p>
+      <p>Мы постоянно улучшаем Симбу. Если ты нашёл ошибку, которую нет в этом списке, пожалуйста, сообщи нам через форму обратной связи на главной странице.</p>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div>симба браузер <span class="dot">●</span> с 2026 года</div>
+    <div>тихо · быстро · по-человечески</div>
+    <div>
+      <a href="simba-story.html" style="color: var(--rust); text-decoration: none;">📖 История</a>
+    </div>
+  </div>
+
+  <svg class="paw-bg" width="110" height="110" viewBox="0 0 100 100" fill="#2a1d14">
+    <ellipse cx="50" cy="65" rx="22" ry="18"/>
+    <ellipse cx="28" cy="40" rx="8" ry="11" transform="rotate(-20 28 40)"/>
+    <ellipse cx="45" cy="28" rx="7" ry="10"/>
+    <ellipse cx="62" cy="28" rx="7" ry="10"/>
+    <ellipse cx="78" cy="42" rx="8" ry="11" transform="rotate(20 78 42)"/>
+  </svg>
+
+</body>
+</html>
