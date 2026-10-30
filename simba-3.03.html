@@ -341,7 +341,7 @@
       <div class="logo">
         <h1>Симба <em>браузер</em></h1>
       </div>
-      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()"></button>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
     </div>
 
     <div class="greeting" id="greeting">Доброе утро!</div>
@@ -354,7 +354,7 @@
 
     <div class="section-title">
       <span>Мои закладки</span>
-      <button class="add-btn" onclick="toggleEditBookmarks()" id="editBtn">️</button>
+      <button class="add-btn" onclick="toggleEditBookmarks()" id="editBtn">✏️</button>
     </div>
     <div class="bookmarks" id="bookmarksList"></div>
 
@@ -405,11 +405,26 @@
   <!-- Модальное окно пасхалки -->
   <div class="modal-overlay easter-modal" id="easterModal">
     <div class="modal">
-      <!-- ССЫЛКА ЧЕРЕЗ JSDelivr CDN (гарантированно работает) -->
       <img class="easter-photo" src="https://cdn.jsdelivr.net/gh/CodeWave-pro/CodeWave-pro.github.io@main/IMG_20261029_214809_872.jpg" alt="Симба на рыбалке">
       <div class="easter-title">Мяу! Я тут 🎣</div>
       <div class="easter-subtitle">Тише... рыба клюёт.</div>
       <button class="ok-btn" onclick="closeModal('easterModal')">Хорошо</button>
+    </div>
+  </div>
+
+  <!-- Модальное окно слабого интернета -->
+  <div class="modal-overlay" id="networkModal">
+    <div class="modal">
+      <svg class="paw-svg" viewBox="0 0 100 100" style="fill: var(--muted);">
+        <ellipse cx="50" cy="65" rx="22" ry="18"/>
+        <ellipse cx="28" cy="40" rx="8" ry="11" transform="rotate(-20 28 40)"/>
+        <ellipse cx="45" cy="28" rx="7" ry="10"/>
+        <ellipse cx="62" cy="28" rx="7" ry="10"/>
+        <ellipse cx="78" cy="42" rx="8" ry="11" transform="rotate(20 78 42)"/>
+      </svg>
+      <h2>Слабый сигнал 📶</h2>
+      <p>Интернет работает очень медленно или отсутствует.<br>Симба не может загрузить страницу. Проверьте подключение.</p>
+      <button class="ok-btn" onclick="closeModal('networkModal')">Понятно</button>
     </div>
   </div>
 
@@ -467,7 +482,6 @@
     const text = input.value.trim();
     if (!text) return;
 
-    // Сначала проверяем пасхалку
     if (isEasterWord(text)) {
       showEasterEgg();
       input.value = '';
@@ -499,16 +513,43 @@
   function showEasterEgg() {
     document.getElementById('easterModal').classList.add('active');
   }
+  function showNetworkModal() {
+    document.getElementById('networkModal').classList.add('active');
+  }
   function closeModal(id) {
     document.getElementById(id).classList.remove('active');
   }
 
-  // Закрытие по клику на фон
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) overlay.classList.remove('active');
     });
   });
+
+  // === ПРОВЕРКА ИНТЕРНЕТА ===
+  function checkNetworkStatus() {
+    // Если совсем нет сети
+    if (!navigator.onLine) {
+      showNetworkModal();
+      return;
+    }
+    // Если сеть есть, но очень медленная (2G или slow-2g)
+    if (navigator.connection) {
+      const type = navigator.connection.effectiveType;
+      if (type === 'slow-2g' || type === '2g') {
+        showNetworkModal();
+      }
+    }
+  }
+
+  // Слушаем изменения сети
+  window.addEventListener('offline', showNetworkModal);
+  if (navigator.connection) {
+    navigator.connection.addEventListener('change', checkNetworkStatus);
+  }
+  // Проверяем при загрузке страницы
+  window.addEventListener('load', checkNetworkStatus);
+
 
   // === ТЁМНАЯ ТЕМА ===
   function toggleTheme() {
@@ -563,7 +604,7 @@
 
   function getFavicon(url) {
     try { return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`; }
-    catch (e) { return ''; }
+    catch (e) { return '🌐'; }
   }
 
   function getShortName(url) {
