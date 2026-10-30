@@ -234,7 +234,7 @@
   }
   .screen-card {
     flex-shrink: 0;
-    width: 160px;
+    width: 180px;
     text-align: center;
   }
   .screen-card img {
@@ -244,6 +244,7 @@
     box-shadow: 4px 4px 0 var(--ink);
     margin-bottom: 8px;
     background: var(--cream);
+    display: block;
   }
   .screen-label {
     font-family: "Helvetica Neue", Arial, sans-serif;
@@ -392,11 +393,14 @@
     opacity: .15;
     transform: rotate(-18deg);
     pointer-events: none;
+    z-index: -1;
   }
   @media (max-width: 600px) {
     .paw { width: 70px; height: 70px; right: 20px; bottom: 20px; }
-    .version-row { padding: 16px 18px; }
+    .version-row { padding: 16px 18px; flex-direction: column; align-items: flex-start; }
     .version-name { font-size: 18px; }
+    .version-row > div:last-child { width: 100%; }
+    .btn-download.small { width: 100%; justify-content: center; }
   }
 </style>
 </head>
@@ -470,11 +474,11 @@
 
     <div class="screenshots">
       <div class="screen-card">
-        <img src="https://placehold.co/160x320/f7f1e6/2a1d14?text=Светлая+тема" alt="Светлая тема Симбы">
+        <img src="https://cdn.jsdelivr.net/gh/CodeWave-pro/CodeWave-pro.github.io@main/Screenshot_2026-10-30-17-22-56-689_com.simbabrowser.app.jpg" alt="Светлая тема Симбы">
         <div class="screen-label">Светлая тема</div>
       </div>
       <div class="screen-card">
-        <img src="https://placehold.co/160x320/1a1510/f1e8db?text=Тёмная+тема" alt="Тёмная тема Симбы">
+        <img src="https://cdn.jsdelivr.net/gh/CodeWave-pro/CodeWave-pro.github.io@main/Screenshot_2026-10-30-17-22-50-914_com.simbabrowser.app.jpg" alt="Тёмная тема Симбы">
         <div class="screen-label">Тёмная тема</div>
       </div>
       <div class="screen-card">
@@ -585,7 +589,7 @@
       <div>
         <a href="simba-help.html">❓ Помощь</a>
         <span style="color: var(--muted); margin: 0 8px;">·</span>
-        <a href="simba-story.html"> История</a>
+        <a href="simba-story.html">📖 История</a>
       </div>
     </div>
 
