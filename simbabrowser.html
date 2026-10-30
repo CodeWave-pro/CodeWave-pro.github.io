@@ -226,16 +226,19 @@
 
   .screenshots {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 24px;
     margin-bottom: 80px;
     overflow-x: auto;
-    padding-bottom: 10px;
+    padding: 0 24px 10px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
   .screen-card {
     flex-shrink: 0;
     width: 180px;
     text-align: center;
+    scroll-snap-align: center;
   }
   .screen-card img {
     width: 100%;
@@ -474,15 +477,15 @@
 
     <div class="screenshots">
       <div class="screen-card">
-        <img src="https://cdn.jsdelivr.net/gh/CodeWave-pro/CodeWave-pro.github.io@main/Screenshot_2026-10-30-17-22-56-689_com.simbabrowser.app.jpg" alt="Светлая тема Симбы">
+        <img src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/Screenshot_2026-10-30-17-22-56-689_com.simbabrowser.app.jpg" alt="Светлая тема Симбы" loading="lazy">
         <div class="screen-label">Светлая тема</div>
       </div>
       <div class="screen-card">
-        <img src="https://cdn.jsdelivr.net/gh/CodeWave-pro/CodeWave-pro.github.io@main/Screenshot_2026-10-30-17-22-50-914_com.simbabrowser.app.jpg" alt="Тёмная тема Симбы">
+        <img src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/Screenshot_2026-10-30-17-22-50-914_com.simbabrowser.app.jpg" alt="Тёмная тема Симбы" loading="lazy">
         <div class="screen-label">Тёмная тема</div>
       </div>
       <div class="screen-card">
-        <img src="https://cdn.jsdelivr.net/gh/CodeWave-pro/CodeWave-pro.github.io@main/IMG_20261029_214809_872.jpg" alt="Пасхалка с котом">
+        <img src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/IMG_20261029_214809_872.jpg" alt="Пасхалка с котом" loading="lazy">
         <div class="screen-label">Секретная пасхалка</div>
       </div>
     </div>
