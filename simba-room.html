@@ -76,7 +76,7 @@
     cursor: pointer;
   }
 
-  /* Хитбокс дивана — подстроен под реальное фото */
+  /* Хитбокс дивана */
   .sofa-hitbox {
     position: absolute;
     top: 10%;
@@ -85,7 +85,22 @@
     height: 50%;
     cursor: pointer;
     z-index: 5;
-    /* background: rgba(255,0,0,0.3); */ /* раскомментируй чтобы увидеть зону */
+  }
+
+  /* Игрушки */
+  .toy {
+    position: absolute;
+    width: 80px;
+    height: auto;
+    cursor: pointer;
+    z-index: 8;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.4));
+    transition: transform 0.2s;
+  }
+  .toy:active { transform: scale(1.2); }
+  .toy img {
+    width: 100%;
+    display: block;
   }
 
   .cat {
@@ -106,10 +121,17 @@
   .cat.flipped img {
     transform: scaleX(-1);
   }
+  .cat.playing {
+    animation: wiggle 0.5s ease-in-out infinite;
+  }
 
   @keyframes bob {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
   }
 
   .action-text {
@@ -170,19 +192,37 @@
     <div class="floor-zone" id="floorZone">
       <div class="sofa-hitbox" id="sofaHitbox" onclick="goToSofa(event)"></div>
 
+      <!-- Игрушки -->
+      <div class="toy" id="toy-mouse" style="bottom: 15%; left: 20%;" onclick="goToToy(event, 'mouse')">
+        <img src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/toy-mouse.png" alt="Мышка">
+      </div>
+      <div class="toy" id="toy-yarn" style="bottom: 20%; right: 25%;" onclick="goToToy(event, 'yarn')">
+        <img src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/toy-yarn.png" alt="Клубок">
+      </div>
+      <div class="toy" id="toy-pink" style="bottom: 25%; left: 50%;" onclick="goToToy(event, 'pink')">
+        <img src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/toy-pink.png" alt="Розовая игрушка">
+      </div>
+
       <div class="cat" id="cat">
         <img id="catImg" src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-lie.png" alt="Симба">
       </div>
     </div>
   </div>
 
-  <div class="hint visible" id="hint">Нажми на диван — Симба ляжет отдыхать!</div>
+  <div class="hint visible" id="hint">Нажми на диван или игрушку!</div>
   <div class="action-text" id="actionText"></div>
 
 <script>
   const IMG_LIE = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-lie.png';
   const IMG_SIT = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-sit.png';
   const IMG_WALK = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-walk.png';
+  const IMG_PLAY = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-play.png';
+
+  const TOY_NAMES = {
+    mouse: 'мышкой 🐭',
+    yarn: 'клубком 🧶',
+    pink: 'игрушкой 🐱'
+  };
 
   const CAT_WIDTH = 160;
   const CAT_HEIGHT = 120;
@@ -217,6 +257,27 @@
     gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
     osc.start(audioCtx.currentTime);
     osc.stop(audioCtx.currentTime + 0.4);
+  }
+
+  function playPurr() {
+    if (!soundOn) return;
+    initAudio();
+    const bufferSize = audioCtx.sampleRate * 1.5;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.1;
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 200;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    noise.start();
   }
 
   function toggleSound() {
@@ -306,9 +367,36 @@
     });
   }
 
+  function goToToy(event, toyName) {
+    event.stopPropagation();
+    if (isMoving) return;
+    hideHint();
+
+    const toy = document.getElementById('toy-' + toyName);
+    const floorRect = floorZone.getBoundingClientRect();
+    const toyRect = toy.getBoundingClientRect();
+    
+    const targetX = (toyRect.left - floorRect.left) + (toyRect.width / 2) - (CAT_WIDTH / 2);
+    const targetY = (toyRect.top - floorRect.top) + (toyRect.height / 2) - (CAT_HEIGHT / 2);
+    
+    const clamped = clampToFloor(targetX, targetY);
+
+    moveCatTo(clamped.x, clamped.y, () => {
+      setCatImage(IMG_PLAY);
+      cat.classList.add('playing');
+      playPurr();
+      showAction('Симба играет с ' + TOY_NAMES[toyName] + '!');
+      
+      setTimeout(() => {
+        cat.classList.remove('playing');
+        setCatImage(IMG_SIT);
+      }, 3000);
+    });
+  }
+
   floorZone.addEventListener('click', (e) => {
     if (isMoving) return;
-    if (e.target.id === 'sofaHitbox' || e.target.closest('.sofa-hitbox')) return;
+    if (e.target.id === 'sofaHitbox' || e.target.closest('.sofa-hitbox') || e.target.closest('.toy')) return;
     hideHint();
 
     const floorRect = floorZone.getBoundingClientRect();
