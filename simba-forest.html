@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Прогулка Симбы 🌳</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: Georgia, serif;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    background: #1a1510;
+  }
+
+  .header {
+    background: #1a1510;
+    color: #f1e8db;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #4a7c2d;
+    flex-shrink: 0;
+    z-index: 100;
+  }
+  .header h1 { font-size: 18px; font-weight: 400; }
+  .header h1 em { color: #6ab04c; font-style: italic; }
+  .header-btns { display: flex; gap: 10px; align-items: center; }
+  .back-btn {
+    background: #4a7c2d;
+    color: #f1e8db;
+    border: 2px solid #f1e8db;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    text-decoration: none;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+  }
+  .sound-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  .forest {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    min-height: 0;
+    background-image: url('https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/forest-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .interactive-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+  }
+
+  /* Хитбоксы деревьев */
+  .tree-hitbox {
+    position: absolute;
+    cursor: pointer;
+    z-index: 6;
+    /* background: rgba(255,0,0,0.2); */
+  }
+  .tree-1 { top: 10%; left: 5%; width: 25%; height: 70%; }
+  .tree-2 { top: 15%; right: 15%; width: 20%; height: 65%; }
+  .tree-3 { top: 20%; left: 40%; width: 18%; height: 60%; }
+
+  /* Хитбокс травы (лечь отдохнуть) */
+  .grass-hitbox {
+    position: absolute;
+    bottom: 5%;
+    left: 10%;
+    width: 80%;
+    height: 25%;
+    cursor: pointer;
+    z-index: 6;
+  }
+
+  /* Лесные находки */
+  .forest-item {
+    position: absolute;
+    width: 70px;
+    height: auto;
+    cursor: pointer;
+    z-index: 8;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.4));
+    transition: transform 0.2s;
+  }
+  .forest-item:active { transform: scale(1.2); }
+  .forest-item img {
+    width: 100%;
+    display: block;
+  }
+
+  /* Кот */
+  .cat {
+    position: absolute;
+    width: 180px;
+    height: auto;
+    z-index: 10;
+    filter: drop-shadow(3px 5px 8px rgba(0,0,0,0.6));
+    cursor: pointer;
+  }
+  .cat img {
+    width: 100%;
+    display: block;
+  }
+  .cat.walking {
+    animation: bob 0.3s ease-in-out infinite;
+  }
+  .cat.flipped img {
+    transform: scaleX(-1);
+  }
+  .cat.sniffing {
+    animation: sniff 0.6s ease-in-out infinite;
+  }
+  .cat.playing {
+    animation: wiggle 0.5s ease-in-out infinite;
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes sniff {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    50% { transform: translateY(-3px) rotate(-3deg); }
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  .action-text {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(26, 21, 16, 0.95);
+    color: #f1e8db;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: 200;
+    pointer-events: none;
+    border: 2px solid #4a7c2d;
+    white-space: nowrap;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .action-text.visible { opacity: 1; }
+
+  .hint {
+    position: fixed;
+    top: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(74, 124, 45, 0.95);
+    color: #f1e8db;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 1s;
+    white-space: nowrap;
+  }
+  .hint.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Прогулка <em>Симбы</em> 🌳</h1>
+    <div class="header-btns">
+      <button class="sound-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
+      <a href="simba-room.html" class="back-btn">🏠 Домой</a>
+    </div>
+  </div>
+
+  <div class="forest" id="forest">
+    <div class="interactive-layer" id="interactiveLayer">
+      <!-- Деревья -->
+      <div class="tree-hitbox tree-1" onclick="goToTree(event, 1)"></div>
+      <div class="tree-hitbox tree-2" onclick="goToTree(event, 2)"></div>
+      <div class="tree-hitbox tree-3" onclick="goToTree(event, 3)"></div>
+
+      <!-- Трава -->
+      <div class="grass-hitbox" id="grassHitbox" onclick="goToGrass(event)"></div>
+
+      <!-- Лесные находки (эмодзи как заглушки, потом можно заменить на картинки) -->
+      <div class="forest-item" id="item-cone" style="top: 70%; left: 25%;" onclick="goToItem(event, 'cone')">🌰</div>
+      <div class="forest-item" id="item-leaf" style="top: 75%; left: 60%;" onclick="goToItem(event, 'leaf')">🍂</div>
+      <div class="forest-item" id="item-butterfly" style="top: 40%; left: 70%;" onclick="goToItem(event, 'butterfly')">🦋</div>
+
+      <div class="cat" id="cat">
+        <img id="catImg" src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-walk.png" alt="Симба">
+      </div>
+    </div>
+  </div>
+
+  <div class="hint visible" id="hint">Гуляй по лесу! Нажми на дерево 🌳</div>
+  <div class="action-text" id="actionText"></div>
+
+<script>
+  const IMG_LIE = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-lie.png';
+  const IMG_SIT = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-sit.png';
+  const IMG_WALK = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-walk.png';
+  const IMG_PLAY = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-play.png';
+
+  const ITEM_NAMES = {
+    cone: 'шишкой 🌰',
+    leaf: 'листочком 🍂',
+    butterfly: 'бабочкой 🦋'
+  };
+
+  const TREE_MESSAGES = [
+    'Симба обнюхивает дерево... Пахнет лесом! 🌲',
+    'Симба точит коготки о кору 🐾',
+    'Симба заглядывает за дерево — никого! 👀'
+  ];
+
+  const CAT_WIDTH = 180;
+  const CAT_HEIGHT = 130;
+
+  const cat = document.getElementById('cat');
+  const catImg = document.getElementById('catImg');
+  const interactiveLayer = document.getElementById('interactiveLayer');
+  const grassHitbox = document.getElementById('grassHitbox');
+  const actionText = document.getElementById('actionText');
+  const hint = document.getElementById('hint');
+
+  let soundOn = true;
+  let isMoving = false;
+  let audioCtx = null;
+
+  function initAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  function playMeow() {
+    if (!soundOn) return;
+    initAudio();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.1);
+    osc.frequency.exponentialRampToValueAtTime(500, audioCtx.currentTime + 0.3);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.4);
+  }
+
+  function playPurr() {
+    if (!soundOn) return;
+    initAudio();
+    const bufferSize = audioCtx.sampleRate * 1.5;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.1;
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 200;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    noise.start();
+  }
+
+  function toggleSound() {
+    soundOn = !soundOn;
+    document.getElementById('soundBtn').textContent = soundOn ? '🔊' : '🔇';
+  }
+
+  function setCatImage(src) { catImg.src = src; }
+
+  function showAction(text) {
+    actionText.textContent = text;
+    actionText.classList.add('visible');
+    setTimeout(() => actionText.classList.remove('visible'), 2500);
+  }
+
+  function flipCat(direction) {
+    if (direction === 'left') cat.classList.add('flipped');
+    else cat.classList.remove('flipped');
+  }
+
+  function getCatPos() {
+    const layerRect = interactiveLayer.getBoundingClientRect();
+    const catRect = cat.getBoundingClientRect();
+    return {
+      left: catRect.left - layerRect.left,
+      top: catRect.top - layerRect.top
+    };
+  }
+
+  function clampToLayer(x, y) {
+    const layerRect = interactiveLayer.getBoundingClientRect();
+    const minX = 5;
+    const maxX = layerRect.width - CAT_WIDTH - 5;
+    x = Math.max(minX, Math.min(x, maxX));
+    const minY = layerRect.height * 0.55;
+    const maxY = layerRect.height - CAT_HEIGHT - 5;
+    y = Math.max(minY, Math.min(y, maxY));
+    return { x, y };
+  }
+
+  function moveCatTo(targetX, targetY, callback) {
+    if (isMoving) return;
+    isMoving = true;
+
+    const pos = getCatPos();
+    const direction = targetX < pos.left ? 'left' : 'right';
+    flipCat(direction);
+
+    setCatImage(IMG_SIT);
+    playMeow();
+
+    setTimeout(() => {
+      setCatImage(IMG_WALK);
+      cat.classList.add('walking');
+
+      const distance = Math.sqrt(Math.pow(targetX - pos.left, 2) + Math.pow(targetY - pos.top, 2));
+      const duration = Math.max(600, distance * 2.5);
+
+      cat.style.transition = `left ${duration}ms ease-in-out, top ${duration}ms ease-in-out`;
+      cat.style.left = targetX + 'px';
+      cat.style.top = targetY + 'px';
+
+      setTimeout(() => {
+        cat.classList.remove('walking');
+        if (callback) callback();
+        isMoving = false;
+      }, duration);
+    }, 300);
+  }
+
+  function goToTree(event, treeNum) {
+    event.stopPropagation();
+    if (isMoving) return;
+    hideHint();
+
+    const tree = document.querySelector('.tree-' + treeNum);
+    const layerRect = interactiveLayer.getBoundingClientRect();
+    const treeRect = tree.getBoundingClientRect();
+    
+    const targetX = (treeRect.left - layerRect.left) + (treeRect.width / 2) - (CAT_WIDTH / 2);
+    const targetY = (treeRect.bottom - layerRect.top) - CAT_HEIGHT - 10;
+    
+    const clamped = clampToLayer(targetX, targetY);
+
+    moveCatTo(clamped.x, clamped.y, () => {
+      cat.classList.add('sniffing');
+      playPurr();
+      const msg = TREE_MESSAGES[Math.floor(Math.random() * TREE_MESSAGES.length)];
+      showAction(msg);
+      
+      setTimeout(() => {
+        cat.classList.remove('sniffing');
+        setCatImage(IMG_SIT);
+      }, 3000);
+    });
+  }
+
+  function goToGrass(event) {
+    event.stopPropagation();
+    if (isMoving) return;
+    hideHint();
+
+    const layerRect = interactiveLayer.getBoundingClientRect();
+    const grassRect = grassHitbox.getBoundingClientRect();
+    
+    const targetX = (grassRect.left - layerRect.left) + (grassRect.width / 2) - (CAT_WIDTH / 2);
+    const targetY = (grassRect.top - layerRect.top) + 10;
+    
+    const clamped = clampToLayer(targetX, targetY);
+
+    moveCatTo(clamped.x, clamped.y, () => {
+      setCatImage(IMG_LIE);
+      showAction('Симба отдыхает на травке... 🌿');
+    });
+  }
+
+  function goToItem(event, itemName) {
+    event.stopPropagation();
+    if (isMoving) return;
+    hideHint();
+
+    const item = document.getElementById('item-' + itemName);
+    const layerRect = interactiveLayer.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    
+    const targetX = (itemRect.left - layerRect.left) + (itemRect.width / 2) - (CAT_WIDTH / 2);
+    const targetY = (itemRect.top - layerRect.top) + (itemRect.height / 2) - (CAT_HEIGHT / 2);
+    
+    const clamped = clampToLayer(targetX, targetY);
+
+    moveCatTo(clamped.x, clamped.y, () => {
+      cat.classList.add('playing');
+      playPurr();
+      showAction('Симба играет с ' + ITEM_NAMES[itemName] + '!');
+      
+      setTimeout(() => {
+        cat.classList.remove('playing');
+        setCatImage(IMG_SIT);
+      }, 3000);
+    });
+  }
+
+  interactiveLayer.addEventListener('click', (e) => {
+    if (isMoving) return;
+    if (e.target.closest('.tree-hitbox') || e.target.closest('.grass-hitbox') || e.target.closest('.forest-item')) return;
+    hideHint();
+
+    const layerRect = interactiveLayer.getBoundingClientRect();
+    const clickX = e.clientX - layerRect.left - (CAT_WIDTH / 2);
+    const clickY = e.clientY - layerRect.top - (CAT_HEIGHT / 2);
+    
+    const clamped = clampToLayer(clickX, clickY);
+
+    moveCatTo(clamped.x, clamped.y, () => {
+      setCatImage(IMG_SIT);
+      showAction('Симба осматривает лес 👀');
+    });
+  });
+
+  cat.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (isMoving) return;
+    playMeow();
+    showAction('Мяу! Здесь так здорово! 🌳');
+  });
+
+  function hideHint() { hint.classList.remove('visible'); }
+  setTimeout(hideHint, 4000);
+
+  window.addEventListener('load', () => {
+    const layerRect = interactiveLayer.getBoundingClientRect();
+    
+    // Стартуем в центре леса
+    const startX = (layerRect.width / 2) - (CAT_WIDTH / 2);
+    const startY = layerRect.height * 0.7;
+    
+    cat.style.left = startX + 'px';
+    cat.style.top = startY + 'px';
+    cat.style.transition = 'none';
+    setCatImage(IMG_WALK);
+  });
+
+  window.addEventListener('resize', () => {
+    const pos = getCatPos();
+    const clamped = clampToLayer(pos.left, pos.top);
+    cat.style.transition = 'none';
+    cat.style.left = clamped.x + 'px';
+    cat.style.top = clamped.y + 'px';
+  });
+</script>
+
+</body>
+  </html>
