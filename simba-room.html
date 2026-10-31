@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Комната Симбы</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
 
   html, body {
     height: 100%;
@@ -19,6 +19,7 @@
     background: #1a1510;
   }
 
+  /* ШАПКА */
   .header {
     background: #1a1510;
     color: #f1e8db;
@@ -50,6 +51,7 @@
     cursor: pointer;
   }
 
+  /* КОМНАТА — фон фото */
   .room {
     flex: 1;
     position: relative;
@@ -57,111 +59,35 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
+    background-image: url('https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/room-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
-  .wall {
+  /* Зоны для кликов (прозрачные) */
+  .wall-zone {
     flex: 1;
-    background: linear-gradient(to bottom, #e8dcc8, #d4c4a8);
     position: relative;
     min-height: 0;
+    /* Прозрачная — виден фон комнаты */
   }
 
-  .floor {
+  .floor-zone {
     flex: 1;
-    background: repeating-linear-gradient(90deg, #8b7355 0px, #8b7355 60px, #7a6245 60px, #7a6245 62px);
     position: relative;
     min-height: 0;
-    box-shadow: inset 0 15px 30px rgba(0,0,0,0.4);
+    cursor: pointer;
+    /* Прозрачная — виден пол комнаты */
   }
 
-  .rug {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 75%;
-    height: 75%;
-    background: radial-gradient(ellipse, #b84a2d, #963a22 60%, #7a2e1a);
-    border-radius: 50%;
-    opacity: 0.75;
-    border: 3px dashed #f1e8db;
-  }
-
-  .window {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 130px;
-    height: 100px;
-    background: linear-gradient(to bottom, #87ceeb, #b0e0e6);
-    border: 8px solid #5a4a3a;
-    border-radius: 4px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  }
-  .window::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 50%;
-    width: 4px; height: 100%;
-    background: #5a4a3a;
-    transform: translateX(-50%);
-  }
-  .window::after {
-    content: '';
-    position: absolute;
-    top: 50%; left: 0;
-    width: 100%; height: 4px;
-    background: #5a4a3a;
-    transform: translateY(-50%);
-  }
-  .sun {
-    position: absolute;
-    top: 15%; right: 15%;
-    width: 22px; height: 22px;
-    background: #ffd700;
-    border-radius: 50%;
-    box-shadow: 0 0 15px #ffd700;
-  }
-
-  .shelf {
-    position: absolute;
-    top: 60%; left: 8%;
-    width: 100px; height: 6px;
-    background: #5a4a3a;
-    border-radius: 2px;
-    box-shadow: 0 3px 5px rgba(0,0,0,0.3);
-  }
-  .book {
-    position: absolute;
-    bottom: 6px;
-    width: 11px; height: 32px;
-    border-radius: 2px;
-  }
-  .book:nth-child(1) { left: 8px; background: #b84a2d; }
-  .book:nth-child(2) { left: 24px; background: #2a5a3a; }
-  .book:nth-child(3) { left: 40px; background: #3a4a6a; }
-  .book:nth-child(4) { left: 56px; background: #d9a441; }
-
-  .picture {
-    position: absolute;
-    top: 30%; right: 10%;
-    width: 65px; height: 75px;
-    background: #f7f1e6;
-    border: 5px solid #5a4a3a;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-  }
-
+  /* Подушка */
   .pillow {
     position: absolute;
-    top: 55%;
-    left: 8%;
-    width: 95px;
-    height: 48px;
+    bottom: 25%;
+    left: 10%;
+    width: 90px;
+    height: 45px;
     background: linear-gradient(135deg, #d9a441, #b8862d);
     border-radius: 50%;
     border: 3px solid #8b6a1a;
@@ -170,22 +96,24 @@
     z-index: 3;
   }
 
+  /* Игрушки */
   .toy {
     position: absolute;
-    font-size: 48px;
+    font-size: 50px;
     cursor: pointer;
     z-index: 4;
-    filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.4));
+    filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.5));
     transition: transform 0.2s;
   }
   .toy:active { transform: scale(1.3); }
 
+  /* Кот */
   .cat {
     position: absolute;
-    width: 150px;
+    width: 160px;
     height: auto;
     z-index: 10;
-    filter: drop-shadow(3px 5px 6px rgba(0,0,0,0.5));
+    filter: drop-shadow(3px 5px 8px rgba(0,0,0,0.6));
     cursor: pointer;
   }
   .cat img {
@@ -211,6 +139,7 @@
     50% { transform: rotate(5deg); }
   }
 
+  /* Текст действия */
   .action-text {
     position: fixed;
     bottom: 30px;
@@ -263,27 +192,18 @@
     </div>
   </div>
 
-  <div class="room">
-    <div class="wall">
-      <div class="window"><div class="sun"></div></div>
-      <div class="shelf">
-        <div class="book"></div>
-        <div class="book"></div>
-        <div class="book"></div>
-        <div class="book"></div>
-      </div>
-      <div class="picture">🐾</div>
-    </div>
+  <div class="room" id="room">
+    <!-- Зона стены (верхняя половина, прозрачная) -->
+    <div class="wall-zone" id="wallZone"></div>
 
-    <div class="floor" id="floor">
-      <div class="rug"></div>
-
+    <!-- Зона пола (нижняя половина, здесь живёт кот) -->
+    <div class="floor-zone" id="floorZone">
       <div class="pillow" id="pillow" onclick="goToPillow(event)"></div>
 
-      <div class="toy" id="toy-yarn" style="top: 60%; right: 12%;" onclick="goToToy(event, 'yarn')">🧶</div>
-      <div class="toy" id="toy-box" style="top: 30%; right: 25%;" onclick="goToToy(event, 'box')">📦</div>
-      <div class="toy" id="toy-rod" style="top: 65%; left: 38%;" onclick="goToToy(event, 'rod')">🎣</div>
-      <div class="toy" id="toy-mouse" style="top: 40%; left: 55%;" onclick="goToToy(event, 'mouse')">🐭</div>
+      <div class="toy" id="toy-yarn" style="bottom: 20%; right: 15%;" onclick="goToToy(event, 'yarn')">🧶</div>
+      <div class="toy" id="toy-box" style="bottom: 30%; right: 30%;" onclick="goToToy(event, 'box')">📦</div>
+      <div class="toy" id="toy-rod" style="bottom: 15%; left: 40%;" onclick="goToToy(event, 'rod')">🎣</div>
+      <div class="toy" id="toy-mouse" style="bottom: 25%; left: 60%;" onclick="goToToy(event, 'mouse')">🐭</div>
 
       <div class="cat" id="cat">
         <img id="catImg" src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-lie.png" alt="Симба">
@@ -307,12 +227,12 @@
     mouse: 'мышкой 🐭'
   };
 
-  const CAT_WIDTH = 150;
-  const CAT_HEIGHT = 110;
+  const CAT_WIDTH = 160;
+  const CAT_HEIGHT = 120;
 
   const cat = document.getElementById('cat');
   const catImg = document.getElementById('catImg');
-  const floor = document.getElementById('floor');
+  const floorZone = document.getElementById('floorZone');
   const actionText = document.getElementById('actionText');
   const hint = document.getElementById('hint');
   const pillow = document.getElementById('pillow');
@@ -321,6 +241,7 @@
   let isMoving = false;
   let audioCtx = null;
 
+  // === ЗВУКИ ===
   function initAudio() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
@@ -368,6 +289,7 @@
     document.getElementById('soundBtn').textContent = soundOn ? '🔊' : '🔇';
   }
 
+  // === УТИЛИТЫ ===
   function setCatImage(src) { catImg.src = src; }
 
   function showAction(text) {
@@ -382,7 +304,7 @@
   }
 
   function getCatPos() {
-    const floorRect = floor.getBoundingClientRect();
+    const floorRect = floorZone.getBoundingClientRect();
     const catRect = cat.getBoundingClientRect();
     return {
       left: catRect.left - floorRect.left,
@@ -391,7 +313,7 @@
   }
 
   function clampToFloor(x, y) {
-    const floorRect = floor.getBoundingClientRect();
+    const floorRect = floorZone.getBoundingClientRect();
     
     const minX = 5;
     const maxX = floorRect.width - CAT_WIDTH - 5;
@@ -442,7 +364,7 @@
     if (isMoving) return;
     hideHint();
 
-    const floorRect = floor.getBoundingClientRect();
+    const floorRect = floorZone.getBoundingClientRect();
     const pillowRect = pillow.getBoundingClientRect();
     
     const targetX = (pillowRect.left - floorRect.left) + (pillowRect.width / 2) - (CAT_WIDTH / 2);
@@ -462,7 +384,7 @@
     hideHint();
 
     const toy = document.getElementById('toy-' + toyName);
-    const floorRect = floor.getBoundingClientRect();
+    const floorRect = floorZone.getBoundingClientRect();
     const toyRect = toy.getBoundingClientRect();
     
     const targetX = (toyRect.left - floorRect.left) + (toyRect.width / 2) - (CAT_WIDTH / 2);
@@ -483,12 +405,13 @@
     });
   }
 
-  floor.addEventListener('click', (e) => {
+  // Клик по полу
+  floorZone.addEventListener('click', (e) => {
     if (isMoving) return;
     if (e.target.closest('.toy') || e.target.id === 'pillow') return;
     hideHint();
 
-    const floorRect = floor.getBoundingClientRect();
+    const floorRect = floorZone.getBoundingClientRect();
     const clickX = e.clientX - floorRect.left - (CAT_WIDTH / 2);
     const clickY = e.clientY - floorRect.top - (CAT_HEIGHT / 2);
     
@@ -500,6 +423,7 @@
     });
   });
 
+  // Клик по коту
   cat.addEventListener('click', (e) => {
     e.stopPropagation();
     if (isMoving) return;
@@ -510,8 +434,9 @@
   function hideHint() { hint.classList.remove('visible'); }
   setTimeout(hideHint, 4000);
 
+  // Стартовая позиция — на подушке
   window.addEventListener('load', () => {
-    const floorRect = floor.getBoundingClientRect();
+    const floorRect = floorZone.getBoundingClientRect();
     const pillowRect = pillow.getBoundingClientRect();
     
     const startX = (pillowRect.left - floorRect.left) + 5;
