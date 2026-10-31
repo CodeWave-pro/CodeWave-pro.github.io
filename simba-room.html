@@ -19,7 +19,6 @@
     background: #1a1510;
   }
 
-  /* ШАПКА */
   .header {
     background: #1a1510;
     color: #f1e8db;
@@ -51,7 +50,6 @@
     cursor: pointer;
   }
 
-  /* КОМНАТА — фон фото */
   .room {
     flex: 1;
     position: relative;
@@ -65,12 +63,10 @@
     background-repeat: no-repeat;
   }
 
-  /* Зоны для кликов (прозрачные) */
   .wall-zone {
     flex: 1;
     position: relative;
     min-height: 0;
-    /* Прозрачная — виден фон комнаты */
   }
 
   .floor-zone {
@@ -78,36 +74,19 @@
     position: relative;
     min-height: 0;
     cursor: pointer;
-    /* Прозрачная — виден пол комнаты */
   }
 
-  /* Подушка */
-  .pillow {
+  /* Невидимый хитбокс дивана */
+  .sofa-hitbox {
     position: absolute;
-    bottom: 25%;
-    left: 10%;
-    width: 90px;
-    height: 45px;
-    background: linear-gradient(135deg, #d9a441, #b8862d);
-    border-radius: 50%;
-    border: 3px solid #8b6a1a;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    bottom: 20%;
+    left: 5%;
+    width: 90%;
+    height: 30%;
     cursor: pointer;
-    z-index: 3;
+    z-index: 5;
   }
 
-  /* Игрушки */
-  .toy {
-    position: absolute;
-    font-size: 50px;
-    cursor: pointer;
-    z-index: 4;
-    filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.5));
-    transition: transform 0.2s;
-  }
-  .toy:active { transform: scale(1.3); }
-
-  /* Кот */
   .cat {
     position: absolute;
     width: 160px;
@@ -126,20 +105,12 @@
   .cat.flipped img {
     transform: scaleX(-1);
   }
-  .cat.playing {
-    animation: wiggle 0.5s ease-in-out infinite;
-  }
 
   @keyframes bob {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
   }
-  @keyframes wiggle {
-    0%, 100% { transform: rotate(-5deg); }
-    50% { transform: rotate(5deg); }
-  }
 
-  /* Текст действия */
   .action-text {
     position: fixed;
     bottom: 30px;
@@ -193,17 +164,10 @@
   </div>
 
   <div class="room" id="room">
-    <!-- Зона стены (верхняя половина, прозрачная) -->
     <div class="wall-zone" id="wallZone"></div>
 
-    <!-- Зона пола (нижняя половина, здесь живёт кот) -->
     <div class="floor-zone" id="floorZone">
-      <div class="pillow" id="pillow" onclick="goToPillow(event)"></div>
-
-      <div class="toy" id="toy-yarn" style="bottom: 20%; right: 15%;" onclick="goToToy(event, 'yarn')">🧶</div>
-      <div class="toy" id="toy-box" style="bottom: 30%; right: 30%;" onclick="goToToy(event, 'box')">📦</div>
-      <div class="toy" id="toy-rod" style="bottom: 15%; left: 40%;" onclick="goToToy(event, 'rod')">🎣</div>
-      <div class="toy" id="toy-mouse" style="bottom: 25%; left: 60%;" onclick="goToToy(event, 'mouse')">🐭</div>
+      <div class="sofa-hitbox" id="sofaHitbox" onclick="goToSofa(event)"></div>
 
       <div class="cat" id="cat">
         <img id="catImg" src="https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-lie.png" alt="Симба">
@@ -211,21 +175,13 @@
     </div>
   </div>
 
-  <div class="hint visible" id="hint">Нажми на пол — Симба пойдёт туда!</div>
+  <div class="hint visible" id="hint">Нажми на диван — Симба ляжет отдыхать!</div>
   <div class="action-text" id="actionText"></div>
 
 <script>
   const IMG_LIE = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-lie.png';
   const IMG_SIT = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-sit.png';
   const IMG_WALK = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-walk.png';
-  const IMG_PLAY = 'https://github.com/CodeWave-pro/CodeWave-pro.github.io/raw/main/simba-play.png';
-
-  const TOY_NAMES = {
-    yarn: 'клубком ниток 🧶',
-    box: 'коробкой 📦',
-    rod: 'удочкой 🎣',
-    mouse: 'мышкой 🐭'
-  };
 
   const CAT_WIDTH = 160;
   const CAT_HEIGHT = 120;
@@ -233,15 +189,14 @@
   const cat = document.getElementById('cat');
   const catImg = document.getElementById('catImg');
   const floorZone = document.getElementById('floorZone');
+  const sofaHitbox = document.getElementById('sofaHitbox');
   const actionText = document.getElementById('actionText');
   const hint = document.getElementById('hint');
-  const pillow = document.getElementById('pillow');
 
   let soundOn = true;
   let isMoving = false;
   let audioCtx = null;
 
-  // === ЗВУКИ ===
   function initAudio() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
@@ -263,33 +218,11 @@
     osc.stop(audioCtx.currentTime + 0.4);
   }
 
-  function playPurr() {
-    if (!soundOn) return;
-    initAudio();
-    const bufferSize = audioCtx.sampleRate * 1.5;
-    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.1;
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = buffer;
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 200;
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(audioCtx.destination);
-    noise.start();
-  }
-
   function toggleSound() {
     soundOn = !soundOn;
     document.getElementById('soundBtn').textContent = soundOn ? '🔊' : '🔇';
   }
 
-  // === УТИЛИТЫ ===
   function setCatImage(src) { catImg.src = src; }
 
   function showAction(text) {
@@ -314,15 +247,12 @@
 
   function clampToFloor(x, y) {
     const floorRect = floorZone.getBoundingClientRect();
-    
     const minX = 5;
     const maxX = floorRect.width - CAT_WIDTH - 5;
     x = Math.max(minX, Math.min(x, maxX));
-    
     const minY = 5;
     const maxY = floorRect.height - CAT_HEIGHT - 5;
     y = Math.max(minY, Math.min(y, maxY));
-    
     return { x, y };
   }
 
@@ -341,10 +271,7 @@
       setCatImage(IMG_WALK);
       cat.classList.add('walking');
 
-      const distance = Math.sqrt(
-        Math.pow(targetX - pos.left, 2) + 
-        Math.pow(targetY - pos.top, 2)
-      );
+      const distance = Math.sqrt(Math.pow(targetX - pos.left, 2) + Math.pow(targetY - pos.top, 2));
       const duration = Math.max(600, distance * 2.5);
 
       cat.style.transition = `left ${duration}ms ease-in-out, top ${duration}ms ease-in-out`;
@@ -359,56 +286,28 @@
     }, 300);
   }
 
-  function goToPillow(event) {
+  function goToSofa(event) {
     event.stopPropagation();
     if (isMoving) return;
     hideHint();
 
     const floorRect = floorZone.getBoundingClientRect();
-    const pillowRect = pillow.getBoundingClientRect();
+    const sofaRect = sofaHitbox.getBoundingClientRect();
     
-    const targetX = (pillowRect.left - floorRect.left) + (pillowRect.width / 2) - (CAT_WIDTH / 2);
-    const targetY = (pillowRect.top - floorRect.top) + (pillowRect.height / 2) - (CAT_HEIGHT / 2);
+    const targetX = (sofaRect.left - floorRect.left) + (sofaRect.width / 2) - (CAT_WIDTH / 2);
+    const targetY = (sofaRect.top - floorRect.top) + (sofaRect.height / 2) - (CAT_HEIGHT / 2);
     
     const clamped = clampToFloor(targetX, targetY);
 
     moveCatTo(clamped.x, clamped.y, () => {
       setCatImage(IMG_LIE);
-      showAction('Симба отдыхает на подушке... 💤');
+      showAction('Симба отдыхает на диване... 💤');
     });
   }
 
-  function goToToy(event, toyName) {
-    event.stopPropagation();
-    if (isMoving) return;
-    hideHint();
-
-    const toy = document.getElementById('toy-' + toyName);
-    const floorRect = floorZone.getBoundingClientRect();
-    const toyRect = toy.getBoundingClientRect();
-    
-    const targetX = (toyRect.left - floorRect.left) + (toyRect.width / 2) - (CAT_WIDTH / 2);
-    const targetY = (toyRect.top - floorRect.top) + (toyRect.height / 2) - (CAT_HEIGHT / 2);
-    
-    const clamped = clampToFloor(targetX, targetY);
-
-    moveCatTo(clamped.x, clamped.y, () => {
-      setCatImage(IMG_PLAY);
-      cat.classList.add('playing');
-      playPurr();
-      showAction('Симба играет с ' + TOY_NAMES[toyName] + '!');
-      
-      setTimeout(() => {
-        cat.classList.remove('playing');
-        setCatImage(IMG_SIT);
-      }, 3000);
-    });
-  }
-
-  // Клик по полу
   floorZone.addEventListener('click', (e) => {
     if (isMoving) return;
-    if (e.target.closest('.toy') || e.target.id === 'pillow') return;
+    if (e.target.id === 'sofaHitbox') return;
     hideHint();
 
     const floorRect = floorZone.getBoundingClientRect();
@@ -423,7 +322,6 @@
     });
   });
 
-  // Клик по коту
   cat.addEventListener('click', (e) => {
     e.stopPropagation();
     if (isMoving) return;
@@ -434,13 +332,12 @@
   function hideHint() { hint.classList.remove('visible'); }
   setTimeout(hideHint, 4000);
 
-  // Стартовая позиция — на подушке
   window.addEventListener('load', () => {
     const floorRect = floorZone.getBoundingClientRect();
-    const pillowRect = pillow.getBoundingClientRect();
+    const sofaRect = sofaHitbox.getBoundingClientRect();
     
-    const startX = (pillowRect.left - floorRect.left) + 5;
-    const startY = (pillowRect.top - floorRect.top) - 20;
+    const startX = (sofaRect.left - floorRect.left) + (sofaRect.width / 2) - (CAT_WIDTH / 2);
+    const startY = (sofaRect.top - floorRect.top) + (sofaRect.height / 2) - (CAT_HEIGHT / 2);
     
     const clamped = clampToFloor(startX, startY);
     
