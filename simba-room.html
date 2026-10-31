@@ -76,15 +76,16 @@
     cursor: pointer;
   }
 
-  /* Невидимый хитбокс дивана */
+  /* Хитбокс дивана — подстроен под реальное фото */
   .sofa-hitbox {
     position: absolute;
-    bottom: 20%;
+    top: 10%;
     left: 5%;
     width: 90%;
-    height: 30%;
+    height: 50%;
     cursor: pointer;
     z-index: 5;
+    /* background: rgba(255,0,0,0.3); */ /* раскомментируй чтобы увидеть зону */
   }
 
   .cat {
@@ -307,7 +308,7 @@
 
   floorZone.addEventListener('click', (e) => {
     if (isMoving) return;
-    if (e.target.id === 'sofaHitbox') return;
+    if (e.target.id === 'sofaHitbox' || e.target.closest('.sofa-hitbox')) return;
     hideHint();
 
     const floorRect = floorZone.getBoundingClientRect();
