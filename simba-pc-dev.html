@@ -171,6 +171,24 @@
   .entry-tag.problem { background: var(--rust); }
   .entry-tag.win { background: #4a7c59; }
 
+  .screenshot {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .screenshot img {
+    max-width: 100%;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .screenshot-caption {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    font-style: italic;
+  }
+
   .manifesto-dev {
     text-align: center;
     padding: 30px;
@@ -217,6 +235,8 @@
     .timeline { padding-left: 20px; }
     .timeline-entry::before { left: -27px; }
     .footer { flex-direction: column; gap: 8px; }
+    .entry-title { font-size: 18px; }
+    .entry-text { font-size: 14px; }
   }
 </style>
 </head>
@@ -274,6 +294,12 @@
           (тихо падал без логов), Eel (но это просто обёртка над Chrome, а мы хотим свой браузер). 
           Каждый раз казалось, что вот-вот получится — и снова стена.
         </div>
+
+        <div class="screenshot">
+          <img src="pc-dev-flet-error.png" alt="Ошибка импорта Flet на Python 3.14">
+          <div class="screenshot-caption">📸 Flet не видит Python 3.14.1 · Попытка №1 провалилась</div>
+        </div>
+
         <span class="entry-tag problem">Поиск решения</span>
       </div>
 
@@ -292,10 +318,16 @@
         <div class="entry-date">Сейчас</div>
         <div class="entry-title">Работает, но <em>не идеально.</em></div>
         <div class="entry-text">
-          Браузер открывается и показывает стартовую страницу. Но вкладки требуют доработки стилей, 
-          а навигационная панель иногда ведёт себя непредсказуемо. Завтра будем доделывать: нормальные 
-          вкладки, рабочую адресную строку и кнопки навигации. Ещё много работы впереди.
+          Браузер открывается и показывает стартовую страницу. Вкладки, навигация, 
+          адресная строка — всё на своих местах. Завтра будем доделывать детали: 
+          закладки, историю, пасхалки. Но первый день прошёл не зря — основа готова!
         </div>
+
+        <div class="screenshot">
+          <img src="pc-dev-day1.png" alt="Первый день разработки — стартовая страница">
+          <div class="screenshot-caption">📸 Стартовая страница ПК-версии · День 1</div>
+        </div>
+
         <span class="entry-tag">В процессе</span>
       </div>
 
