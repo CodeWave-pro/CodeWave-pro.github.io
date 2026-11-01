@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Дневник разработки · Симба для ПК</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --cream: #f1e8db;
+    --paper: #f7f1e6;
+    --ink: #2a1d14;
+    --rust: #b84a2d;
+    --rust-dark: #963a22;
+    --muted: #7a6a58;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    min-height: 100%;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 10% 15%, rgba(217,164,65,.12), transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(184,74,45,.10), transparent 45%);
+    padding: 40px 24px 60px;
+  }
+
+  .wrap { max-width: 800px; margin: 0 auto; }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(42,29,20,.2);
+    padding-bottom: 14px;
+    margin-bottom: 60px;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: var(--muted);
+  }
+  .topbar .logo { color: var(--ink); font-weight: 700; letter-spacing: .18em; text-decoration: none; }
+  .topbar .logo span { color: var(--rust); }
+  .topbar a { color: var(--rust); text-decoration: none; font-weight: 600; }
+  .topbar a:hover { text-decoration: underline; }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .page-title h1 {
+    font-size: clamp(32px, 6vw, 48px);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .page-title h1 em { color: var(--rust); font-style: italic; }
+  .page-title p {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .status-bar {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 20px 24px;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .status-item {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+  .status-item strong { color: var(--ink); }
+  .progress-track {
+    flex: 1;
+    min-width: 200px;
+    background: var(--cream);
+    border: 1px solid rgba(42,29,20,.15);
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    width: 35%;
+    height: 100%;
+    background: var(--rust);
+    border-radius: 4px;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 24px;
+    border-left: 2px solid rgba(42,29,20,.15);
+    margin-bottom: 60px;
+  }
+
+  .timeline-entry {
+    position: relative;
+    margin-bottom: 32px;
+    background: var(--paper);
+    border: 1px solid rgba(42,29,20,.15);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .timeline-entry::before {
+    content: "";
+    position: absolute;
+    left: -31px;
+    top: 28px;
+    width: 10px;
+    height: 10px;
+    background: var(--rust);
+    border: 2px solid var(--cream);
+    border-radius: 50%;
+  }
+  .timeline-entry:last-child { margin-bottom: 0; }
+
+  .entry-date {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .entry-title {
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .entry-title em { color: var(--rust); font-style: italic; }
+  .entry-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .entry-tag {
+    display: inline-block;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .entry-tag.problem { background: var(--rust); }
+  .entry-tag.win { background: #4a7c59; }
+
+  .manifesto-dev {
+    text-align: center;
+    padding: 30px;
+    border-top: 1px solid rgba(42,29,20,.2);
+    border-bottom: 1px solid rgba(42,29,20,.2);
+    margin-bottom: 40px;
+  }
+  .manifesto-dev p {
+    font-size: 18px;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .manifesto-dev .author {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--rust);
+    font-weight: 600;
+  }
+
+  .footer {
+    padding-top: 18px;
+    border-top: 1px solid rgba(42,29,20,.2);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer .dot { color: var(--rust); }
+  .footer a { color: var(--rust); text-decoration: none; font-weight: 600; }
+  .footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .status-bar { flex-direction: column; align-items: flex-start; }
+    .progress-track { width: 100%; }
+    .timeline { padding-left: 20px; }
+    .timeline-entry::before { left: -27px; }
+    .footer { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+    
+    <div class="topbar">
+      <a href="simbabrowser.html" class="logo">СИМБА<span>●</span>browser</a>
+      <a href="simbabrowser.html">← Назад к скачиванию</a>
+    </div>
+
+    <div class="page-title">
+      <h1>Дневник <em>разработки</em> ПК-версии</h1>
+      <p>Честный отчёт о каждом шаге: что получилось, что сломалось, и почему иногда всё идёт не по плану.</p>
+    </div>
+
+    <div class="status-bar">
+      <div class="status-item">Статус: <strong>В активной работе</strong></div>
+      <div class="progress-track">
+        <div class="progress-fill"></div>
+      </div>
+      <div class="status-item">Готовность: <strong>~35%</strong></div>
+    </div>
+
+    <div class="timeline">
+      
+      <div class="timeline-entry">
+        <div class="entry-date">1 ноября 2026 · День 1</div>
+        <div class="entry-title">Начало пути. <em>Амбициозный план.</em></div>
+        <div class="entry-text">
+          Мобильная версия уже работает, пользователи довольны. Но большой экран — это другая история. 
+          Хочется настоящие вкладки, закладки, историю посещений. И чтобы всё это выглядело так же 
+          спокойно и красиво, как на телефоне.
+        </div>
+        <span class="entry-tag">Идея</span>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="entry-date">1 ноября 2026 · Вечер</div>
+        <div class="entry-title">Первая попытка. <em>PyQt6 и боль.</em></div>
+        <div class="entry-text">
+          Начал с PyQt6 — красивой библиотеки с поддержкой градиентов и теней. Но выяснилось, что 
+          установленный Python 3.14 слишком новый. Готовых сборок для него нет, компиляция падает, 
+          возникают ошибки DLL. Первый вечер ушёл в никуда.
+        </div>
+        <span class="entry-tag problem">Проблема</span>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="entry-date">1 ноября 2026 · Ночь</div>
+        <div class="entry-title">Метод проб и ошибок.</div>
+        <div class="entry-text">
+          Пробовал всё: Flet (WebView не работает на Windows), PySide6 (те же ошибки), pywebview 
+          (тихо падал без логов), Eel (но это просто обёртка над Chrome, а мы хотим свой браузер). 
+          Каждый раз казалось, что вот-вот получится — и снова стена.
+        </div>
+        <span class="entry-tag problem">Поиск решения</span>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="entry-date">1 ноября 2026 · Поздний вечер</div>
+        <div class="entry-title">Нашёл причину. <em>Python 3.11 спасает.</em></div>
+        <div class="entry-text">
+          Понял главное: нужно использовать стабильную версию языка. Установил Python 3.11 — и всё 
+          заработало с первого раза. Библиотеки скачались за 10 секунд. Первый запуск браузера с 
+          тенями, градиентами и кастомной шапкой прошёл успешно.
+        </div>
+        <span class="entry-tag win">Победа!</span>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="entry-date">Сейчас</div>
+        <div class="entry-title">Работает, но <em>не идеально.</em></div>
+        <div class="entry-text">
+          Браузер открывается и показывает стартовую страницу. Но вкладки требуют доработки стилей, 
+          а навигационная панель иногда ведёт себя непредсказуемо. Завтра будем доделывать: нормальные 
+          вкладки, рабочую адресную строку и кнопки навигации. Ещё много работы впереди.
+        </div>
+        <span class="entry-tag">В процессе</span>
+      </div>
+
+    </div>
+
+    <div class="manifesto-dev">
+      <p>«Мы не торопимся. Лучше выпустить одну по-настоящему тихую и качественную версию, чем десять сырых.»</p>
+      <div class="author">— Арсений, создатель Симба браузера</div>
+    </div>
+
+    <div class="footer">
+      <div>симба браузер <span class="dot">●</span> с 2026 года</div>
+      <div>
+        <a href="simbabrowser.html">Главная</a>
+        <span style="color: var(--muted); margin: 0 8px;">·</span>
+        <a href="simba-help.html">Помощь</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
