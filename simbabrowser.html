@@ -45,7 +45,7 @@
     font-family: "Helvetica Neue", Arial, sans-serif;
     color: var(--muted);
   }
-  .topbar .logo { color: var(--ink); font-weight: 700; letter-spacing: .18em; }
+  .topbar .logo { color: var(--ink); font-weight: 700; letter-spacing: .18em; text-decoration: none; }
   .topbar .logo span { color: var(--rust); }
 
   .hero {
@@ -327,6 +327,10 @@
   .version-meta .badge.soon {
     background: var(--muted);
   }
+  
+  .version-meta .badge.native {
+    background: var(--ink);
+  }
 
   .manifesto {
     max-width: 600px;
@@ -412,7 +416,7 @@
   <div class="wrap">
     
     <div class="topbar">
-      <div class="logo">СИМБА<span>●</span>browser</div>
+      <a href="simbabrowser.html" class="logo">СИМБА<span>●</span>browser</a>
       <div>выпуск № 3 · с 2026 года</div>
     </div>
 
@@ -495,6 +499,21 @@
       
       <div class="versions-list">
 
+        <!-- === ВЕРСИЯ 1.0 NATIVE СО ССЫЛКОЙ НА DEVLOG === -->
+        <div class="version-row">
+          <div class="version-info">
+            <div class="version-name">Симба браузер 1.0 (Native)</div>
+            <div class="version-meta">
+              <span class="badge native">Новинка</span>
+              Первая полноценная версия, разработанная НЕ в CCode. Чистая Java, нативный WebView.
+            </div>
+          </div>
+          <a href="https://codewave-pro.github.io/simba-devlog.html" class="btn-download small" style="background: var(--ink); border-color: var(--rust);">
+            📜 Дневник разработки
+          </a>
+        </div>
+        <!-- ========================================== -->
+
         <div class="version-row">
           <div class="version-info">
             <div class="version-name">Симба браузер 3.01</div>
@@ -549,7 +568,6 @@
           </a>
         </div>
 
-        <!-- Версия 3.04 (В РАЗРАБОТКЕ) -->
         <div class="version-row">
           <div class="version-info">
             <div class="version-name">Симба браузер 3.04</div>
@@ -561,7 +579,6 @@
           <div style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: var(--muted); font-weight: 600;">Скоро</div>
         </div>
 
-        <!-- Версия 3.05 -->
         <div class="version-row">
           <div class="version-info">
             <div class="version-name">Симба браузер 3.05</div>
@@ -581,9 +598,7 @@
       <div class="manifesto-author">— Арсений, создатель Симба браузера</div>
     </div>
     
-                            <!-- ===== ПК ВЕРСИЯ ===== -->
     <div style="max-width: 700px; margin: 0 auto 60px; background: var(--paper); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 4px 4px 0 var(--ink); padding: 32px 24px; position: relative;">
-      
       <div style="position: absolute; top: -12px; right: 24px; background: var(--rust); color: var(--cream); padding: 4px 12px; border-radius: 4px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; border: 2px solid var(--ink);">
         В разработке
       </div>
@@ -616,9 +631,7 @@
           Читать дневник разработки →
         </a>
       </div>
-
     </div>
-    <!-- ===== КОНЕЦ ПК ВЕРСИИ ===== -->
 
     <div class="specs">
       <div class="spec-item"><span>Android:</span> 6.0 и выше</div>
@@ -633,7 +646,7 @@
       <div>
         <a href="simba-help.html">❓ Помощь</a>
         <span style="color: var(--muted); margin: 0 8px;">·</span>
-        <a href="simba-story.html">📖 История</a>
+        <a href="simba-devlog.html">📖 Дневник разработки</a>
       </div>
     </div>
 
@@ -648,4 +661,4 @@
   </svg>
 
 </body>
- </html>
+</html>
