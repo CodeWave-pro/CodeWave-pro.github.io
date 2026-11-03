@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Дневник разработки — Симба браузер</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --cream: #f1e8db;
+    --paper: #f7f1e6;
+    --ink: #2a1d14;
+    --rust: #b84a2d;
+    --rust-dark: #963a22;
+    --muted: #7a6a58;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    min-height: 100%;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 10% 15%, rgba(217,164,65,.12), transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(184,74,45,.10), transparent 45%);
+    padding: 40px 24px 60px;
+  }
+
+  .wrap { max-width: 800px; margin: 0 auto; }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid rgba(42,29,20,.2);
+    padding-bottom: 14px;
+    margin-bottom: 40px;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: var(--muted);
+  }
+  .topbar .logo { color: var(--ink); font-weight: 700; letter-spacing: .18em; text-decoration: none; }
+  .topbar .logo span { color: var(--rust); }
+
+  .devlog-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .devlog-header h1 {
+    font-size: clamp(32px, 6vw, 56px);
+    line-height: 1.1;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .devlog-header h1 em { font-style: italic; color: var(--rust); }
+  .devlog-header p {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .chapter {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    padding: 32px 28px;
+    margin-bottom: 32px;
+    box-shadow: 4px 4px 0 var(--ink);
+    position: relative;
+  }
+  .chapter::before {
+    content: "🐾";
+    position: absolute;
+    top: -16px;
+    left: 24px;
+    background: var(--cream);
+    padding: 0 8px;
+    font-size: 20px;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chapter h2 {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--rust);
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+
+  .chapter h3 {
+    font-family: Georgia, serif;
+    font-size: 24px;
+    color: var(--ink);
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+
+  .chapter p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .chapter p:last-child { margin-bottom: 0; }
+
+  .error-block {
+    background: rgba(184, 74, 45, 0.08);
+    border-left: 4px solid var(--rust);
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 0 8px 8px 0;
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--rust-dark);
+    line-height: 1.5;
+  }
+
+  .success-block {
+    background: rgba(42, 29, 20, 0.05);
+    border-left: 4px solid var(--ink);
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .success-block strong { color: var(--rust); }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .feature-tag {
+    background: var(--cream);
+    border: 1px solid rgba(42,29,20,.15);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    text-align: center;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    color: var(--rust);
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: opacity 0.2s;
+  }
+  .back-link:hover { opacity: 0.7; }
+
+  .footer {
+    margin-top: 60px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(42,29,20,.2);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer .dot { color: var(--rust); }
+  .footer a { color: var(--rust); text-decoration: none; font-weight: 600; }
+
+  @media (max-width: 600px) {
+    .chapter { padding: 24px 20px; }
+    .feature-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+    
+    <a href="simbabrowser.html" class="back-link">← Вернуться на главную</a>
+
+    <div class="topbar">
+      <a href="simbabrowser.html" class="logo">СИМБА<span>●</span>browser</a>
+      <div>Дневник разработки</div>
+    </div>
+
+    <div class="devlog-header">
+      <h1>Как мы создавали <br><em>Native-версию</em></h1>
+      <p>Честная история о том, как мы прошли через ошибки компиляции, тупики веб-технологий и в итоге создали настоящий браузер на Java прямо на телефоне.</p>
+    </div>
+
+    <!-- Глава 1 -->
+    <article class="chapter">
+      <h2>Глава 1</h2>
+      <h3>Иллюзия простоты: Python и Termux</h3>
+      <p>Всё началось с амбициозной идеи: написать браузер на Python прямо на Android-устройстве, используя Termux и фреймворки вроде Flet или Kivy. Казалось, что пара команд <code>pip install</code> решит все проблемы.</p>
+      <p>Но реальность оказалась суровой. Мобильная архитектура ARM и среда Termux не предназначены для легкой компиляции тяжелых C/Rust зависимостей.</p>
+      <div class="error-block">
+        ERROR: Failed to build 'watchfiles' when installing build dependencies.<br>
+        Target triple not supported by rustup: aarch64-unknown-linux-android<br>
+        Rust not found, installing into a temporary directory...
+      </div>
+      <p>Мы пытались установить Rust, обновляли репозитории, искали обходные пути для <code>pydantic-core</code> и <code>watchfiles</code>, но каждая победа рождала новую ошибку. Мы поняли: путь Python на мобильном устройстве для такого проекта — это бесконечная борьба с инструментами, а не создание продукта.</p>
+    </article>
+
+    <!-- Глава 2 -->
+    <article class="chapter">
+      <h2>Глава 2</h2>
+      <h3>Тупик веб-технологий: Проблема iframe</h3>
+      <p>Отказавшись от Python, мы попробовали создать PWA (Progressive Web App) на чистом HTML/JS или через Flask. Интерфейс получился красивым, но столкнулись с фундаментальным ограничением веба.</p>
+      <p>Когда мы попытались открыть YouTube, Google или ВКонтакте внутри элемента <code>&lt;iframe&gt;</code>, экран оставался пустым. Современные сайты защищаются заголовком <code>X-Frame-Options: DENY</code> или <code>Content-Security-Policy</code>, запрещая встраивание себя в чужие страницы. Это защита от кликджекинга, и обойти её на чистом фронтенде <strong>невозможно</strong>.</p>
+      <p>Нам нужен был не просто "контейнер" для сайта, а настоящий движок рендеринга.</p>
+    </article>
+
+    <!-- Глава 3 -->
+    <article class="chapter">
+      <h2>Глава 3</h2>
+      <h3>Поворотный момент: Переход на Java</h3>
+      <p>Мы приняли стратегическое решение: писать на родном языке Android — Java. Это означало отказ от привычных Python-скриптов, но давало прямой доступ к системным API.</p>
+      <p>Мы скачали приложение <strong>Android IDE (m4coding)</strong>, создали проект с пакетом <code>com.simba.browser</code> и впервые подключили настоящий <code>android.webkit.WebView</code>. Это был тот самый момент, когда браузер перестал быть "костылём" и стал настоящим приложением.</p>
+      <div class="success-block">
+        <strong>Успех:</strong> Мы получили компонент, который рендерит страницы так же, как Chrome, без каких-либо ограничений iframe, с полной поддержкой JavaScript и локального хранилища.
+      </div>
+    </article>
+
+    <!-- Глава 4 -->
+    <article class="chapter">
+      <h2>Глава 4</h2>
+      <h3>Битва с компилятором: Ошибки и отладка</h3>
+      <p>Java — строгий язык. Компилятор не прощает мелочей, и наша первая сборка с треском провалилась. Но каждая ошибка делала код лучше:</p>
+      <ul style="margin-left: 20px; line-height: 1.7; margin-bottom: 16px;">
+        <li><strong>Ошибка 1:</strong> <code>cannot find symbol: method setBlockPopups(boolean)</code>. Мы узнали, что в Android WebView нет такого метода, и заменили его на корректный <code>setSupportMultipleWindows(false)</code>.</li>
+        <li><strong>Ошибка 2:</strong> <code>incompatible types: CAP#1 cannot be converted to String</code>. Строгая типизация Java потребовала явного приведения типов при чтении закладок из <code>SharedPreferences</code>.</li>
+        <li><strong>Ошибка 3:</strong> <code>cannot find symbol: method setZoom(float)</code>. Мы пытались управлять масштабом несуществующим методом и элегантно решили это через внедрение JavaScript (<code>document.body.style.zoom</code>).</li>
+      </ul>
+      <p>Арсений проявил невероятное терпение, копируя, вставляя и проверяя код шаг за шагом, пока мы не увидели заветное: <code>BUILD SUCCESSFUL</code>.</p>
+    </article>
+
+    <!-- Глава 5 -->
+    <article class="chapter">
+      <h2>Глава 5</h2>
+      <h3>Рождение функционала: 50+ возможностей</h3>
+      <p>Когда базовый WebView заработал, мы не стали останавливаться на простом просмотре страниц. Мы превратили приложение в полноценный инструмент, добавив огромное количество функций, используя только стандартные возможности Android:</p>
+      <div class="feature-grid">
+        <div class="feature-tag">🌙 Ночной режим (CSS-инъекция)</div>
+        <div class="feature-tag">🕵️ Режим инкогнито</div>
+        <div class="feature-tag">📖 Режим чтения (парсинг текста)</div>
+        <div class="feature-tag">💻 Переключение User-Agent (Десктоп)</div>
+        <div class="feature-tag">🔤 Динамическое изменение шрифта</div>
+        <div class="feature-tag">🗑️ Полная очистка кэша и cookies</div>
+        <div class="feature-tag">⭐ Локальные закладки (SharedPreferences)</div>
+        <div class="feature-tag">📜 История посещений</div>
+        <div class="feature-tag">📤 Поделиться и Копировать ссылку</div>
+        <div class="feature-tag">🌍 Перевод страницы через Google Translate</div>
+        <div class="feature-tag">⛶ Полноэкранный режим (Immersive)</div>
+        <div class="feature-tag">🚫 Базовая защита от фишинговых ссылок</div>
+      </div>
+      <p style="margin-top: 16px;">Мы также добавили кнопку меню в правый верхний угол и сделали весь интерфейс закруглённым, мягким и приятным для глаз, в фирменных цветах Симбы.</p>
+    </article>
+
+    <!-- Глава 6 -->
+    <article class="chapter">
+      <h2>Глава 6</h2>
+      <h3>Финальный штрих: Исправление бага со свайпами</h3>
+      <p>На финишной прямой мы добавили жесты (свайпы) для навигации "назад" и "вперёд". Но столкнулись с неприятным багом: при обычном вертикальном скроллинге страницы браузер иногда случайно переключал страницы, интерпретируя малейшее отклонение пальца как горизонтальный свайп.</p>
+      <p>Вместо того чтобы писать сложные математические фильтры для детектора жестов, мы приняли мудрое дизайнерское решение: <strong>полностью удалить свайпы</strong>. Мы сделали ставку на надёжность. Теперь навигация работает только по чёткому нажатию на кнопки "←" и "→", что исключает любые случайные действия пользователя.</p>
+      <div class="success-block">
+        <strong>Итог:</strong> Мы создали стабильное, быстрое и красивое приложение, которое не зависит от сторонних конструкторов вроде CCode. Оно собрано вручную, с пониманием каждой строчки кода.
+      </div>
+    </article>
+
+    <div style="text-align: center; margin: 60px 0 40px; padding: 30px; border-top: 1px solid rgba(42,29,20,.2); border-bottom: 1px solid rgba(42,29,20,.2);">
+      <p style="font-family: Georgia, serif; font-size: 20px; font-style: italic; color: var(--ink); line-height: 1.5; margin-bottom: 16px;">
+        «Этот браузер доказывает: если у тебя есть идея, терпение и готовность учиться на ошибках, ты можешь создать настоящий продукт прямо у себя в кармане.»
+      </p>
+      <div style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--rust); font-weight: 600;">
+        — Арсений, создатель Симба браузера
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>симба браузер <span class="dot">●</span> с 2026 года</div>
+      <div>
+        <a href="simbabrowser.html">Главная</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
